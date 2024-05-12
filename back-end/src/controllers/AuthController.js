@@ -38,11 +38,12 @@ const authController = {
           refreshToken: refreshToken,
         });
 
-        const { password, refreshTokens, ...other } = user;
+        // const { password, refreshTokens, ...other } = user;
+        const { idUser, idRole, username, email } = user;
         res.json({
           code: 1000,
           data: {
-            user: { ...other },
+            user: { idUser, idRole, username, email },
             accessToken,
             message: "Đăng nhập thành công",
           },

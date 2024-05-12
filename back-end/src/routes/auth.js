@@ -4,6 +4,7 @@ const router = express.Router();
 const authController = require("../controllers/AuthController");
 const authenToken = require("../middlewares/authenToken");
 
+
 // Login
 router.post("/login", authController.login);
 

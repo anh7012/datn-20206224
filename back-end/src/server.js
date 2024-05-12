@@ -5,7 +5,7 @@ const route = require('./routes/index')
 const  cors = require('cors')
 
 const app = express()
-const port = 7012
+const port = 7012;
 
 // parse application
 app.use(bodyParser.urlencoded({ extended: false }))
