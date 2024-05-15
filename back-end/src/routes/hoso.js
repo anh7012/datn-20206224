@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const hosoController = require('../controllers/hosoController')
+const hosoController = require('../controllers/HoSoController')
 
-router.get('/', hosoController.list)
+
+router.post('/themhoso', hosoController.createHoSo)
+router.get('/', hosoController.listHoSo)
 
 module.exports = router

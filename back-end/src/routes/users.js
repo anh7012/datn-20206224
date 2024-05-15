@@ -10,11 +10,8 @@ router.post("/:id/change_username",authenToken.verifyToken,usersController.chang
 router.post("/:id/change_password",authenToken.verifyToken,usersController.changePassword);
 // router.post("/reset_password", usersController.resetPassword);
 router.put("/:id", usersController.updateUser);
-// router.put('/:id/', usersController.updateUser)
 router.delete("/:id", usersController.deleteUser);
 //
-
-
 router.get("/", usersController.listUsers);
 
 module.exports = router;

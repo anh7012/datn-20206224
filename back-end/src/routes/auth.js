@@ -3,10 +3,11 @@ const router = express.Router();
 
 const authController = require("../controllers/AuthController");
 const authenToken = require("../middlewares/authenToken");
+const validate = require("../middlewares/validator");
 
 
 // Login
-router.post("/login", authController.login);
+router.post("/login", validate.validateEmail, authController.login);
 
 // Refresh Token
 router.post("/refresh", authController.reqRefreshToken);

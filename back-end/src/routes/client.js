@@ -2,7 +2,9 @@ const express = require('express')
 const router = express.Router()
 
 const ClientController = require('../controllers/ClientController')
+const validate = require("../middlewares/validator");
 
-router.get('/', ClientController.list)
+router.post('/themkhachhang',validate.validateEmail, ClientController.createClient)
+router.get('/', ClientController.listClient)
 
 module.exports = router

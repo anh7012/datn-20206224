@@ -7,7 +7,6 @@ const usersController = {
     listUsers: async (req, res, next) => {
         try {
             const listUser = await User.getAllUser();
-            console.log(listUser.length);
             res.json(listUser);
         } catch (error) {
             res.json({
@@ -45,7 +44,10 @@ const usersController = {
                 data.password = hashedPassword;
                 // Create new User
                 const newUser = await User.createUser(data);
-                res.json({code: 1000, data: newUser});
+                res.json({
+                    code: 1000,
+                    message: "Thêm nhân viên mới thành công",
+                    data: newUser});
             }
         } catch (error) {
             res.status(500).json({
