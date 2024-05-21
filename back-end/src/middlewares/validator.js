@@ -11,6 +11,7 @@ const validate = {
             res.status(500).json({ code: 9999, error });
         }
     },
+//
 };
 
 module.exports = validate;

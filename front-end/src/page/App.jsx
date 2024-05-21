@@ -2,9 +2,15 @@ import React, {useEffect, useState} from 'react';
 import {Link, Outlet} from "react-router-dom";
 import Nav from "../components/Nav.jsx";
 import {appApi} from "../../Apis/appApi.js";
+import {Select} from "antd";
+import {handleSelectForm} from "../utils/handleSelectForm.js";
+import {optionConfig} from "../../config/optionConfig.js";
 
 function App(props) {
     const [data, setData] = useState([])
+    const [tienAn, setTienAn] = useState({})
+
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -19,6 +25,9 @@ function App(props) {
         fetchData(); // Gọi hàm async ở đây
     }, []);
 
+    function handleSelect(e) {
+        setTienAn(handleSelectForm(e, optionConfig.tienan, 'tienan'))
+    }
     return (
         <div>
             <h1 className="text-3xl font-bold underline">
@@ -127,6 +136,31 @@ function App(props) {
                     </table>
                 </div>
             </div>
+
+            <Select
+                onSelect={handleSelect}
+                showSearch
+                style={{
+                    width: 200,
+                }}
+                placeholder="Search to Select"
+                optionFilterProp="children"
+                filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                filterSort={(optionA, optionB) =>
+                    (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                }
+                options={[
+                    {
+                        value: 'yes',
+                        label: 'yes',
+                    },
+                    {
+                        value: 'no',
+                        label: 'no',
+                    },
+                ]}
+            />
+
         </div>
 
     );

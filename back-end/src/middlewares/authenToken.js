@@ -6,7 +6,6 @@ const authenToken = {
   // verify Token
   verifyToken: (req, res, next) => {
     const authorizationHeader = req.headers["authorization"];
-
     if (authorizationHeader) {
       const accessToken = authorizationHeader.split(" ")[1];
       jwt.verify(

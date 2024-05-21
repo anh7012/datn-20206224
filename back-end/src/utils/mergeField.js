@@ -6,15 +6,9 @@ const mergeFields = async (reqBody, oldData) => {
                 if (reqBody[key] !== '') {
                     newData[key] = reqBody[key];
                 }
-
         }
     } else {
-        // res.json({
-        //     code: 9999,
-        //     message: "Thiếu thông tin",
-        //
-        // })
-        console.log('ko vao')
+        console.log('Lỗi hệ thống')
     }
 
     return newData;

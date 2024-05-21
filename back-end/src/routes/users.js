@@ -11,6 +11,7 @@ router.post("/:id/change_password",authenToken.verifyToken,usersController.chang
 // router.post("/reset_password", usersController.resetPassword);
 router.put("/:id", usersController.updateUser);
 router.delete("/:id", usersController.deleteUser);
+// router.put("/:id", usersController.roleUser);
 //
 router.get("/", usersController.listUsers);
 

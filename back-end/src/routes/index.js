@@ -15,6 +15,5 @@ const route = (app) => {
   app.use("/danhgiatindung", dgtdRouter);
   app.use("/hopdong", hopdongRouter);
   app.use("/", authRouter);
-  // app.use('/baocao', )
 };
 module.exports = route;

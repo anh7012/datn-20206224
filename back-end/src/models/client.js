@@ -17,6 +17,7 @@ module.exports = class Client {
         this.CCCD = client.CCCD;
         this.typeClient = client.typeClient;
         this.populationDate = client.populationDate;
+        this.updateDate = client.updateDate
     }
 
     static getAllClient = async () => {
@@ -31,6 +32,22 @@ module.exports = class Client {
         );
         return rows[0];
     };
+
+    static getInforClientById = async (id) => {
+        const [rows, fields] = await promisePool.query(
+            "SELECT HoTen,NgaySinh,GioiTinh,DiaChi,sdt,email FROM client WHERE idClient = ?;",
+            [id]
+        );
+        return rows[0];
+    }
+
+    static getClientByMaKH = async (maKH) => {
+        const [rows, fields] = await promisePool.query(
+            "SELECT * FROM client WHERE maKhachHang = ?;",
+            [maKH]
+        );
+        return rows[0];
+    }
 
     static createClient = async (client) => {
         const idClient = uuidv4({format: "hex"}).substring(0, 32);
@@ -64,4 +81,31 @@ module.exports = class Client {
         const newData = {id: result.insertId, ...client};
         return newData;
     }
+
+    static updateClient = async ({HoTen, NgaySinh, GioiTinh, DiaChi, sdt, email, id}) => {
+        const updateDate = moment();
+        const Tuoi = (dateOfBirth) => {
+            // Tạo một đối tượng Moment từ ngày sinh
+            const birthDateMoment = moment(dateOfBirth, 'YYYY-MM-DD');
+            // Tính toán số năm kể từ ngày sinh đến ngày hiện tại
+            const age = moment().diff(birthDateMoment, 'years');
+            // Kiểm tra xem ngày sinh đã qua hay chưa trong năm nay
+            return age;
+        };
+        const [result] = await promisePool.query(
+            "UPDATE client SET  HoTen =?, NgaySinh =?,Tuoi =?, GioiTinh =?, DiaChi =?, sdt =?, email =?, updateDate =? WHERE idClient = ?;",
+            [
+                HoTen,
+                NgaySinh,
+                Tuoi(NgaySinh),
+                GioiTinh,
+                DiaChi,
+                sdt,
+                email,
+                updateDate.format('YYYY-MM-DD'),
+                id
+            ]
+        );
+        return result;
+    };
 };

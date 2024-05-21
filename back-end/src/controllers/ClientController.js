@@ -1,4 +1,7 @@
 const Client = require('../models/client')
+const {mergeFields} = require("../utils/mergeField");
+const validator = require('validator');
+
 
 const ClientController = {
     // [GET] Client/ -- list khach hang
@@ -60,7 +63,48 @@ const ClientController = {
                 message: "Không thể thêm khách hàng mới",
             });
         }
+    },
+    // [put] client/:id/suakhachhang
+    updateClient: async (req, res) => {
+        try {
+            const old_data = await Client.getInforClientById(req.params.id)
+            const new_data = await mergeFields(req.body, old_data)
+            if(!validator.isEmail(new_data.email)) {
+                res.json({
+                    code: 1006, error: "Invalid email address"
+                });
+            } else {
+                const data = await Client.updateClient({
+                    HoTen: new_data.HoTen,
+                    NgaySinh: new_data.NgaySinh,
+                    GioiTinh: new_data.GioiTinh,
+                    DiaChi: new_data.DiaChi,
+                    sdt: new_data.sdt,
+                    email: new_data.email,
+                    id: req.params.id
+                });
+                if (data.affectedRows == 1) {
+                    res.json({
+                        code: 1000,
+                        data: {
+                            message: "Thông tin khách hàng đã được cập nhật thành công!",
+                        },
+                    });
+                } else {
+                    res.json({
+                        code: 1001,
+                        data: {
+                            message: "Thông tin khách hàng cập nhật thất bại",
+                        },
+                    });
+                }
+            }
+        } catch (error) {
+            console.log(error)
+            res.status(404).json({
+                message: "Không thể thay đổi thông tin khách hàng",
+            });
+        }
     }
-
-};
+}
 module.exports = ClientController;

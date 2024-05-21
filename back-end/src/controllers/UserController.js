@@ -47,7 +47,8 @@ const usersController = {
                 res.json({
                     code: 1000,
                     message: "Thêm nhân viên mới thành công",
-                    data: newUser});
+                    data: newUser
+                });
             }
         } catch (error) {
             res.status(500).json({
@@ -56,9 +57,9 @@ const usersController = {
         }
     },
     // [PUT] /users/:id
-                updateUser: async (req, res) => {
-                try {
-                    const old_data = await User.getInforByIdUser(req.params.id)
+    updateUser: async (req, res) => {
+        try {
+            const old_data = await User.getInforByIdUser(req.params.id)
             const new_data = await mergeFields(req.body, old_data)
             const data = await User.updateUser({
                 email: new_data.email,
@@ -174,6 +175,6 @@ const usersController = {
             res.json({code: 9999, error: error.message})
         }
     }
-
+// CHANGE ROLE, PERMISSON
 };
 module.exports = usersController;
