@@ -9,7 +9,7 @@ const {
 
 const authController = {
   // [POST] /users/login
-  login: async (req, res, next) => {
+  login: async (req, res) => {
     try {
       const user = await User.getByUsername(req.body.username);
       if (!user) {
@@ -31,6 +31,7 @@ const authController = {
           httpOnly: true,
           secure: false,
           sameSite: "strict",
+          path:"/",
         });
         let rs = await User.addToken({
           id: user.idUser,

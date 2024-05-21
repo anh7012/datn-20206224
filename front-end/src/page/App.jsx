@@ -1,168 +1,170 @@
-import React, {useEffect, useState} from 'react';
+import * as React from 'react';
+import {styled} from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import CssBaseline from '@mui/material/CssBaseline';
+import MuiAppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import logo from '../assets/image/logo.jpg'
 import {Link, Outlet} from "react-router-dom";
+import {Avatar, Menu, MenuItem, Tooltip, Typography} from "@mui/material";
 import Nav from "../components/Nav.jsx";
-import {appApi} from "../../Apis/appApi.js";
-import {Select} from "antd";
-import {handleSelectForm} from "../utils/handleSelectForm.js";
-import {optionConfig} from "../../config/optionConfig.js";
+import PersonIcon from '@mui/icons-material/Person';
+const drawerWidth = 240;
 
-function App(props) {
-    const [data, setData] = useState([])
-    const [tienAn, setTienAn] = useState({})
+const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open'})(
+    ({theme, open}) => ({
+        flexGrow: 1,
+        padding: theme.spacing(3),
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        marginLeft: `-${drawerWidth}px`,
+        ...(open && {
+            transition: theme.transitions.create('margin', {
+                easing: theme.transitions.easing.easeOut,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
+            marginLeft: 0,
+        }),
+    }),
+);
+
+const AppBar = styled(MuiAppBar, {
+    shouldForwardProp: (prop) => prop !== 'open',
+})(({theme, open}) => ({
+    transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+    }),
+    ...(open && {
+        width: `calc(100% - ${drawerWidth}px)`,
+        marginLeft: `${drawerWidth}px`,
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    }),
+}));
+
+const DrawerHeader = styled('div')(({theme}) => ({
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    ...theme.mixins.toolbar,
+    justifyContent: 'center',
+}));
+const settings = ['Thông tin', 'Tài khoản','Đăng xuất'];
+
+function App() {
+    const [open, setOpen] = React.useState(true);
+    const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+    const handleOpenUserMenu = (event) => {
+        setAnchorElUser(event.currentTarget);
+    };
 
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await appApi.getUser();
-                setData(res.data)
-                console.log(res.data);
-            } catch (error) {
-                console.error("Error fetching user:", error);
-            }
-        };
 
-        fetchData(); // Gọi hàm async ở đây
-    }, []);
-
-    function handleSelect(e) {
-        setTienAn(handleSelectForm(e, optionConfig.tienan, 'tienan'))
-    }
+    const handleCloseUserMenu = () => {
+        setAnchorElUser(null);
+    };
+    const handleDrawerOpen = () => {
+        setOpen(true);
+    };
+    const handleDrawerClose = () => {
+        setOpen(false);
+    };
     return (
-        <div>
-            <h1 className="text-3xl font-bold underline">
-                Hello world!
-                <Link to={'/test'} className={'text-blue-500 underline text-2xl'}>
-                    Go to hello test
-                </Link>
+        <Box sx={{display: 'flex'}}>
+            <CssBaseline/>
+            <AppBar position="fixed" open={open} className={'!bg-white !shadow-[0px_0px_20px] !shadow-gray-300'}>
+                <Toolbar className={'flex items-center justify-between'}>
+                    <IconButton
+                        aria-label="open drawer"
+                        onClick={!open ? handleDrawerOpen : handleDrawerClose}
+                        edge="start"
+                        sx={{mr: 2, ...(open && {display: 'flex'}), height: '50px', width: '50px'}}
+                        className={'justify-center items-center !text-[#018957]'}
 
-            </h1>
-            <ul className="timeline">
-                <li>
-                    <div className="timeline-middle">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                             className="w-5 h-5">
-                            <path fillRule="evenodd"
-                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                                  clipRule="evenodd"/>
-                        </svg>
-                    </div>
-                    <div className="timeline-end timeline-box">First Macintosh computer</div>
-                    <hr/>
-                </li>
-                <li>
-                    <hr/>
-                    <div className="timeline-middle">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                             className="w-5 h-5">
-                            <path fillRule="evenodd"
-                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                                  clipRule="evenodd"/>
-                        </svg>
-                    </div>
-                    <div className="timeline-end timeline-box">iMac</div>
-                    <hr/>
-                </li>
-                <li>
-                    <hr/>
-                    <div className="timeline-middle">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                             className="w-5 h-5">
-                            <path fillRule="evenodd"
-                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                                  clipRule="evenodd"/>
-                        </svg>
-                    </div>
-                    <div className="timeline-end timeline-box">iPod</div>
-                    <hr/>
-                </li>
-                <li>
-                    <hr/>
-                    <div className="timeline-middle">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                             className="w-5 h-5">
-                            <path fillRule="evenodd"
-                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                                  clipRule="evenodd"/>
-                        </svg>
-                    </div>
-                    <div className="timeline-end timeline-box">iPhone</div>
-                    <hr/>
-                </li>
-                <li>
-                    <hr/>
-                    <div className="timeline-middle">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                             className="w-5 h-5">
-                            <path fillRule="evenodd"
-                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                                  clipRule="evenodd"/>
-                        </svg>
-                    </div>
-                    <div className="timeline-end timeline-box">Apple Watch</div>
-                </li>
-            </ul>
-            <Nav/>
-            <div>
-                <Outlet/>
-            </div>
-            <div>
+                    >
+                        <MenuIcon className={'text-[#018957]'}/>
+                    </IconButton>
+                    <Box sx={{ flexGrow: 0 }} className={'!flex justify-center items-center'}>
+                        <div className={'text-black flex-col flex items-start justify-end mr-2'}>
+                            <p className={'text-[#018957] '}>Quản trị viên</p>
+                            <p className={'text-[14px] '}>Phạm Thị Ngọc Anh</p>
+                        </div>
+                        <Tooltip title="Open settings">
+                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 1 }} className={'!bg-[#018957]'}>
+                                <PersonIcon className={'scale-150  text-white' }/>
+                            </IconButton>
+                        </Tooltip>
+                        <Menu
+                            sx={{ mt: '45px'}}
+                            id="menu-appbar"
+                            anchorEl={anchorElUser}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={Boolean(anchorElUser)}
+                            onClose={handleCloseUserMenu}
+                        >
 
-            </div>
-            <div>
-                <div className="overflow-x-auto">
-                    <table className="table">
-                        {/* head */}
-                        <thead>
-                        <tr>
-                            <th>id</th>
-                            <th>Name</th>
-                            <th>Job</th>
-                            <th>Favorite Color</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {
-                            data.map((e, i) => (
-                                <tr key={i}>
-                                    <th>{e.idUser}</th>
-                                    <td>{e.username}</td>
-                                    <td>{e.HoTen}</td>
-                                    <td>{e.GioiTinh ? 'Nam' : 'Nữ'}</td>
-                                </tr>
-                            ))
-                        }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                            <MenuItem  >
+                                <Typography textAlign="center" className={'!px-4'}>Thông tin</Typography>
+                            </MenuItem>
 
-            <Select
-                onSelect={handleSelect}
-                showSearch
-                style={{
-                    width: 200,
+                            <MenuItem>
+                                <Link to={'/login'}>
+                                    <Typography textAlign="center" className={'!px-4'}>Đăng xuất</Typography>
+                                </Link>
+                            </MenuItem>
+                        </Menu>
+                    </Box>
+                </Toolbar>
+            </AppBar>
+            <Drawer
+                sx={{
+                    width: drawerWidth,
+                    flexShrink: 0,
+                    '& .MuiDrawer-paper': {
+                        width: drawerWidth,
+                        boxSizing: 'border-box',
+                    },
                 }}
-                placeholder="Search to Select"
-                optionFilterProp="children"
-                filterOption={(input, option) => (option?.label ?? '').includes(input)}
-                filterSort={(optionA, optionB) =>
-                    (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
-                }
-                options={[
-                    {
-                        value: 'yes',
-                        label: 'yes',
-                    },
-                    {
-                        value: 'no',
-                        label: 'no',
-                    },
-                ]}
-            />
-
-        </div>
-
+                variant="persistent"
+                anchor="left"
+                open={open}
+                className={'!outline-0 !border-0 !bg-red-400'}
+            >
+                <DrawerHeader>
+                    <a href={'/'} className={'flex items-center justify-center hover:cursor-pointer'}>
+                        <img src={logo} alt="" className={'h-[50px]'}/>
+                        <div className={''}>
+                            <p className={' text-[#018957]  text-[14px]  uppercase font-bold'}>Hỗ trợ </p>
+                            <p className={' text-[#018957]  text-[14px]  uppercase font-bold'}>đánh giá Tín dụng</p>
+                        </div>
+                    </a>
+                </DrawerHeader>
+                <Divider/>
+                <Nav/>
+            </Drawer>
+            <Main open={open} className={'!bg-[#F4F4F4]'}>
+                <DrawerHeader/>
+                <Outlet/>
+            </Main>
+        </Box>
     );
 }
 

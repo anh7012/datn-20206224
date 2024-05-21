@@ -1,24 +1,20 @@
-import React from 'react';
-import {Route, Routes} from "react-router-dom";
-import App from "../page/App.jsx";
-import AppTest from "../page/AppTest.jsx";
-import Hoso from "../page/hoso.jsx";
-import Danhgia from "../page/danhgia.jsx";
-import HoSo5 from "../page/HoSo5.jsx";
+import {Navigate, Route, Routes} from "react-router-dom";
 import DangNhap from "../page/DangNhap.jsx";
+import App from "../page/App.jsx";
+import DanhGiaTinDung from "../page/DanhGiaTinDung.jsx";
+import QuanLyNhanVien from "../page/QuanLyNhanVien.jsx";
 
 
-function AppRoutes(props) {
+function AppRoutes() {
     return (
         <div>
             <Routes>
                 <Route path="/dangnhap" element={<DangNhap/>}/>
-                <Route path="/" element={<App/>}>
-                    <Route path={'/hoso'} element={<Hoso/>}/>
-                    <Route path={'/hoso/:id'} element={<HoSo5/>}/>
-                    <Route path={'/danhgia'} element={<Danhgia/>}/>
+                <Route path="/" element={<App />}>
+                    <Route index element={<Navigate to="danhgiatindung" replace />} />
+                    <Route path="danhgiatindung" element={<DanhGiaTinDung />} />
+                    <Route path="quanlynhanvien" element={<QuanLyNhanVien />} />
                 </Route>
-                <Route path="/test" element={<AppTest/>}/>
             </Routes>
         </div>
     );
