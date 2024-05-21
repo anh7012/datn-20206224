@@ -2,9 +2,10 @@ const express = require('express')
 const router = express.Router()
 
 const AccountController = require('../controllers/AccountController')
+const {verifyToken} = require("../middlewares/authenToken");
 
-router.post('/create', AccountController.createAccount)
+router.post('/create', verifyToken,AccountController.createAccount)
 
-router.get('/', AccountController.listAccount)
+router.get('/',verifyToken, AccountController.listAccount)
 
 module.exports = router

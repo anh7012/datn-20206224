@@ -2,10 +2,10 @@ const express = require('express')
 const router = express.Router()
 
 const ClientController = require('../controllers/ClientController')
-const validate = require("../middlewares/validator");
+const {verifyToken} = require("../middlewares/authenToken");
 
-router.post('/themkhachhang',validate.validateEmail, ClientController.createClient)
-router.put('/:id/suakhachhang', ClientController.updateClient)
-router.get('/', ClientController.listClient)
+router.post('/themkhachhang',verifyToken, ClientController.createClient)
+router.put('/:id/suakhachhang',verifyToken, ClientController.updateClient)
+router.get('/', verifyToken,ClientController.listClient)
 
 module.exports = router

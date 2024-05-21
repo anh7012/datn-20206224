@@ -2,9 +2,9 @@ const jwt = require("jsonwebtoken");
 let User = require("../models/user");
 require("dotenv").config();
 
-const authenToken = {
+
   // verify Token
-  verifyToken: (req, res, next) => {
+  const verifyToken = (req, res, next) => {
     const authorizationHeader = req.headers["authorization"];
     if (authorizationHeader) {
       const accessToken = authorizationHeader.split(" ")[1];
@@ -35,7 +35,6 @@ const authenToken = {
         data: { message: "You're not authenticated" },
       });
     }
-  },
-};
+  }
 
-module.exports = authenToken;
+module.exports = {verifyToken};

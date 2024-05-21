@@ -19,12 +19,56 @@ module.exports = {
                     return;
                 }
                 const roleInfo = await  Role.getRoleById(user.idRole)
-
+                if (!roleInfo) {
+                    res.json({code: 9999, data: {message: "Role cannot found"}});
+                    return;
+                }
+                if (roleInfo.roleName !== 'Nhân viên'){
+                    res.json({code: 9999, data: {message: "Người dùng không phải nhân viên"}});
+                    return;
+                }
+                next()
             })
+        }else {
+            return res.json({
+                code: 9999,
+                data: {message: "You're not authenticated"},
+            });
         }
     },
-    checkNhanVien: async () => {
-
+    checkAdmin: async (req, res, next) => {
+        const authorizationHeader = req.headers["authorization"];
+        if (authorizationHeader) {
+            const accessToken = authorizationHeader.split(" ")[1];
+            jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, async (err, data) => {
+                if (err) {
+                    return res.json({
+                        code: 9999,
+                        data: {message: "Token not valid"},
+                    });
+                }
+                const user = await User.getByIdUser(data.id);
+                if (!user) {
+                    res.json({code: 9999, data: {message: "User cannot found"}});
+                    return;
+                }
+                const roleInfo = await  Role.getRoleById(user.idRole)
+                if (!roleInfo) {
+                    res.json({code: 9999, data: {message: "Role cannot found"}});
+                    return;
+                }
+                if (roleInfo.roleName !== 'Quản trị viên'){
+                    res.json({code: 9999, data: {message: "Người dùng không phải quản trị viên"}});
+                    return;
+                }
+                next()
+            })
+        }else {
+            return res.json({
+                code: 9999,
+                data: {message: "You're not authenticated"},
+            });
+        }
     },
     checkPermisson: async () => {
 

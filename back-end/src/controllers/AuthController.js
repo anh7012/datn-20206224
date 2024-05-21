@@ -52,7 +52,8 @@ const authController = {
         res.json({ code: 1006, data: { message: "Sai mật khẩu" } });
       }
     } catch (error) {
-      res.json({ code: 9999, error: error.message });
+      console.log(error)
+      res.json({ code: 9999, data: { message: "Không thể đăng nhập" }});
     }
   },
 
