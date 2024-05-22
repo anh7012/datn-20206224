@@ -9,7 +9,7 @@ const {
 
 const authController = {
   // [POST] /users/login
-  login: async (req, res) => {
+  login: async (req, res, next) => {
     try {
       const user = await User.getByUsername(req.body.username);
       if (!user) {
@@ -33,18 +33,21 @@ const authController = {
           sameSite: "strict",
           path:"/",
         });
+        if (user.refreshTokens !== null) {
+          let deleteToken = await User.deleteToken(user.idUser)
+          next()
+        }
         let rs = await User.addToken({
           id: user.idUser,
           refreshTokens: user.refreshTokens,
           refreshToken: refreshToken,
         });
 
-        // const { password, refreshTokens, ...other } = user;
-        const { idUser, roleName, username,HoTen, email } = user;
+        const { password, refreshTokens, ...other } = user;
         res.json({
           code: 1000,
           data: {
-            user: { idUser,roleName, username,HoTen, email },
+            user: other,
             accessToken,
             message: "Đăng nhập thành công",
           },

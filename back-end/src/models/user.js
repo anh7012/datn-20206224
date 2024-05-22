@@ -140,4 +140,12 @@ module.exports = class Users {
         );
         return result;
     };
+    static deleteToken = async (id) => {
+        const [result] = await promisePool.query(
+            "UPDATE users SET refreshTokens = null WHERE idUser = ?;",
+            [id]
+        );
+        return result;
+    };
+
 };
