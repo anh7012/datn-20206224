@@ -16,6 +16,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import {useDispatch, useSelector} from "react-redux";
 import {useState} from "react";
 import {logout} from "../redux/apiRequest.js";
+import ModalInfoUser from "../components/ModalInfoUser.jsx";
 
 
 const drawerWidth = 240;
@@ -128,7 +129,7 @@ function App() {
                         >
 
                             <MenuItem>
-                                <Typography textAlign="center" className={'!px-4'}>Thông tin</Typography>
+                                <Typography textAlign="center" className={'!px-4 '}><ModalInfoUser/></Typography>
                             </MenuItem>
 
                             <MenuItem>

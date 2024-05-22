@@ -9,42 +9,44 @@ const {
 
 const authController = {
   // [POST] /users/login
+  // [POST] /users/login
   login: async (req, res, next) => {
     try {
       const user = await User.getByUsername(req.body.username);
       if (!user) {
-        res.json({
+        return res.json({
           code: 9992,
           data: { message: "Tài khoản không tồn tại" },
         });
-        return;
       }
       const validPassword = await bcrypt.compare(
-        req.body.password,
-        user.password
+          req.body.password,
+          user.password
       );
 
       if (validPassword) {
-        const accessToken = generateAccessToken(user); //
-        const refreshToken = generateRefreshToken(user); //Lưu trữ ở cookie
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
+
         res.cookie("refreshToken", refreshToken, {
           httpOnly: true,
-          secure: false,
+          secure: false, // Chú ý: nên đặt là true trong môi trường production
           sameSite: "strict",
-          path:"/",
+          path: "/",
         });
+
         if (user.refreshTokens !== null) {
-          let deleteToken = await User.deleteToken(user.idUser)
-          next()
+          await User.deleteToken(user.idUser); // Giả sử rằng phương thức này không gây ra lỗi
         }
-        let rs = await User.addToken({
+
+        await User.addToken({
           id: user.idUser,
           refreshTokens: user.refreshTokens,
           refreshToken: refreshToken,
         });
 
         const { password, refreshTokens, ...other } = user;
-        res.json({
+        return res.json({
           code: 1000,
           data: {
             user: other,
@@ -53,11 +55,11 @@ const authController = {
           },
         });
       } else {
-        res.json({ code: 1006, data: { message: "Sai mật khẩu" } });
+        return res.json({ code: 1006, data: { message: "Sai mật khẩu" } });
       }
     } catch (error) {
-      console.log(error)
-      res.json({ code: 9999, data: { message: "Không thể đăng nhập" }});
+      console.log(error);
+      return res.status(500).json({ code: 9999, data: { message: "Không thể đăng nhập" }});
     }
   },
 

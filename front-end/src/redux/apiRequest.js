@@ -53,3 +53,31 @@ export const getAllUser = async (accessToken,dispatch)=>{
     }
 
 }
+
+
+export const updateUser = async (data,id,accessToken)=>{
+    try {
+        const res = await axios.put(`http://localhost:7012/users/${id}`,{}, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+
+    }catch (e){
+        console.log(e)
+    }
+}
+export const loginAgain = async (user, dispatch)=>{
+    try {
+        const res = await axios.post('http://localhost:7012/login', user);
+        if (res.data.code === 1000) {
+            dispatch(loginSuccess(res.data));
+        } else {
+            // dispatch(loginFailed(res.data));
+        }
+
+    } catch (error) {
+        // dispatch(loginFailed(error));
+        // eventEmitter.emit('error',error)
+    }
+}
