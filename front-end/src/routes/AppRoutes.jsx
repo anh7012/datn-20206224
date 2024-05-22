@@ -9,8 +9,9 @@ function AppRoutes() {
     return (
         <div>
             <Routes>
+                <Route path="/" element={<Navigate to="dangnhap" replace />}/>
                 <Route path="/dangnhap" element={<DangNhap/>}/>
-                <Route path="/" element={<App />}>
+                <Route path="/home" element={<App />}>
                     <Route index element={<Navigate to="danhgiatindung" replace />} />
                     <Route path="danhgiatindung" element={<DanhGiaTinDung />} />
                     <Route path="quanlynhanvien" element={<QuanLyNhanVien />} />

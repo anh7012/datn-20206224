@@ -9,10 +9,15 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import logo from '../assets/image/logo.jpg'
-import {Link, Outlet} from "react-router-dom";
-import {Avatar, Menu, MenuItem, Tooltip, Typography} from "@mui/material";
+import {Link, Outlet, useNavigate} from "react-router-dom";
+import { Menu, MenuItem, Tooltip, Typography} from "@mui/material";
 import Nav from "../components/Nav.jsx";
 import PersonIcon from '@mui/icons-material/Person';
+import {useDispatch, useSelector} from "react-redux";
+import {useState} from "react";
+import {logout} from "../redux/apiRequest.js";
+
+
 const drawerWidth = 240;
 
 const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open'})(
@@ -58,16 +63,17 @@ const DrawerHeader = styled('div')(({theme}) => ({
     ...theme.mixins.toolbar,
     justifyContent: 'center',
 }));
-const settings = ['Thông tin', 'Tài khoản','Đăng xuất'];
 
 function App() {
+    const dispatch = useDispatch()
+    const navigator = useNavigate()
     const [open, setOpen] = React.useState(true);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-
+    const user = useSelector((state) => state.auth.login?.currentUser?.data.user);
+    const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data.accessToken);
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
-
 
 
     const handleCloseUserMenu = () => {
@@ -94,18 +100,18 @@ function App() {
                     >
                         <MenuIcon className={'text-[#018957]'}/>
                     </IconButton>
-                    <Box sx={{ flexGrow: 0 }} className={'!flex justify-center items-center'}>
-                        <div className={'text-black flex-col flex items-start justify-end mr-2'}>
-                            <p className={'text-[#018957] '}>Quản trị viên</p>
-                            <p className={'text-[14px] '}>Phạm Thị Ngọc Anh</p>
+                    <Box sx={{flexGrow: 0}} className={'!flex justify-center items-center'}>
+                        <div className={'text-black flex-col flex items-start justify-end mr-4'}>
+                            <p className={'text-[#018957] text-[12px] '}>{user?.roleName}</p>
+                            <p className={'text-[14px]'}>{user?.HoTen}</p>
                         </div>
                         <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 1 }} className={'!bg-[#018957]'}>
-                                <PersonIcon className={'scale-150  text-white' }/>
+                            <IconButton onClick={handleOpenUserMenu} sx={{p: 1}} className={'!bg-[#018957]'}>
+                                <PersonIcon className={'scale-150  text-white'}/>
                             </IconButton>
                         </Tooltip>
                         <Menu
-                            sx={{ mt: '45px'}}
+                            sx={{mt: '45px'}}
                             id="menu-appbar"
                             anchorEl={anchorElUser}
                             anchorOrigin={{
@@ -121,14 +127,16 @@ function App() {
                             onClose={handleCloseUserMenu}
                         >
 
-                            <MenuItem  >
+                            <MenuItem>
                                 <Typography textAlign="center" className={'!px-4'}>Thông tin</Typography>
                             </MenuItem>
 
                             <MenuItem>
-                                <Link to={'/login'}>
+                                <div  onClick={async ()=>{
+                                   await logout(accessToken,dispatch,navigator)
+                                }}>
                                     <Typography textAlign="center" className={'!px-4'}>Đăng xuất</Typography>
-                                </Link>
+                                </div>
                             </MenuItem>
                         </Menu>
                     </Box>
@@ -150,10 +158,10 @@ function App() {
             >
                 <DrawerHeader>
                     <a href={'/'} className={'flex items-center justify-center hover:cursor-pointer'}>
-                        <img src={logo} alt="" className={'h-[50px]'}/>
+                        <img src={logo} alt="" className={'h-[50px] ml-[-50px]'}/>
                         <div className={''}>
-                            <p className={' text-[#018957]  text-[14px]  uppercase font-bold'}>Hỗ trợ </p>
-                            <p className={' text-[#018957]  text-[14px]  uppercase font-bold'}>đánh giá Tín dụng</p>
+                            <p className={' text-[#018957]  text-[12px]  uppercase font-bold'}>Hỗ trợ </p>
+                            <p className={' text-[#018957]  text-[12px]  uppercase font-bold'}>đánh giá Tín dụng</p>
                         </div>
                     </a>
                 </DrawerHeader>
