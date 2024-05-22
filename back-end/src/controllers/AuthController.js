@@ -79,11 +79,13 @@ const authController = {
           data: { message: "Refresh token is not valid" },
         });
       }
-      let rs = await User.addToken({
+
+      // Remove old refreshToken
+      let rm = await User.removeToken({
         id: user.idUser,
         refreshTokens: user.refreshTokens,
         refreshToken: refreshToken,
-      });
+      })
       // Create new tokens
       const newAccessToken = generateAccessToken(user);
       const newRefreshToken = generateRefreshToken(user);
@@ -91,6 +93,12 @@ const authController = {
         httpOnly: true,
         secure: false,
         sameSite: "strict",
+      });
+      // Save new refreshToken
+      let rs = await User.addToken({
+        id: user.idUser,
+        refreshTokens: user.refreshTokens,
+        refreshToken: newRefreshToken,
       });
       return res.json({
         code: 1000,
