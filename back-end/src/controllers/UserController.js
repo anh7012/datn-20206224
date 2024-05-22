@@ -15,6 +15,23 @@ const usersController = {
             });
         }
     },
+    // [GET] /users/:id
+    getUser: async (req, res, next) => {
+        try {
+            const user = await User.getByIdUser(req.params.id);
+            const { password, refreshTokens, ...other } = user;
+            res.json({
+                code: 1000,
+                user: other,
+                message: "Lấy thông tin nhân viên thành công"
+            });
+        } catch (error) {
+            res.json({
+                code: 9992,
+                data: {message: "Không tìm thấy nhân viên"},
+            });
+        }
+    },
     // [POST] /users/create
     create: async (req, res, next) => {
         try {

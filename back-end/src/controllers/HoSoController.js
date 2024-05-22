@@ -116,7 +116,7 @@ const hoSoController = {
     },
 
     // [POST] /hoso/themhoso/tsdb
-    createMHBIDV: async (req, res, next) => {
+    createMHBIDVAndEY: async (req, res, next) => {
         try {
             const hoso = await HoSo.getHoSoByMaHoSo(req.body.MaHoSo)
             const TyLeTienTraTrenThuNhap = (hoso.SoTienTraHangThang / hoso.ThuNhapRong).toFixed(2)
@@ -138,25 +138,7 @@ const hoSoController = {
                 TinhHinhTraNo: req.body.TinhHinhTraNo?.tinhhinhtrano,
                 DiemTinhHinhTraNo: req.body.TinhHinhTraNo?.diem,
             }
-            console.log(mhbidv)
             const newmhbidv = await MoHinhBIDV.createBIDV(mhbidv)
-            res.json({
-                code: 1000,
-                message: "Thêm hồ sơ mới thành công",
-                data: newmhbidv
-            });
-        } catch (error) {
-            console.log(error)
-            res.status(500).json({
-                message: "Không thể thêm hồ sơ mới",
-            });
-        }
-    }
-    ,
-    // [POST] /hoso/themhoso/kntn
-    createMHEY: async (req, res, next) => {
-        try {
-            const hoso = await HoSo.getHoSoByMaHoSo(req.body.MaHoSo)
             const duno = await Loan.getTongNoByID(hoso.idClient)
             const diemDuNoTrenTSRong = await Diem.DiemDuNoTrenTSRong(duno.TongNo, req.body.TaiSanRong)
             const diemLoiNhuanTrenTN = await Diem.DiemLoiNhuanTrenTN(req.body.LoiNhuan, req.body.DoanhThu, hoso.ThuNhapRong)
@@ -171,7 +153,7 @@ const hoSoController = {
             const diemTienKeHoachTrenNguonTraNo = await Diem.DiemTienKeHoachTrenNguonTraNo(sotientra.tonggoclaitra, req.body.NguonTraNo)
             const mhey = {
                 idHoSo: hoso.idHoSo,
-                DuNo: parseFloat(duno.TongNo) ,
+                DuNo: parseFloat(duno.TongNo),
                 TaiSanRong: req.body.TaiSanRong,
                 DiemDuNoTrenTSRong: diemDuNoTrenTSRong,
                 TinhHinhTraNo: req.body.tinhhinhtrano?.TinhHinhTraNo,
@@ -186,12 +168,11 @@ const hoSoController = {
                 NguonTraNo: req.body.NguonTraNo,
                 DiemTienKeHoachTrenNguonTraNo: diemTienKeHoachTrenNguonTraNo
             }
-            console.log(mhey)
             const newmhey = await MoHinhEY.createEY(mhey)
             res.json({
                 code: 1000,
                 message: "Thêm hồ sơ mới thành công",
-                data: newmhey
+                data: newmhbidv, newmhey
             });
         } catch (error) {
             console.log(error)
@@ -202,5 +183,4 @@ const hoSoController = {
     }
 
 }
-;
 module.exports = hoSoController;

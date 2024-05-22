@@ -15,5 +15,7 @@ router.delete("/:id",checkAdmin, usersController.deleteUser);
 router.post("/:id",checkAdmin, usersController.changeRole);
 //
 router.get("/",checkAdmin, usersController.listUsers);
+// Lây thông tin 1 nhan vien
+router.get("/:id",verifyToken, usersController.getUser);
 
 module.exports = router;
