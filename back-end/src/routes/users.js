@@ -12,7 +12,7 @@ router.post("/:id/change_password",checkAdmin,usersController.changePassword);
 // router.post("/reset_password", usersController.resetPassword);
 router.put("/:id",verifyToken, usersController.updateUser);
 router.delete("/:id",checkAdmin, usersController.deleteUser);
-// router.put("/:id", usersController.roleUser);
+router.post("/:id",checkAdmin, usersController.changeRole);
 //
 router.get("/",checkAdmin, usersController.listUsers);
 

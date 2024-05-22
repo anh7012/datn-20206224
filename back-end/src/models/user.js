@@ -39,7 +39,7 @@ module.exports = class Users {
 
     static getByUsername = async (username) => {
         const [rows, fields] = await promisePool.query(
-            "SELECT * FROM users WHERE username=?",
+            "SELECT * FROM users JOIN role ON users.idRole = role.idRole WHERE username= ?",
             [username]
         );
         return rows[0];
@@ -101,6 +101,14 @@ module.exports = class Users {
         const [result] = await promisePool.query(
             "UPDATE users SET password = ? WHERE idUser = ?;",
             [newPassword, id]
+        )
+        return result;
+    }
+
+    static changeRole = async ({id, newRole}) => {
+        const [result] = await promisePool.query(
+            "UPDATE users SET users.idRole = (SELECT idRole FROM role WHERE roleName = ?) WHERE users.idUser = ?;",
+            [newRole, id]
         )
         return result;
     }

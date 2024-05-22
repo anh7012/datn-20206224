@@ -31,3 +31,18 @@ Routes:http://localhost:7012/
 - updateUser: [put] http://localhost:7012/users/:id
   - Auth: accessToken
   - Param: idUser 
+  - Body:
+    + email
+    + HoTen
+    + NgaySinh
+    + GioiTinh
+    + DiaChi
+- deleteUser: [delete] http://localhost:7012/users/:id
+  - Auth: accessToken
+  - Param: idUser
+- changeRole: [post] http://localhost:7012/users/:id
+  - Auth: accessToken
+  - Param: idUser
+  - Body: roleName: 1 trong 3 {"Quản trị viên", "Nhân viên", "Giám đốc"}
+- listUser: [get] http://localhost:7012/users/
+  - Auth: accessToken

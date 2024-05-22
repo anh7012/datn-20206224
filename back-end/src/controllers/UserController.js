@@ -174,7 +174,35 @@ const usersController = {
         } catch (error) {
             res.json({code: 9999, error: error.message})
         }
-    }
+    },
 // CHANGE ROLE, PERMISSON
+    changeRole: async (req, res) => {
+        try {
+            const data = await User.changeRole({
+                id: req.params.id,
+                newRole: req.body.roleName
+            })
+            console.log(data)
+            if (data.affectedRows == 1) {
+                res.json({
+                    code: 1000,
+                    data: {
+                        id: req.params.id,
+                        username: req.body.roleName,
+                        message: "Role has been changed successfully!",
+                    }
+                })
+            } else {
+                res.json({
+                    code: 1006,
+                    data: {
+                        message: "Role has been changed and failed!",
+                    },
+                })
+            }
+        } catch (error) {
+            res.json({code: 9999, error: error.message});
+        }
+    }
 };
 module.exports = usersController;
