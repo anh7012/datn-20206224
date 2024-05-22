@@ -18,12 +18,17 @@ const usersController = {
     // [GET] /users/:id
     getUser: async (req, res, next) => {
         try {
+            const authorizationHeader = req.headers["authorization"];
+            const accessToken = authorizationHeader.split(" ")[1];
             const user = await User.getByIdUser(req.params.id);
             const { password, refreshTokens, ...other } = user;
-            res.json({
+            return res.json({
                 code: 1000,
-                user: other,
-                message: "Lấy thông tin nhân viên thành công"
+                data: {
+                    user: other,
+                    accessToken: accessToken,
+                    message: "Lấy thông tin thành công",
+                },
             });
         } catch (error) {
             res.json({

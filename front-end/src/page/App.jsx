@@ -70,8 +70,8 @@ function App() {
     const navigator = useNavigate()
     const [open, setOpen] = React.useState(true);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const user = useSelector((state) => state.auth.login?.currentUser?.data.user);
-    const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data.accessToken);
+    const user = useSelector((state) => state.auth.login?.currentUser?.data?.user);
+    const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };

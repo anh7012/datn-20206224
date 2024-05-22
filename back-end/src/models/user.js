@@ -22,7 +22,7 @@ module.exports = class Users {
 
     static getByIdUser = async (id) => {
         const [rows, fields] = await promisePool.query(
-            "SELECT * FROM users WHERE idUser = ?;",
+            "SELECT * FROM users JOIN role ON users.idRole = role.idRole WHERE users.idUser = ?;",
             [id]
         );
         return rows[0];

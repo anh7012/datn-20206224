@@ -38,26 +38,12 @@ export const logout = async (accessToken,dispatch,navigator)=>{
 }
 
 
-export const getAllUser = async (accessToken,dispatch)=>{
-    dispatch(getAllUserStart())
-    try {
-        const res = await axios.get('http://localhost:8000/user',{
-            headers:{
-                token:`Bearer ${accessToken}`
-            }
-        })
-        dispatch(getAllUserSuccess(res.data))
-    }
-    catch (e){
-        dispatch(getAllUserFailed())
-    }
 
-}
 
 
 export const updateUser = async (data,id,accessToken)=>{
     try {
-        const res = await axios.put(`http://localhost:7012/users/${id}`,{}, {
+        const res = await axios.put(`http://localhost:7012/users/${id}`,data, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -67,17 +53,15 @@ export const updateUser = async (data,id,accessToken)=>{
         console.log(e)
     }
 }
-export const loginAgain = async (user, dispatch)=>{
+export const getUserInfo = async (id,accessToken ,dispatch)=>{
     try {
-        const res = await axios.post('http://localhost:7012/login', user);
-        if (res.data.code === 1000) {
-            dispatch(loginSuccess(res.data));
-        } else {
-            // dispatch(loginFailed(res.data));
-        }
-
+        const res = await axios.get(`http://localhost:7012/users/${id}`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+       dispatch(loginSuccess(res.data))
     } catch (error) {
-        // dispatch(loginFailed(error));
-        // eventEmitter.emit('error',error)
+        console.log(error)
     }
 }
