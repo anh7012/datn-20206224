@@ -2,6 +2,8 @@ const promisePool = require("../config/db/db");
 const {v4: uuidv4} = require("uuid");
 const {removeToken, addToken} = require("../utils/token");
 const moment = require("moment/moment");
+const momentYZ = require('moment-timezone');
+
 
 module.exports = class Users {
     constructor(users) {
@@ -21,13 +23,24 @@ module.exports = class Users {
         return rows;
     };
 
-    static getByIdUser = async (id) => {
-        const [rows, fields] = await promisePool.query(
-            "SELECT * FROM users JOIN role ON users.idRole = role.idRole WHERE users.idUser = ?;",
+
+    static getUserById = async (id) => {
+        const [rows] = await promisePool.query(
+            "SELECT email, HoTen, NgaySinh, GioiTinh, DiaChi, roleName, username FROM users JOIN role ON users.idRole = role.idRole WHERE idUser = ?;",
             [id]
         );
-        return rows[0];
+
+        if (rows.length > 0) {
+            const user = rows[0];
+            // Chuyển đổi NgaySinh từ UTC sang Asia/Ho_Chi_Minh
+            user.NgaySinh = momentYZ.tz(user.NgaySinh, 'UTC').tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD');
+            console.log('Retrieved NgaySinh:', user.NgaySinh);
+            return user;
+        } else {
+            throw new Error('User not found');
+        }
     };
+
 
     static getInforByIdUser = async (id) => {
         const [rows, fields] = await promisePool.query(
@@ -76,9 +89,14 @@ module.exports = class Users {
     };
 
     static updateUser = async ({email, HoTen, NgaySinh, GioiTinh, DiaChi, id}) => {
-        const formatNgaySinh = moment(NgaySinh).format('YYYY-MM-DD')
+        console.log('Original NgaySinh:', NgaySinh);
+
+        // Định dạng lại NgaySinh thành chuỗi theo định dạng YYYY-MM-DD
+        const formatNgaySinh = moment(NgaySinh).format('YYYY-MM-DD');
+        console.log('Formatted NgaySinh:', formatNgaySinh);
+
         const [result] = await promisePool.query(
-            "UPDATE users SET  email =?, HoTen =?, NgaySinh =?, GioiTinh =?, DiaChi =? WHERE idUser = ?;",
+            "UPDATE users SET email =?, HoTen =?, NgaySinh =?, GioiTinh =?, DiaChi =? WHERE idUser = ?;",
             [
                 email,
                 HoTen,

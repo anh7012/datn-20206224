@@ -13,7 +13,7 @@ module.exports = {
                         data: {message: "Token not valid"},
                     });
                 }
-                const user = await User.getByIdUser(data.id);
+                const user = await User.getUserById(data.id);
                 if (!user) {
                     res.json({code: 9999, data: {message: "User cannot found"}});
                     return;
@@ -47,7 +47,7 @@ module.exports = {
                         data: {message: "Token not valid"},
                     });
                 }
-                const user = await User.getByIdUser(data.id);
+                const user = await User.getUserById(data.id);
                 if (!user) {
                     res.json({code: 9999, data: {message: "User cannot found"}});
                     return;

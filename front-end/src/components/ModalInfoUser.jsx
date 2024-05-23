@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {getUserInfo, updateUser} from "../redux/apiRequest.js";
 import {notify} from "../utils/notify.js";
 import eventEmitter from "../utils/eventEmitter.js";
+import moment from 'moment';
 
 const style = {
     position: 'absolute',
@@ -30,7 +31,7 @@ function ModalInfoUser() {
         GioiTinh: userInfo?.GioiTinh || '',
         NgaySinh: ''
     });
-
+    const formattedNgaySinh = userInfo?.NgaySinh ? moment(userInfo.NgaySinh).format('YYYY-MM-DD') : '';
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
@@ -128,14 +129,19 @@ function ModalInfoUser() {
                                         <option value={0}>Nữ</option>
                                     </NativeSelect>
                                 </FormControl>
-                                <input type="date" name={'NgaySinh'} defaultValue={userInfo?.NgaySinh}
-                                       onChange={handleChange} style={{
-                                    padding: '10px',
-                                    width: '100%',
-                                    marginTop: '8px',
-                                    border: '1px solid #ccc',
-                                    borderRadius: '4px'
-                                }}/>
+                                <input
+                                    type="date"
+                                    name="NgaySinh"
+                                    defaultValue={formattedNgaySinh}
+                                    onChange={handleChange}
+                                    style={{
+                                        padding: '10px',
+                                        width: '100%',
+                                        marginTop: '8px',
+                                        border: '1px solid #ccc',
+                                        borderRadius: '4px'
+                                    }}
+                                />
                             </div>
                         </div>
                         <div className={'w-full flex justify-end item-center !mt-10'}

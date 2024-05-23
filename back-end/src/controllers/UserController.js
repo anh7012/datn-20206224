@@ -16,11 +16,11 @@ const usersController = {
         }
     },
     // [GET] /users/:id
-    getUser: async (req, res, next) => {
+     getUser : async (req, res, next) => {
         try {
             const authorizationHeader = req.headers["authorization"];
             const accessToken = authorizationHeader.split(" ")[1];
-            const user = await User.getByIdUser(req.params.id);
+            const user = await User.getUserById(req.params.id);
             const { password, refreshTokens, ...other } = user;
             return res.json({
                 code: 1000,
@@ -33,10 +33,11 @@ const usersController = {
         } catch (error) {
             res.json({
                 code: 9992,
-                data: {message: "Không tìm thấy nhân viên"},
+                data: { message: "Không tìm thấy nhân viên" },
             });
         }
     },
+
     // [POST] /users/create
     create: async (req, res, next) => {
         try {
@@ -152,7 +153,7 @@ const usersController = {
     //CHANGE PASSWORD
     changePassword: async (req, res, next) => {
         try {
-            const user = await User.getByIdUser(req.params.id)
+            const user = await User.getUserById(req.params.id)
             const saltRounds = 10; // Number of salt round for bcrypt
             const hashedPassword = await bcrypt.hash(
                 req.body.new_password,

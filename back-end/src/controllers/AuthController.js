@@ -75,7 +75,7 @@ const authController = {
     }
     try {
       const data = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-      const user = await User.getByIdUser(data.id);
+      const user = await User.getUserById(data.id);
       const verifySignature = getVerifySignature(refreshToken);
       const refreshTokens = user.refreshTokens;
       if (!refreshTokens.includes(verifySignature)) {
@@ -124,7 +124,7 @@ const authController = {
       const refreshToken = req.cookies.refreshToken;
       res.clearCookie("refreshToken");
       const data = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-      const user = await User.getByIdUser(data.id);
+      const user = await User.getUserById(data.id);
       await User.removeToken({
         id: user.idUser,
         refreshTokens: user.refreshTokens,
