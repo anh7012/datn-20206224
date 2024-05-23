@@ -1,6 +1,7 @@
 const promisePool = require("../config/db/db");
 const {v4: uuidv4} = require("uuid");
 const {removeToken, addToken} = require("../utils/token");
+const moment = require("moment/moment");
 
 module.exports = class Users {
     constructor(users) {
@@ -75,12 +76,13 @@ module.exports = class Users {
     };
 
     static updateUser = async ({email, HoTen, NgaySinh, GioiTinh, DiaChi, id}) => {
+        const formatNgaySinh = moment(NgaySinh).format('YYYY-MM-DD')
         const [result] = await promisePool.query(
             "UPDATE users SET  email =?, HoTen =?, NgaySinh =?, GioiTinh =?, DiaChi =? WHERE idUser = ?;",
             [
                 email,
                 HoTen,
-                NgaySinh,
+                formatNgaySinh,
                 GioiTinh,
                 DiaChi,
                 id
