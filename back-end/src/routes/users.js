@@ -14,7 +14,7 @@ router.put("/:id/updateUser",verifyToken, usersController.updateUser);
 router.delete("/:id/deleteUser",checkAdmin, usersController.deleteUser);
 router.post("/:id/changeRole",checkAdmin, usersController.changeRole);
 //
-router.get("/listUser",checkPermisson, usersController.listUsers);
+router.get("/listUser",verifyToken,checkPermisson, usersController.listUsers);
 // Lây thông tin 1 nhan vien
 router.get("/:id/getUser",verifyToken, usersController.getUser);
 

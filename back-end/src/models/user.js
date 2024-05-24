@@ -26,7 +26,7 @@ module.exports = class Users {
 
     static getUserById = async (id) => {
         const [rows] = await promisePool.query(
-            "SELECT email, HoTen, NgaySinh, GioiTinh, DiaChi, roleName, users.idRole, username FROM users JOIN role ON users.idRole = role.idRole WHERE idUser = ?;",
+            "SELECT * FROM users JOIN role ON users.idRole = role.idRole WHERE idUser = ?;",
             [id]
         );
 
@@ -149,8 +149,9 @@ module.exports = class Users {
         return {result, newRefreshToken};
     };
 
-    static removeToken = async ({id, refreshTokens, refreshTokenRm}) => {
-        let newRefreshToken = removeToken(refreshTokens, refreshTokenRm);
+    static removeToken = async ({id, refreshTokens, refreshToken}) => {
+        console.log('1>>>>>,',refreshToken);
+        let newRefreshToken = removeToken(refreshTokens, refreshToken);
         if (newRefreshToken === "not found") {
             throw new Error("Token not found");
         }

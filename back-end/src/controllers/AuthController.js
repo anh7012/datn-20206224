@@ -84,11 +84,10 @@ const authController = {
           data: { message: "Refresh token is not valid" },
         });
       }
-
       // Remove old refreshToken
       let rm = await User.removeToken({
         id: user.idUser,
-        refreshTokens: user.refreshTokens,
+        refreshTokens: refreshTokens,
         refreshToken: refreshToken,
       })
       // Create new tokens
