@@ -121,13 +121,14 @@ const authController = {
   logout: async (req, res) => {
     try {
       const refreshToken = req.cookies.refreshToken;
+      console.log(refreshToken)
       res.clearCookie("refreshToken");
       const data = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
       const user = await User.getUserById(data.id);
       await User.removeToken({
         id: user.idUser,
         refreshTokens: user.refreshTokens,
-        refreshTokenRm: refreshToken,
+        refreshToken: refreshToken,
       });
       return res.json({ code: 1000, data: { message: "Logout success" } });
     } catch (error) {
