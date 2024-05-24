@@ -4,8 +4,8 @@ import App from "../page/App.jsx";
 import DanhGiaTinDung from "../page/DanhGiaTinDung.jsx";
 import QuanLyNhanVien from "../page/QuanLyNhanVien.jsx";
 
-
 function AppRoutes() {
+
     return (
         <div>
             <Routes>

@@ -1,19 +1,38 @@
-import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+    Button,
+    CircularProgress,
+    FormControl,
+    IconButton,
+    InputAdornment,
+    InputLabel,
+    OutlinedInput,
+    TextField
+} from "@mui/material";
+import {Visibility, VisibilityOff} from "@mui/icons-material";
 import {useEffect, useState} from "react";
 import logo from '../assets/image/logo.jpg';
-import { useNavigate } from "react-router-dom";
-import { loginUser } from "../redux/apiRequest.js";
-import {useDispatch} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import {loginUser} from "../redux/apiRequest.js";
+import {useDispatch, useSelector} from "react-redux";
 import {notify} from "../utils/notify.js";
 import eventEmitter from "../utils/eventEmitter.js";
 
 function DangNhap() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
+    const isLogin = !!useSelector(state => state.auth?.login?.currentUser)
+
+    useEffect(() => {
+        if (isLogin) {
+            navigate("/home");
+        }
+        setLoading(false)
+    }, []);
+
 
     const handleUserNameChange = (e) => {
         setUserName(e.target.value);
@@ -36,7 +55,7 @@ function DangNhap() {
             username: userName,
             password: password,
         };
-            await loginUser(userDetails, dispatch, navigate);
+        await loginUser(userDetails, dispatch, navigate);
     };
     useEffect(() => {
         const handleSuccess = () => {
@@ -55,11 +74,17 @@ function DangNhap() {
             eventEmitter.off('error', handleError);
         };
     }, []);
-
+    if (loading) {
+        return (
+            <div className="w-full h-[100vh] flex items-center justify-center">
+                <CircularProgress className="scale-150" />
+            </div>
+        );
+    }
     return (
         <div className="w-full h-[100vh] grid grid-cols-[55%,45%]">
             <div className="flex items-center justify-center flex-col mt-[-100px]">
-                <img src={logo} alt="logo" className="h-[300px]" />
+                <img src={logo} alt="logo" className="h-[300px]"/>
                 <div className="mt-[-40px]">
                     <div className="font-bold text-[50px] flex flex-col items-center justify-center">
                         <div className="uppercase">Hệ thống</div>
@@ -91,7 +116,7 @@ function DangNhap() {
                                             onMouseDown={handleMouseDownPassword}
                                             edge="end"
                                         >
-                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                            {showPassword ? <VisibilityOff/> : <Visibility/>}
                                         </IconButton>
                                     </InputAdornment>
                                 }
