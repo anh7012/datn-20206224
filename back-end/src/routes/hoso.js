@@ -5,9 +5,9 @@ const hosoController = require('../controllers/HoSoController')
 const {verifyToken} = require("../middlewares/authenToken");
 
 
-router.post('/themhoso/thongtin',verifyToken, hosoController.createHoSo)
-router.post('/themhoso/tsdb',verifyToken, hosoController.createMHBIDVAndEY)
+router.post('/createHoSo',verifyToken, hosoController.createHoSo)
+router.post('/createMHBIDVAndEY',verifyToken, hosoController.createMHBIDVAndEY)
 // router.post('/themhoso/kntn',verifyToken, hosoController.createMHEY)
-router.get('/',verifyToken, hosoController.listHoSo)
+router.get('/listHoSo',verifyToken, hosoController.listHoSo)
 
 module.exports = router
