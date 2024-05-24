@@ -13,4 +13,5 @@ module.exports = class Role {
         );
         return rows[0];
     };
+
 }

@@ -8,7 +8,7 @@ Routes:http://localhost:7012/
   - Auth: accessToken
 
 **Users Router**
-- Create User: [post] http://localhost:7012/users/create
+- Create User: [post] http://localhost:7012/users/createUser
     - Auth: accessToken
     - Req.body: 
       + roleName: 1 trong 3 {"Quản trị viên", "Nhân viên", "Giám đốc"}
@@ -20,15 +20,15 @@ Routes:http://localhost:7012/
       + GioiTinh: Nam 1, Nữ 0
       + DiaChi
 
-- changeUsername: [post] http://localhost:7012/users/:id/change_username/
+- changeUsername: [post] http://localhost:7012/users/:id/changeUsername
     - Auth: accessToken
     - Param: idUser đó
     - Body: username
-- changePassword: [post] http://localhost:7012/users/:id/change_password/
+- changePassword: [post] http://localhost:7012/users/:id/changePassword
     - Auth: accessToken
     - Param: idUser đó
     - Body: old_password, new_password
-- updateUser: [put] http://localhost:7012/users/:id
+- updateUser: [put] http://localhost:7012/users/:id/updateUser
   - Auth: accessToken
   - Param: idUser 
   - Body:
@@ -37,12 +37,14 @@ Routes:http://localhost:7012/
     + NgaySinh
     + GioiTinh
     + DiaChi
-- deleteUser: [delete] http://localhost:7012/users/:id
+- deleteUser: [delete] http://localhost:7012/users/:id/deleteUser
   - Auth: accessToken
   - Param: idUser
-- changeRole: [post] http://localhost:7012/users/:id
+- changeRole: [post] http://localhost:7012/users/:id/changeRole
   - Auth: accessToken
   - Param: idUser
   - Body: roleName: 1 trong 3 {"Quản trị viên", "Nhân viên", "Giám đốc"}
-- listUser: [get] http://localhost:7012/users/
+- listUser: [get] http://localhost:7012/users/listUser
+  - Auth: accessToken
+- getUser: [get] http://localhost:7012/users/listUser/:id/getUser
   - Auth: accessToken
