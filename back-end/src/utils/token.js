@@ -4,7 +4,7 @@ const generateAccessToken = (user) => {
   return jwt.sign(
     { id: user.idUser, idRole: user.idRole },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "365d" }
+    { expiresIn: "10s" }
   );
 };
 
@@ -37,8 +37,11 @@ const addToken = (refreshTokens, newRefreshToken) => {
 };
 
 const getVerifySignature = (refreshToken) => {
-  let arr = refreshToken.split(".");
-  return arr[2];
+  if (refreshToken){
+    let arr = refreshToken.split(".");
+    return arr[2];
+  }
+
 };
 
 module.exports = {
