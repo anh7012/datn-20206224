@@ -32,7 +32,6 @@ const authController = {
           httpOnly: true,
           secure: false, // Chú ý: nên đặt là true trong môi trường production
           sameSite: "strict",
-          path: "/",
         });
 
         if (user.refreshTokens !== null) {
@@ -66,7 +65,9 @@ const authController = {
   // Refresh Token
   reqRefreshToken: async (req, res) => {
     // Take refresh token from user
+
     const refreshToken = req.cookies.refreshToken;
+
     if (!refreshToken) {
       return res.json({
         code: 9992,
@@ -78,6 +79,7 @@ const authController = {
       const user = await User.getUserById(data.id);
       const verifySignature = getVerifySignature(refreshToken);
       const refreshTokens = user.refreshTokens;
+      console.log()
       if (!refreshTokens.includes(verifySignature)) {
         return res.json({
           code: 9992,
@@ -132,8 +134,8 @@ const authController = {
       });
       return res.json({ code: 1000, data: { message: "Logout success" } });
     } catch (error) {
-      res.json({ code: 9999, error: error.message });
-      return
+      return res.json({ code: 9999, error: error.message });
+
     }
   },
 };

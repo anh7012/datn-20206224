@@ -1,8 +1,11 @@
-import React from 'react';
+import {refreshToken} from "../utils/axiosInterceptor.js";
 
-function DanhGiaTinDung(props) {
+function DanhGiaTinDung() {
     return (
-        <div>day la quna ly tin dung</div>
+        <div>
+            <div>aaa</div>
+            <button onClick={refreshToken}>refresh Token</button>
+        </div>
     );
 }
 

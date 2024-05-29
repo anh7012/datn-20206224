@@ -1,5 +1,5 @@
 const express = require('express')
-var bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 const route = require('./routes/index')
 const  cors = require('cors')

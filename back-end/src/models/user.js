@@ -150,7 +150,6 @@ module.exports = class Users {
     };
 
     static removeToken = async ({id, refreshTokens, refreshToken}) => {
-        console.log('1>>>>>,',refreshToken);
         let newRefreshToken = removeToken(refreshTokens, refreshToken);
         if (newRefreshToken === "not found") {
             throw new Error("Token not found");

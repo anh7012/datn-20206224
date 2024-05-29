@@ -1,6 +1,4 @@
-import React from 'react';
-
-function QuanLyNhanVien(props) {
+function QuanLyNhanVien() {
     return (
         <div>
             day la quna ly nhanvien

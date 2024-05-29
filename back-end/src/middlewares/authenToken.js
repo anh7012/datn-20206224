@@ -5,6 +5,7 @@ require("dotenv").config();
 // verify Token
 const verifyToken = (req, res, next) => {
     const authorizationHeader = req.headers["authorization"];
+    console.log(authorizationHeader)
     if (!authorizationHeader) {
         res.json({code: 9999, data: {message: "Header do not have token"}});
         return;

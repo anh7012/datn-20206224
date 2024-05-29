@@ -19,20 +19,19 @@ export const loginUser = async (user, dispatch, navigate) => {
         eventEmitter.emit('error', error)
     }
 };
-export const logout = async (accessToken, dispatch, navigator) => {
+export const logout = async (accessToken, dispatch, navigator, axiosInstance) => {
     try {
-        await axios.post('http://localhost:7012/logout', {}, {
+        await axiosInstance.post('http://localhost:7012/logout', {}, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
         });
-        dispatch(logoutUser())
-        navigator('/dangnhap')
+        dispatch(logoutUser());
+        navigator('/dangnhap');
     } catch (e) {
-        console.log(e)
+        console.log('>>', e);
     }
 }
-
 
 export const updateUser = async (data, id, accessToken) => {
     try {

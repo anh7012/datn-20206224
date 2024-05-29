@@ -14,9 +14,9 @@ import { Menu, MenuItem, Tooltip, Typography} from "@mui/material";
 import Nav from "../components/Nav.jsx";
 import PersonIcon from '@mui/icons-material/Person';
 import {useDispatch, useSelector} from "react-redux";
-import {useState} from "react";
 import {logout} from "../redux/apiRequest.js";
 import ModalInfoUser from "../components/ModalInfoUser.jsx";
+import {createAxios} from "../utils/axiosInterceptor.js";
 
 
 const drawerWidth = 240;
@@ -72,6 +72,7 @@ function App() {
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const user = useSelector((state) => state.auth.login?.currentUser?.data?.user);
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
+    const userData = useSelector((state) => state.auth?.login?.currentUser?.data);
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
@@ -103,8 +104,8 @@ function App() {
                     </IconButton>
                     <Box sx={{flexGrow: 0}} className={'!flex justify-center items-center'}>
                         <div className={'text-black flex-col flex items-start justify-end mr-4'}>
-                            <p className={'text-[#018957] text-[12px] '}>{user?.roleName}</p>
-                            <p className={'text-[14px]'}>{user?.HoTen}</p>
+                            <div className={'text-[#018957] text-[12px] '}>{user?.roleName}</div>
+                            <div className={'text-[14px]'}>{user?.HoTen}</div>
                         </div>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{p: 1}} className={'!bg-[#018957]'}>
@@ -133,8 +134,9 @@ function App() {
                             </MenuItem>
 
                             <MenuItem>
-                                <div  onClick={async ()=>{
-                                   await logout(accessToken,dispatch,navigator)
+                                <div  onClick={async () => {
+                                    const axiosInstance = createAxios(userData, dispatch);
+                                    await logout(accessToken, dispatch, navigator, axiosInstance);
                                 }}>
                                     <Typography textAlign="center" className={'!px-4'}>Đăng xuất</Typography>
                                 </div>
@@ -161,8 +163,8 @@ function App() {
                     <a href={'/'} className={'flex items-center justify-center hover:cursor-pointer'}>
                         <img src={logo} alt="" className={'h-[50px] ml-[-50px]'}/>
                         <div className={''}>
-                            <p className={' text-[#018957]  text-[12px]  uppercase font-bold'}>Hỗ trợ </p>
-                            <p className={' text-[#018957]  text-[12px]  uppercase font-bold'}>đánh giá Tín dụng</p>
+                            <div className={' text-[#018957]  text-[12px]  uppercase font-bold'}>Hỗ trợ </div>
+                            <div className={' text-[#018957]  text-[12px]  uppercase font-bold'}>đánh giá Tín dụng</div>
                         </div>
                     </a>
                 </DrawerHeader>
