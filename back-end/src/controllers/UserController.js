@@ -16,7 +16,7 @@ const usersController = {
             }
         },
         // [GET] /users/:id
-        getUser: async (req, res, next) => {
+        getUser: async (req, res) => {
             try {
                 const authorizationHeader = req.headers["authorization"];
                 const accessToken = authorizationHeader.split(" ")[1];
@@ -59,7 +59,8 @@ const usersController = {
         create: async (req, res, next) => {
             try {
                 const data = req.body;
-                const existUser = await User.getByEmail(data.email);
+                const existEmail = await User.getByEmail(data.email);
+                const existUsername = await User.getByUsername(data.username);
                 if (
                     !data.roleName ||
                     !data.username ||
@@ -73,7 +74,7 @@ const usersController = {
                             message: "Vui lòng nhập đầy đủ thông tin",
                         },
                     });
-                } else if (existUser) {
+                } else if (existUsername || existEmail) {
                     res.json({
                         code: 9993,
                         message: "Tài khoản đã tồn tại",
