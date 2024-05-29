@@ -27,7 +27,7 @@ Routes:http://localhost:7012/
 - changePassword: [post] http://localhost:7012/users/:id/changePassword
     - Auth: accessToken
     - Param: idUser đó
-    - Body: old_password, new_password
+    - Body: new_password
 - updateUser: [put] http://localhost:7012/users/:id/updateUser
   - Auth: accessToken
   - Param: idUser 
@@ -48,3 +48,9 @@ Routes:http://localhost:7012/
   - Auth: accessToken
 - getUser: [get] http://localhost:7012/users/listUser/:id/getUser
   - Auth: accessToken
+- getUserAll: [get] http://localhost:7012/users/listUser/:id/getUserAll
+  - Auth: accessToken
+- changeStatus: [post] http://localhost:7012/users/:id/changeStatus
+    - Auth: accessToken
+    - Param: idUser
+    - Body: status: 1 trong 2 {"active", "close"}
