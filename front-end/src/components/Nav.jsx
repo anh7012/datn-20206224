@@ -13,26 +13,26 @@ function Nav() {
     const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.user?.roleName)
     const [arr, setArr] = useState(() => {
         if (roleUser === 'Quản trị viên') return [
-            {title: 'Đánh giá tín dụng', icon: <AnalyticsIcon/>, path: '/danhgiatindung'},
-            {title: 'Quản lý nhân viên', icon: <ManageAccountsIcon/>, path: '/quanlynhanvien'},
-            {title: 'Quản lý tài khoản tín dụng', icon: <ManageAccountsIcon/>, path: '/quanlynhanvien'},
-            {title: 'Quản lý hồ sơ', icon: <ManageAccountsIcon/>, path: '/quanlynhanvien'},
-            {title: 'Quản lý hợp đồng', icon: <ManageAccountsIcon/>, path: '/quanlynhanvien'},
-            {title: 'Danh sách khách hàng', icon: <ManageAccountsIcon/>, path: '/quanlynhanvien'},
+            {title: 'Đánh giá tín dụng', icon: <AnalyticsIcon/>, path: '/home/danhgiatindung'},
+            {title: 'Quản lý nhân viên', icon: <ManageAccountsIcon/>, path: '/home/quanlynhanvien'},
+            {title: 'Quản lý tài khoản tín dụng', icon: <ManageAccountsIcon/>, path: '/home/quanlynhanvien'},
+            {title: 'Quản lý hồ sơ', icon: <ManageAccountsIcon/>, path: '/home/quanlynhanvien'},
+            {title: 'Quản lý hợp đồng', icon: <ManageAccountsIcon/>, path: '/home/quanlynhanvien'},
+            {title: 'Danh sách khách hàng', icon: <ManageAccountsIcon/>, path: '/home/quanlynhanvien'},
         ]
         else if (roleUser === 'Nhân viên') return [
-            {title: 'Đánh giá tín dụng', icon: <AnalyticsIcon/>, path: '/danhgiatindung'},
-            {title: 'Quản lý tài khoản tín dụng', icon: <ManageAccountsIcon/>, path: '/quanlynhanvien'},
-            {title: 'Quản lý hồ sơ', icon: <ManageAccountsIcon/>, path: '/quanlynhanvien'},
-            {title: 'Quản lý hợp đồng', icon: <ManageAccountsIcon/>, path: '/quanlynhanvien'},
-            {title: 'Danh sách khách hàng', icon: <ManageAccountsIcon/>, path: '/quanlynhanvien'},
+            {title: 'Đánh giá tín dụng', icon: <AnalyticsIcon/>, path: '/home/danhgiatindung'},
+            {title: 'Quản lý tài khoản tín dụng', icon: <ManageAccountsIcon/>, path: '/home/quanlynhanvien'},
+            {title: 'Quản lý hồ sơ', icon: <ManageAccountsIcon/>, path: '/home/quanlynhanvien'},
+            {title: 'Quản lý hợp đồng', icon: <ManageAccountsIcon/>, path: '/home/quanlynhanvien'},
+            {title: 'Danh sách khách hàng', icon: <ManageAccountsIcon/>, path: '/home/quanlynhanvien'},
         ]
         else return [
-                {title: 'Đánh giá tín dụng', icon: <AnalyticsIcon/>, path: '/danhgiatindung'},
-                {title: 'Quản lý tài khoản tín dụng', icon: <ManageAccountsIcon/>, path: '/quanlynhanvien'},
-                {title: 'Quản lý hồ sơ', icon: <ManageAccountsIcon/>, path: '/quanlynhanvien'},
-                {title: 'Quản lý hợp đồng', icon: <ManageAccountsIcon/>, path: '/quanlynhanvien'},
-                {title: 'Danh sách khách hàng', icon: <ManageAccountsIcon/>, path: '/quanlynhanvien'},
+                {title: 'Đánh giá tín dụng', icon: <AnalyticsIcon/>, path: '/home/danhgiatindung'},
+                {title: 'Quản lý tài khoản tín dụng', icon: <ManageAccountsIcon/>, path: '/home/quanlynhanvien'},
+                {title: 'Quản lý hồ sơ', icon: <ManageAccountsIcon/>, path: '/home/quanlynhanvien'},
+                {title: 'Quản lý hợp đồng', icon: <ManageAccountsIcon/>, path: '/home/quanlynhanvien'},
+                {title: 'Danh sách khách hàng', icon: <ManageAccountsIcon/>, path: '/home/quanlynhanvien'},
             ]
     })
     if (roleUser)

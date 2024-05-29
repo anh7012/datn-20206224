@@ -1,8 +1,6 @@
 import axios from "axios";
 import {loginFailed, loginSuccess, logoutUser} from "./slice/authSlice.js";
 import eventEmitter from "../utils/eventEmitter.js";
-
-
 export const loginUser = async (user, dispatch, navigate) => {
     try {
         const res = await axios.post('http://localhost:7012/login', user);
@@ -32,7 +30,6 @@ export const logout = async (accessToken, dispatch, navigator, axiosInstance) =>
         console.log('>>', e);
     }
 }
-
 export const updateUser = async (data, id, accessToken) => {
     try {
         await axios.put(`http://localhost:7012/users/${id}`, data, {
@@ -55,5 +52,18 @@ export const getUserInfo = async (id, accessToken, dispatch) => {
         dispatch(loginSuccess(res.data))
     } catch (error) {
         console.log(error)
+    }
+}
+export const listUser = async (accessToken) => {
+    try {
+      const res =  await axios.get('http://localhost:7012/users/listUser', {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    }
+    catch (e) {
+        console.log(e)
     }
 }
