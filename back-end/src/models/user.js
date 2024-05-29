@@ -16,10 +16,13 @@ module.exports = class Users {
         this.GioiTinh = users.GioiTinh;
         this.DiaChi = users.DiaChi;
         this.refreshTokens = users.refreshTokens;
+        this.status = users.status
+        this.created_at = users.created_at
+        this.updated_at = users.updated_at
     }
 
     static getAllUser = async () => {
-        const [rows, fields] = await promisePool.query("SELECT * FROM users;");
+        const [rows, fields] = await promisePool.query("SELECT * FROM users JOIN role ON users.idRole = role.idRole;");
         return rows;
     };
 
@@ -41,7 +44,12 @@ module.exports = class Users {
         }
     };
 
-
+    static getUserAllById = async (id) => {
+        const [rows] = await promisePool.query(
+            "SELECT * FROM users JOIN role ON users.idRole = role.idRole WHERE idUser = ?;",
+            [id]
+        );
+    }
     static getInforByIdUser = async (id) => {
         const [rows, fields] = await promisePool.query(
             "SELECT email, HoTen, NgaySinh, GioiTinh, DiaChi FROM users WHERE idUser = ?;",
@@ -70,7 +78,7 @@ module.exports = class Users {
     static createUser = async (user) => {
         const idUser = uuidv4({format: "hex"}).substring(0, 32);
         const [result] = await promisePool.query(
-            "INSERT INTO users (idUser, idRole, username, password, email, HoTen, NgaySinh, GioiTinh, DiaChi) VALUES (?, (SELECT idRole FROM role WHERE roleName = ?), ?, ?, ?, ?, ?, ?, ?);",
+            "INSERT INTO users (idUser, idRole, username, password, email, HoTen, NgaySinh, GioiTinh, DiaChi,created_at, updated_at) VALUES (?, (SELECT idRole FROM role WHERE roleName = ?), ?, ?, ?, ?, ?, ?, ?,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);",
             [
                 idUser,
                 user.roleName,
@@ -96,7 +104,7 @@ module.exports = class Users {
         console.log('Formatted NgaySinh:', formatNgaySinh);
 
         const [result] = await promisePool.query(
-            "UPDATE users SET email =?, HoTen =?, NgaySinh =?, GioiTinh =?, DiaChi =? WHERE idUser = ?;",
+            "UPDATE users SET email =?, HoTen =?, NgaySinh =?, GioiTinh =?, DiaChi =? updated_at = CURRENT_TIMESTAMP WHERE idUser = ?;",
             [
                 email,
                 HoTen,
@@ -113,6 +121,13 @@ module.exports = class Users {
         const [result] = await promisePool.query(
             "UPDATE users SET username = ? WHERE idUser = ?;",
             [newUsername, id]
+        )
+        return result;
+    }
+    static changeStatus = async ({id, newStatus}) => {
+        const [result] = await promisePool.query(
+            "UPDATE users SET status = ? WHERE idUser = ?;",
+            [newStatus, id]
         )
         return result;
     }

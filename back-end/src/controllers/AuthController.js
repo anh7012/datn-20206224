@@ -121,7 +121,6 @@ const authController = {
   logout: async (req, res) => {
     try {
       const refreshToken = req.cookies.refreshToken;
-      console.log(refreshToken)
       res.clearCookie("refreshToken");
       const data = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
       const user = await User.getUserById(data.id);
