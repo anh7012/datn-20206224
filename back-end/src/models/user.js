@@ -104,7 +104,7 @@ module.exports = class Users {
         console.log('Formatted NgaySinh:', formatNgaySinh);
 
         const [result] = await promisePool.query(
-            "UPDATE users SET email =?, HoTen =?, NgaySinh =?, GioiTinh =?, DiaChi =? updated_at = CURRENT_TIMESTAMP WHERE idUser = ?;",
+            "UPDATE users SET email =?, HoTen =?, NgaySinh =?, GioiTinh =?, DiaChi =?, updated_at = CURRENT_TIMESTAMP WHERE idUser = ?;",
             [
                 email,
                 HoTen,

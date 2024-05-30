@@ -6,6 +6,8 @@ import {useSelector} from "react-redux";
 import RestartAltIcon from '@mui/icons-material/RestartAlt'
 import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import ModalInfoUserManager from "../components/Modal/ModalInfoUserManager.jsx";
+import ModalCreateUser from "../components/Modal/ModalCreateUser.jsx";
 function QuanLyNhanVien() {
     const [listUserData, setListUserData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -51,16 +53,16 @@ function QuanLyNhanVien() {
     };
 
     // Extract unique values for roleName and status
-    const uniqueRoleNames = [...new Set(listUserData.map(item => item.roleName))];
-    const uniqueStatuses = [...new Set(listUserData.map(item => item.status))];
+    const uniqueRoleNames = [...new Set(listUserData?.map(item => item?.roleName))];
+    const uniqueStatuses = [...new Set(listUserData?.map(item => item?.status))];
 
     // Apply filters to listUserData
-    const filteredUsers = listUserData.filter(user => {
+    const filteredUsers = listUserData?.filter(user => {
         return (
-            (filterRole ? user.roleName === filterRole : true) &&
-            (filterStatus ? user.status === filterStatus : true) &&
-            (filterFullName ? user.HoTen.toLowerCase().includes(filterFullName.toLowerCase()) : true) &&
-            (filterUsername ? user.username.toLowerCase().includes(filterUsername.toLowerCase()) : true)
+            (filterRole ? user?.roleName === filterRole : true) &&
+            (filterStatus ? user?.status === filterStatus : true) &&
+            (filterFullName ? user?.HoTen.toLowerCase().includes(filterFullName.toLowerCase()) : true) &&
+            (filterUsername ? user?.username.toLowerCase().includes(filterUsername.toLowerCase()) : true)
         );
     });
 
@@ -115,7 +117,7 @@ function QuanLyNhanVien() {
                     </div>
                 </div>
                 <div className={'flex justify-end items-end'}>
-                    <Button variant={"contained"} startIcon={<AddIcon/>} color={'success'}> Tạo mới</Button>
+                    <ModalCreateUser/>
                 </div>
             </div>
             <div className={'grid grid-cols-[10%,15%,20%,15%,10%,auto] gap-2 py-2'}>
@@ -145,7 +147,7 @@ function QuanLyNhanVien() {
                                 )}
                             </div>
                             <div className={'flex justify-center items-center gap-2'}>
-                                <Button variant={'contained'} color={'primary'} size={'small'} ><p className={' text-[12px]'}>Xem</p></Button>
+                              <ModalInfoUserManager/>
                                 <Button variant={'contained'} color={'error'} size={'small'}
                                       startIcon={<DeleteIcon/>} ><p className={' text-[12px]'}>Xoá</p></Button>
                             </div>

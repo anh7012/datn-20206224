@@ -46,9 +46,9 @@ Routes:http://localhost:7012/
   - Body: roleName: 1 trong 3 {"Quản trị viên", "Nhân viên", "Giám đốc"}
 - listUser: [get] http://localhost:7012/users/listUser
   - Auth: accessToken
-- getUser: [get] http://localhost:7012/users/listUser/:id/getUser
+- getUser: [get] http://localhost:7012/users/:id/getUser
   - Auth: accessToken
-- getUserAll: [get] http://localhost:7012/users/listUser/:id/getUserAll
+- getUserAll: [get] http://localhost:7012/users/:id/getUserAll
   - Auth: accessToken
 - changeStatus: [post] http://localhost:7012/users/:id/changeStatus
     - Auth: accessToken

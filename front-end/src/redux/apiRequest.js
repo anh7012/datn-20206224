@@ -32,7 +32,7 @@ export const logout = async (accessToken, dispatch, navigator, axiosInstance) =>
 }
 export const updateUser = async (data, id, accessToken) => {
     try {
-        await axios.put(`http://localhost:7012/users/${id}`, data, {
+        await axios.put(`http://localhost:7012/users/${id}/updateUser`, data, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -44,7 +44,7 @@ export const updateUser = async (data, id, accessToken) => {
 }
 export const getUserInfo = async (id, accessToken, dispatch) => {
     try {
-        const res = await axios.get(`http://localhost:7012/users/${id}`, {
+        const res = await axios.get(`http://localhost:7012/users/${id}/getUser`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }

@@ -15,7 +15,7 @@ import Nav from "../components/Nav.jsx";
 import PersonIcon from '@mui/icons-material/Person';
 import {useDispatch, useSelector} from "react-redux";
 import {logout} from "../redux/apiRequest.js";
-import ModalInfoUser from "../components/ModalInfoUser.jsx";
+import ModalInfoUser from "../components/Modal/ModalInfoUser.jsx";
 import {createAxios} from "../utils/axiosInterceptor.js";
 
 

@@ -1,18 +1,29 @@
 import React from 'react';
-import {Button, FormControl, InputLabel, Modal, NativeSelect, TextField, Typography} from "@mui/material";
+import {
+    Button,
+    FormControl, FormControlLabel,
+    FormLabel,
+    InputLabel,
+    Modal,
+    NativeSelect, Radio,
+    RadioGroup,
+    TextField,
+    Typography
+} from "@mui/material";
 import Box from "@mui/material/Box";
 import {useDispatch, useSelector} from "react-redux";
-import {getUserInfo, updateUser} from "../redux/apiRequest.js";
-import {notify} from "../utils/notify.js";
-import eventEmitter from "../utils/eventEmitter.js";
+import {getUserInfo, updateUser} from "../../redux/apiRequest.js";
+import {notify} from "../../utils/notify.js";
+import eventEmitter from "../../utils/eventEmitter.js";
 import moment from 'moment';
+import PersonIcon from "@mui/icons-material/Person";
 
 const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 800,
+    width: 700,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -29,7 +40,7 @@ function ModalInfoUser() {
         email: userInfo?.email || '',
         DiaChi: userInfo?.DiaChi || '',
         GioiTinh: userInfo?.GioiTinh || '',
-        NgaySinh: ''
+        NgaySinh: userInfo?.NgaySinh || ''
     });
     const formattedNgaySinh = userInfo?.NgaySinh ? moment(userInfo.NgaySinh).format('YYYY-MM-DD') : '';
     const handleOpen = () => setOpen(true);
@@ -41,7 +52,7 @@ function ModalInfoUser() {
             ...prevState,
             [name]: value
         }));
-
+        console.log(name,value)
     };
 
     const handleUpdate = async () => {
@@ -68,7 +79,19 @@ function ModalInfoUser() {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style} className={'!border-0'}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                    <Typography className={'!pb-8 border-b-[1px] border-gray-500'} >
+                        <div className={'flex justify-start items-center gap-x-6'}>
+                            <div className={'flex items-center justify-center w-20 h-20 !border-[2px] border-gray-600'}>
+                                <PersonIcon className="!text-[50px]"  />
+                            </div>
+                            <div>
+                                <h1 className={'font-bold text-2xl'}>{userInfo?.HoTen}</h1>
+                                <h1 className={''}>{userInfo?.email}</h1>
+                            </div>
+                        </div>
+                    </Typography>
+
+                    <Typography id="modal-modal-title" variant="p" component="h2" className={'!mt-4'}>
                         Thông tin cá nhân
                     </Typography>
                     <Typography id="modal-modal-description" sx={{mt: 2}}>
@@ -102,6 +125,23 @@ function ModalInfoUser() {
                                     defaultValue={userInfo?.email}
                                     sx={{width: '100%'}}
                                 />
+                                <FormControl fullWidth={true}>
+                                    <FormLabel id="demo-row-radio-buttons-group-label">Giới tính</FormLabel>
+                                    <RadioGroup
+                                        row
+                                        aria-labelledby="demo-row-radio-buttons-group-label"
+                                        name="GioiTinh"
+                                        defaultChecked={userInfo?.GioiTinh}
+                                        defaultValue={userInfo?.GioiTinh}
+                                        onChange={handleChange}
+                                    >
+                                        <FormControlLabel value={1} control={<Radio />} label="Nam" />
+                                        <FormControlLabel value={0} control={<Radio />} label="Nữ" />
+                                    </RadioGroup>
+                                </FormControl>
+
+                            </div>
+                            <div className={'flex gap-8 items-end'}>
                                 <TextField
                                     id="outlined-helperText-address"
                                     label="Địa chỉ"
@@ -110,36 +150,16 @@ function ModalInfoUser() {
                                     defaultValue={userInfo?.DiaChi}
                                     sx={{width: '100%'}}
                                 />
-                            </div>
-                            <div className={'flex gap-8'}>
-                                <FormControl fullWidth sx={{mt: 2}}>
-                                    <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                                        Giới tính
-                                    </InputLabel>
-                                    <NativeSelect
-                                        defaultValue={userInfo?.GioiTinh}
-                                        onChange={handleChange}
-                                        inputProps={{
-                                            name: 'GioiTinh',
-                                            id: 'uncontrolled-native',
-                                        }}
-                                        sx={{width: '100%'}}
-                                    >
-                                        <option value={1}>Nam</option>
-                                        <option value={0}>Nữ</option>
-                                    </NativeSelect>
-                                </FormControl>
-                                <input
-                                    type="date"
+                                <TextField
+                                    label="Ngày sinh"
                                     name="NgaySinh"
-                                    defaultValue={formattedNgaySinh}
+                                    type="date"
+                                    defaultValue={userInfo?.NgaySinh}
                                     onChange={handleChange}
-                                    style={{
-                                        padding: '10px',
-                                        width: '100%',
-                                        marginTop: '8px',
-                                        border: '1px solid #ccc',
-                                        borderRadius: '4px'
+                                    fullWidth
+                                    variant="outlined"
+                                    InputLabelProps={{
+                                        shrink: true
                                     }}
                                 />
                             </div>
