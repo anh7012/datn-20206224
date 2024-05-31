@@ -8,6 +8,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import ModalInfoUserManager from "../components/Modal/ModalInfoUserManager.jsx";
 import ModalCreateUser from "../components/Modal/ModalCreateUser.jsx";
+import eventEmitter from "../utils/eventEmitter.js";
+
 function QuanLyNhanVien() {
     const [listUserData, setListUserData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -24,6 +26,16 @@ function QuanLyNhanVien() {
             setListUserData(res);
         });
     }, [accessToken]);
+    // useEffect(() => {
+    //     const fetch = async () => {
+    //         const res = await listUser(accessToken)
+    //         setListUserData(res)
+    //     }
+    //     eventEmitter.on('updateListUser', fetch)
+    //     return () => {
+    //         eventEmitter.removeListener('updateListUser', fetch)
+    //     }
+    // }, [])
 
     const handlePageChange = (event, value) => {
         setCurrentPage(value);
@@ -139,7 +151,9 @@ function QuanLyNhanVien() {
                             <div>{item?.roleName}</div>
                             <div className={'flex justify-center'}>
                                 {item?.status === 'active' ? (
-                                    <div className={'w-12  h-6 bg-green-200 flex items-center justify-center rounded-xl p-2'}><p className={'text-[10px] font-bold'}>Active</p></div>
+                                    <div
+                                        className={'w-12  h-6 bg-green-200 flex items-center justify-center rounded-xl p-2'}>
+                                        <p className={'text-[10px] font-bold'}>Active</p></div>
                                 ) : (
                                     <div
                                         className={'w-12  h-6 bg-red-300 flex items-center justify-center rounded-xl p-2'}>
@@ -147,9 +161,9 @@ function QuanLyNhanVien() {
                                 )}
                             </div>
                             <div className={'flex justify-center items-center gap-2'}>
-                              <ModalInfoUserManager/>
+                                <ModalInfoUserManager/>
                                 <Button variant={'contained'} color={'error'} size={'small'}
-                                      startIcon={<DeleteIcon/>} ><p className={' text-[12px]'}>Xoá</p></Button>
+                                        startIcon={<DeleteIcon/>}><p className={' text-[12px]'}>Xoá</p></Button>
                             </div>
                         </div>
                     ))

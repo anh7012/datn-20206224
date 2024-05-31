@@ -42,6 +42,18 @@ export const updateUser = async (data, id, accessToken) => {
         console.log(e)
     }
 }
+export const createUser = async (data, accessToken) => {
+    try {
+        await axios.post(`http://localhost:7012/users/createUser`, data, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+
+    } catch (e) {
+        console.log(e)
+    }
+}
 export const getUserInfo = async (id, accessToken, dispatch) => {
     try {
         const res = await axios.get(`http://localhost:7012/users/${id}/getUser`, {
