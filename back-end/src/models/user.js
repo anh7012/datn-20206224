@@ -153,6 +153,7 @@ module.exports = class Users {
             "DELETE FROM users WHERE idUser = ?;",
             [idUser]
         );
+        return result;
     };
 
     static addToken = async ({id, refreshTokens, refreshToken}) => {

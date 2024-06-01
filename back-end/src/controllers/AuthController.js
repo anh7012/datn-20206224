@@ -79,7 +79,6 @@ const authController = {
       const user = await User.getUserById(data.id);
       const verifySignature = getVerifySignature(refreshToken);
       const refreshTokens = user.refreshTokens;
-      console.log()
       if (!refreshTokens.includes(verifySignature)) {
         return res.json({
           code: 9992,

@@ -26,16 +26,16 @@ function QuanLyNhanVien() {
             setListUserData(res);
         });
     }, [accessToken]);
-    // useEffect(() => {
-    //     const fetch = async () => {
-    //         const res = await listUser(accessToken)
-    //         setListUserData(res)
-    //     }
-    //     eventEmitter.on('updateListUser', fetch)
-    //     return () => {
-    //         eventEmitter.removeListener('updateListUser', fetch)
-    //     }
-    // }, [])
+    useEffect(() => {
+        const fetch = async () => {
+            const res = await listUser(accessToken)
+            setListUserData(res)
+        }
+        eventEmitter.on('updateListUser', fetch)
+        return () => {
+            eventEmitter.removeListener('updateListUser', fetch)
+        }
+    }, [])
 
     const handlePageChange = (event, value) => {
         setCurrentPage(value);

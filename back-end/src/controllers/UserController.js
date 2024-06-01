@@ -126,18 +126,42 @@ const usersController = {
                     });
                 }
             } catch (error) {
-                console.log(error)
-                res.status(404).json({
-                    message: "Không thể thay đổi thông tin nhân viên",
+                res.json({
+                    code: 9999,
+                    data: {
+                        message: "Không thể thay đổi thông tin nhân viên",
+                    },
                 });
             }
         },
 
-        // [DELETE] /users/:id
+        // [DELETE] /users/:id/deleteUser
         deleteUser: async (req, res) => {
-            const idUser = req.params.id;
-            const deletedUser = await User.deleteUser(idUser);
-            return res.redirect("/users");
+            try {
+                const deletedUser = await User.deleteUser(req.params.id);
+                if (deletedUser.affectedRows == 1) {
+                   return res.json({
+                        code: 1000,
+                        data: {
+                            message: "Nhân viên đã được xoá thành công",
+                        },
+                    });
+                } else {
+                    return res.json({
+                        code: 1001,
+                        data: {
+                            message: "Thực hiện xoá nhân viên thất bại",
+                        },
+                    });
+                }
+            } catch (err) {
+                return res.json({
+                    code: 9999,
+                    data: {
+                        message: "Không thể xoá nhân viên",
+                    },
+                });
+            }
         },
 
 //CHANGE USERNAME :id/change_username/
@@ -238,7 +262,6 @@ const usersController = {
                         id: req.params.id,
                         newRole: req.body.roleName
                     })
-                    console.log(data)
                     if (data.affectedRows == 1) {
                         res.json({
                             code: 1000,

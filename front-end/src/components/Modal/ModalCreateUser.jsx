@@ -59,14 +59,14 @@ function ModalCreateUser() {
         }));
     };
     const handleUpdate = async () => {
-        // try {
-        //     await createUser(userData,accessToken)
-        //     notify('success', 'Cập nhật dữ liệu thành công!');
-        //     eventEmitter.emit('updateListUser')
-        // } catch (e) {
-        //     notify('error', e.message);
-        // }
-        // handleClose();
+        try {
+            await createUser(userData,accessToken)
+            notify('success', 'Tạo tài khoản thành công!');
+            eventEmitter.emit('updateListUser')
+        } catch (e) {
+            notify('error', e.message);
+        }
+        handleClose();
     };
     const handleCloseModal = () => {
         handleClose();
