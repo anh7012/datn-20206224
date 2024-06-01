@@ -10,6 +10,7 @@ import ModalInfoUserManager from "../components/Modal/ModalInfoUserManager.jsx";
 import ModalCreateUser from "../components/Modal/ModalCreateUser.jsx";
 import eventEmitter from "../utils/eventEmitter.js";
 import {notify} from "../utils/notify.js";
+import {useNavigate} from "react-router-dom";
 
 function QuanLyNhanVien() {
     const [listUserData, setListUserData] = useState([]);
@@ -21,6 +22,7 @@ function QuanLyNhanVien() {
     const [filterUsername, setFilterUsername] = useState('');
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
+    const nav = useNavigate()
 
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
 
@@ -112,6 +114,11 @@ function QuanLyNhanVien() {
             eventEmitter.removeListener('successDelete', showNotifySuccess);
         }
     }, [])
+
+    function handleViewUser(idUser) {
+       nav(`/home/${idUser}`)
+    }
+
     return (
         <div>
             <p className={'pb-2 font-bold'}>Danh sách nhân viên</p>
@@ -190,7 +197,8 @@ function QuanLyNhanVien() {
                                 )}
                             </div>
                             <div className={'flex justify-center items-center gap-2'}>
-                                <ModalInfoUserManager/>
+                                <Button variant={'contained'} color={'primary'} size={'small'} onClick={()=>handleViewUser(item.idUser)} ><p className={' text-[12px]'}>Xem</p></Button>
+                                {/*<ModalInfoUserManager/>*/}
                                 <Button variant={'contained'} color={'error'} size={'small'}
                                         onClick={() => handleDeleteClick(item)}
                                         startIcon={<DeleteIcon/>}><p className={' text-[12px]'}>Xoá</p></Button>

@@ -59,7 +59,7 @@ function ModalInfoUserManager() {
     };
     return (
         <div>
-            <Button variant={'contained'} color={'primary'} size={'small'} onClick={handleOpen} ><p className={' text-[12px]'}>Xem</p></Button>
+            {/*<Button variant={'contained'} color={'primary'} size={'small'} onClick={handleOpen} ><p className={' text-[12px]'}>Xem</p></Button>*/}
             <Modal
                 open={open}
                 onClose={handleClose}

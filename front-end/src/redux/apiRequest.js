@@ -100,4 +100,15 @@ export const deleteUser = async (accessToken,idUser) => {
         console.log(e)
     }
 }
-
+export const getUser= async (id, accessToken) => {
+    try {
+     const res= await axios.get(`http://localhost:7012/users/${id}/getUserAll`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return  res.data.data.user
+    } catch (error) {
+        console.log(error)
+    }
+}
