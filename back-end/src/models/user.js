@@ -37,7 +37,6 @@ module.exports = class Users {
             const user = rows[0];
             // Chuyển đổi NgaySinh từ UTC sang Asia/Ho_Chi_Minh
             user.NgaySinh = momentYZ.tz(user.NgaySinh, 'UTC').tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD');
-            console.log('Retrieved NgaySinh:', user.NgaySinh);
             return user;
         } else {
             throw new Error('User not found');
@@ -97,12 +96,8 @@ module.exports = class Users {
     };
 
     static updateUser = async ({email, HoTen, NgaySinh, GioiTinh, DiaChi, id}) => {
-        console.log('Original NgaySinh:', NgaySinh);
-
         // Định dạng lại NgaySinh thành chuỗi theo định dạng YYYY-MM-DD
         const formatNgaySinh = moment(NgaySinh).format('YYYY-MM-DD');
-        console.log('Formatted NgaySinh:', formatNgaySinh);
-
         const [result] = await promisePool.query(
             "UPDATE users SET email =?, HoTen =?, NgaySinh =?, GioiTinh =?, DiaChi =?, updated_at = CURRENT_TIMESTAMP WHERE idUser = ?;",
             [

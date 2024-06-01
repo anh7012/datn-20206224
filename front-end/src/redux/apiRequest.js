@@ -44,11 +44,14 @@ export const updateUser = async (data, id, accessToken) => {
 }
 export const createUser = async (data, accessToken) => {
     try {
-        await axios.post(`http://localhost:7012/users/createUser`, data, {
+     const res =  await axios.post(`http://localhost:7012/users/createUser`, data, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
         })
+    if (!res.data.user) {
+        eventEmitter.emit('errorCreateUser', res.data.message)
+    } else eventEmitter.emit('successcreateUser')
 
     } catch (e) {
         console.log(e)
@@ -79,3 +82,22 @@ export const listUser = async (accessToken) => {
         console.log(e)
     }
 }
+export const deleteUser = async (accessToken,idUser) => {
+    try {
+      const res =  await axios.delete(`http://localhost:7012/users/${idUser}/deleteUser`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        console.log(res)
+        if (res.data.code === 1000) {
+            eventEmitter.emit('successDelete',res.data.data.message)
+        } else {
+            eventEmitter.emit('errorDelete', res.data.data.message)
+        }
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+

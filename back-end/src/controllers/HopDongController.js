@@ -5,7 +5,6 @@ const HopDongController = {
   list: async (req, res, next) => {
     try {
       const listHD = await HopDong.getAllHD();
-      console.log(listHD.length);
       res.json(listHD);
     } catch (error) {
       res.json({

@@ -81,8 +81,7 @@ const usersController = {
                     });
                 } else {
                     const saltRounds = 10; // Number of salt round for bcrypt
-                    const hashedPassword = await bcrypt.hash(data.password, saltRounds);
-                    data.password = hashedPassword;
+                    data.password = await bcrypt.hash(data.password, saltRounds);
                     // Create new User
                     const newUser = await User.createUser(data);
                     res.json({
@@ -143,14 +142,14 @@ const usersController = {
                    return res.json({
                         code: 1000,
                         data: {
-                            message: "Nhân viên đã được xoá thành công",
+                            message: "Đã được xoá thành công",
                         },
                     });
                 } else {
                     return res.json({
                         code: 1001,
                         data: {
-                            message: "Thực hiện xoá nhân viên thất bại",
+                            message: "Thực hiện xoá thất bại",
                         },
                     });
                 }
@@ -158,7 +157,7 @@ const usersController = {
                 return res.json({
                     code: 9999,
                     data: {
-                        message: "Không thể xoá nhân viên",
+                        message: "Không thể xoá",
                     },
                 });
             }

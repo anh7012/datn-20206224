@@ -1,22 +1,24 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
     Accordion, AccordionDetails,
     AccordionSummary,
     Button,
-    FormControl, FormControlLabel, FormLabel,
+    FormControl, FormControlLabel, FormLabel, InputAdornment,
     InputLabel, MenuItem,
-    Modal,
-   Radio, RadioGroup, Select,
+    Modal, OutlinedInput,
+    Radio, RadioGroup, Select,
     TextField,
     Typography
 } from "@mui/material";
 import Box from "@mui/material/Box";
-import { useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {notify} from "../../utils/notify.js";
 import AddIcon from "@mui/icons-material/Add.js";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {createUser} from "../../redux/apiRequest.js";
 import eventEmitter from "../../utils/eventEmitter.js";
+import IconButton from "@mui/material/IconButton";
+import {Visibility, VisibilityOff} from "@mui/icons-material";
 
 const style = {
     position: 'absolute',
@@ -29,8 +31,6 @@ const style = {
     boxShadow: 24,
     p: 4,
 };
-
-
 
 
 function ModalCreateUser() {
@@ -60,9 +60,7 @@ function ModalCreateUser() {
     };
     const handleUpdate = async () => {
         try {
-            await createUser(userData,accessToken)
-            notify('success', 'Tạo tài khoản thành công!');
-            eventEmitter.emit('updateListUser')
+            await createUser(userData, accessToken)
         } catch (e) {
             notify('error', e.message);
         }
@@ -71,6 +69,27 @@ function ModalCreateUser() {
     const handleCloseModal = () => {
         handleClose();
     };
+    const [showPassword, setShowPassword] = React.useState(false);
+
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
+    useEffect(() => {
+        const showNotifyError = (e) => notify('error', e);
+        const showNotifySuccess = () => {
+            notify('success', 'Tạo tài khoản thành công')
+            eventEmitter.emit('updateListUser')
+
+        };
+        eventEmitter.on('errorCreateUser', showNotifyError)
+        eventEmitter.on('successcreateUser', showNotifySuccess)
+        return () => {
+            eventEmitter.removeListener('errorCreateUser', showNotifyError);
+            eventEmitter.removeListener('successcreateUser', showNotifySuccess);
+        }
+    }, [])
     return (
         <div>
             <Button variant="contained" startIcon={<AddIcon/>} color="success" onClick={handleOpen}>Tạo mới</Button>
@@ -104,15 +123,28 @@ function ModalCreateUser() {
                                             onChange={handleChange}
                                             sx={{width: '100%'}}
                                         />
-                                        <TextField
-                                            id="outlined-password-input"
-                                            label="Mật khẩu"
-                                            type="password"
-                                            name="password"
-                                            onChange={handleChange}
-                                            autoComplete="current-password"
-                                            sx={{width: '100%'}}
-                                        />
+                                        <FormControl sx={{width: '100%'}} variant="outlined">
+                                            <InputLabel htmlFor="outlined-adornment-password">Mật khẩu</InputLabel>
+                                            <OutlinedInput
+                                                id="outlined-adornment-password"
+                                                type={showPassword ? 'text' : 'password'}
+                                                name="password"
+                                                onChange={handleChange}
+                                                endAdornment={
+                                                    <InputAdornment position="end">
+                                                        <IconButton
+                                                            aria-label="toggle password visibility"
+                                                            onClick={handleClickShowPassword}
+                                                            onMouseDown={handleMouseDownPassword}
+                                                            edge="end"
+                                                        >
+                                                            {showPassword ? <VisibilityOff/> : <Visibility/>}
+                                                        </IconButton>
+                                                    </InputAdornment>
+                                                }
+                                                label="Password"
+                                            />
+                                        </FormControl>
                                     </div>
                                 </div>
                             </AccordionDetails>
@@ -203,8 +235,8 @@ function ModalCreateUser() {
                         </Accordion>
                         <div className={'w-full flex justify-end item-center !mt-10'}
                              style={{width: '100%', maxWidth: 750, margin: 'auto'}}>
-                            <Button variant="contained" className={'w-[120px] h-12 !mx-4'} onClick={handleUpdate}>Cập
-                                nhật</Button>
+                            <Button variant="contained" className={'w-[120px] h-12 !mx-4'} onClick={handleUpdate}>Tạo
+                                mới</Button>
                             <Button variant="outlined" className={'w-[120px] h-12 !mx-4'}
                                     onClick={handleCloseModal}>Đóng</Button>
                         </div>

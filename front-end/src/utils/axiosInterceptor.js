@@ -19,12 +19,11 @@ export const createAxios = (user,dispatch)=>{
     newInstance.interceptors.response.use(async (config) => {
             const decodedToken = jwtDecode(user?.accessToken);
             if (decodedToken.exp < Date.now() / 1000) {
-                console.log('het hạn',decodedToken)
                 const data = await refreshToken()
                 console.log(data)
                 dispatch(loginAgain(data.accessToken))
                 config.headers['token'] = 'Bearer' + data.accessToken
-            }else console.log('chưa hét hoặc giai sai')
+            }
             return config
         },
         (err)=>{

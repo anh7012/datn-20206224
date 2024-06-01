@@ -1,14 +1,15 @@
-import {Button, Chip, Pagination} from "@mui/material";
+import {Button, Pagination, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
-import {listUser} from "../redux/apiRequest.js";
+import {deleteUser, listUser} from "../redux/apiRequest.js";
 import {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
-import RestartAltIcon from '@mui/icons-material/RestartAlt'
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import ModalInfoUserManager from "../components/Modal/ModalInfoUserManager.jsx";
 import ModalCreateUser from "../components/Modal/ModalCreateUser.jsx";
 import eventEmitter from "../utils/eventEmitter.js";
+import {notify} from "../utils/notify.js";
 
 function QuanLyNhanVien() {
     const [listUserData, setListUserData] = useState([]);
@@ -18,6 +19,8 @@ function QuanLyNhanVien() {
     const [filterStatus, setFilterStatus] = useState('');
     const [filterFullName, setFilterFullName] = useState('');
     const [filterUsername, setFilterUsername] = useState('');
+    const [openDialog, setOpenDialog] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
 
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
 
@@ -26,16 +29,17 @@ function QuanLyNhanVien() {
             setListUserData(res);
         });
     }, [accessToken]);
+
     useEffect(() => {
         const fetch = async () => {
-            const res = await listUser(accessToken)
-            setListUserData(res)
-        }
-        eventEmitter.on('updateListUser', fetch)
+            const res = await listUser(accessToken);
+            setListUserData(res);
+        };
+        eventEmitter.on('updateListUser', fetch);
         return () => {
-            eventEmitter.removeListener('updateListUser', fetch)
-        }
-    }, [])
+            eventEmitter.removeListener('updateListUser', fetch);
+        };
+    }, [accessToken]);
 
     const handlePageChange = (event, value) => {
         setCurrentPage(value);
@@ -64,11 +68,26 @@ function QuanLyNhanVien() {
         setFilterUsername('');
     };
 
-    // Extract unique values for roleName and status
+    const handleDeleteClick = (user) => {
+        setSelectedUser(user);
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+        setSelectedUser(null);
+    };
+
+    const handleConfirmDelete = async () => {
+        await deleteUser(accessToken, selectedUser.idUser);
+        setOpenDialog(false);
+        setSelectedUser(null);
+        eventEmitter.emit('updateListUser');
+    };
+
     const uniqueRoleNames = [...new Set(listUserData?.map(item => item?.roleName))];
     const uniqueStatuses = [...new Set(listUserData?.map(item => item?.status))];
 
-    // Apply filters to listUserData
     const filteredUsers = listUserData?.filter(user => {
         return (
             (filterRole ? user?.roleName === filterRole : true) &&
@@ -78,11 +97,21 @@ function QuanLyNhanVien() {
         );
     });
 
-    // Calculate items for current page
     const indexOfLastItem = currentPage * rowsPerPage;
     const indexOfFirstItem = indexOfLastItem - rowsPerPage;
     const currentItems = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
-
+    useEffect(() => {
+        const showNotifyError = (e) => notify('error', e);
+        const showNotifySuccess = (e) => {
+            notify('success', e)
+        };
+        eventEmitter.on('errorDelete', showNotifyError)
+        eventEmitter.on('successDelete', showNotifySuccess)
+        return () => {
+            eventEmitter.removeListener('errorDelete', showNotifyError);
+            eventEmitter.removeListener('successDelete', showNotifySuccess);
+        }
+    }, [])
     return (
         <div>
             <p className={'pb-2 font-bold'}>Danh sách nhân viên</p>
@@ -163,6 +192,7 @@ function QuanLyNhanVien() {
                             <div className={'flex justify-center items-center gap-2'}>
                                 <ModalInfoUserManager/>
                                 <Button variant={'contained'} color={'error'} size={'small'}
+                                        onClick={() => handleDeleteClick(item)}
                                         startIcon={<DeleteIcon/>}><p className={' text-[12px]'}>Xoá</p></Button>
                             </div>
                         </div>
@@ -179,6 +209,17 @@ function QuanLyNhanVien() {
                     />
                 </div>
             </div>
+            <Dialog open={openDialog} onClose={handleCloseDialog}>
+                <DialogTitle>Xác nhận xoá</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>Bạn có chắc chắn muốn xoá tài khoản
+                        của <strong>{selectedUser?.HoTen}</strong> không?</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDialog} color="primary">Hủy</Button>
+                    <Button onClick={handleConfirmDelete} color="primary">Xác nhận</Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }
