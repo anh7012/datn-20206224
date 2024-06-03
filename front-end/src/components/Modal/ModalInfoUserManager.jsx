@@ -30,7 +30,7 @@ function ModalInfoUserManager() {
     //     GioiTinh: userInfo?.GioiTinh || '',
     //     NgaySinh: ''
     // });
-    // const formattedNgaySinh = userInfo?.NgaySinh ? moment(userInfo.NgaySinh).format('YYYY-MM-DD') : '';
+    const formattedNgaySinh = userInfo?.NgaySinh ? moment(userInfo.NgaySinh).format('YYYY-MM-DD') : '';
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
@@ -131,7 +131,7 @@ function ModalInfoUserManager() {
                                 <input
                                     type="date"
                                     name="NgaySinh"
-                                    // defaultValue={formattedNgaySinh}
+                                    defaultValue={formattedNgaySinh}
                                     onChange={handleChange}
                                     style={{
                                         padding: '10px',

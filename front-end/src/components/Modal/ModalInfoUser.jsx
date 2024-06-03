@@ -69,6 +69,7 @@ function ModalInfoUser() {
     const handleCloseModal = () => {
         handleClose();
     };
+
     return (
         <div>
             <div onClick={handleOpen}>Thông tin tài khoản</div>
@@ -154,7 +155,7 @@ function ModalInfoUser() {
                                     label="Ngày sinh"
                                     name="NgaySinh"
                                     type="date"
-                                    defaultValue={userInfo?.NgaySinh}
+                                    defaultValue={formattedNgaySinh}
                                     onChange={handleChange}
                                     fullWidth
                                     variant="outlined"
