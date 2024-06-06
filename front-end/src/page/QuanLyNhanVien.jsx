@@ -178,7 +178,7 @@ function QuanLyNhanVien() {
                 <div className={'text-gray-500 flex justify-center'}>Trạng thái</div>
                 <div></div>
             </div>
-            <div className={'bg-white rounded-sm  min-h-[391px] relative '}>
+            <div className={'bg-white rounded-sm  min-h-[calc(100vh-285px)] relative '}>
                 {
                     currentItems.map((item, i) => (
                         <div key={i}
@@ -202,7 +202,6 @@ function QuanLyNhanVien() {
                                 <Button variant={'contained'} color={'primary'} size={'small'}
                                         onClick={() => handleViewUser(item.idUser)}><p
                                     className={' text-[12px]'}>Xem</p></Button>
-                                {/*<ModalInfoUserManager/>*/}
                                 <Button variant={'contained'} color={'error'} size={'small'}
                                         onClick={() => handleDeleteClick(item)}
                                         startIcon={<DeleteIcon/>}><p className={' text-[12px]'}>Xoá</p></Button>

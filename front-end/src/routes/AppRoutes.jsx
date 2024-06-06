@@ -5,6 +5,7 @@ import DanhGiaTinDung from "../page/DanhGiaTinDung.jsx";
 import QuanLyNhanVien from "../page/QuanLyNhanVien.jsx";
 import DetailUserUnfo from "../page/DetailUserUnfo.jsx";
 import QuanLyHoSo from "../page/QuanLyHoSo.jsx";
+import FormCreateHoso from "../page/FormCreateHoso.jsx";
 
 function AppRoutes() {
 
@@ -19,6 +20,7 @@ function AppRoutes() {
                     <Route path="quanlyhoso" element={<QuanLyHoSo />} />
                     <Route path="quanlynhanvien" element={<QuanLyNhanVien />} />
                     <Route path=":id" element={<DetailUserUnfo />} />
+                    <Route path="toahosomoi" element={<FormCreateHoso />} />
                 </Route>
             </Routes>
         </div>
