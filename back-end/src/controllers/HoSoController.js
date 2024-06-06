@@ -15,7 +15,11 @@ const hoSoController = {
     listHoSo: async (req, res, next) => {
         try {
             const listHoSo = await HoSo.getAllHoSo();
-            res.json(listHoSo)
+            res.json({
+                code: 1000,
+                data: listHoSo,
+                message: "Danh sách hồ sơ tìm thấy thành công"
+            })
         } catch (error) {
             res.json({
                 code: 9992,
