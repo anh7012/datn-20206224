@@ -42,7 +42,9 @@ module.exports = class HoSo{
         this.DiemTuoi = hoso.DiemTuoi
     }
     static getAllHoSo = async () => {
-    const [rows, fields] = await promisePool.query("SELECT * FROM hoso;");
+    const [rows, fields] = await promisePool.query(
+        "SELECT idHoSo, maHoSo, HoTen, TongTienVay, LaiSuatVay, KyHan FROM hoso JOIN client ON client.idClient = hoso.idClient;"
+    );
     return rows;
   };
     static getHoSoByIdHoSo = async (id) => {
