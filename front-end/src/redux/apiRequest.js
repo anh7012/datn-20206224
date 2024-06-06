@@ -156,3 +156,15 @@ export const updateUserInfoToManeger = async (userInfo, accessToken) => {
         console.log(e)
     }
 }
+export const  getListHoso = async (accessToken)=>{
+try {
+  const res = await axios.get(`http://localhost:7012/hoso/listHoSo`,{
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+    return res.data
+}catch (e){
+    console.log(e)
+}
+}

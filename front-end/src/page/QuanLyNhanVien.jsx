@@ -5,8 +5,6 @@ import {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import ModalInfoUserManager from "../components/Modal/ModalInfoUserManager.jsx";
 import ModalCreateUser from "../components/Modal/ModalCreateUser.jsx";
 import eventEmitter from "../utils/eventEmitter.js";
 import {notify} from "../utils/notify.js";

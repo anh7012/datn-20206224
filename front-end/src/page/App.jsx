@@ -130,7 +130,7 @@ function App() {
                         >
 
                             <MenuItem>
-                                <Typography textAlign="center" className={'!px-4 '}><ModalInfoUser/></Typography>
+                                <ModalInfoUser/>
                             </MenuItem>
 
                             <MenuItem>
