@@ -80,7 +80,7 @@ function ModalInfoUser() {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style} className={'!border-0'}>
-                    <Typography className={'!pb-8 border-b-[1px] border-gray-500'} >
+                    <div  className={'!pb-8 border-b-[1px] border-gray-500'} >
                         <div className={'flex justify-start items-center gap-x-6'}>
                             <div className={'flex items-center justify-center w-20 h-20 !border-[2px] border-gray-600'}>
                                 <PersonIcon className="!text-[50px]"  />
@@ -90,12 +90,12 @@ function ModalInfoUser() {
                                 <h1 className={''}>{userInfo?.email}</h1>
                             </div>
                         </div>
-                    </Typography>
+                    </div>
 
                     <Typography id="modal-modal-title" variant="p" component="h2" className={'!mt-4'}>
                         Thông tin cá nhân
                     </Typography>
-                    <Typography id="modal-modal-description" sx={{mt: 2}}>
+                    <div className={'mt-2'}>
                         <div className={'flex flex-col gap-4 p-4'}
                              style={{width: '100%', maxWidth: 600, margin: 'auto'}}>
                             <div className={'flex gap-8'}>
@@ -172,7 +172,7 @@ function ModalInfoUser() {
                             <Button variant={'outlined'} className={'w-[120px] h-12 !mx-4'}
                                     onClick={handleCloseModal}>Đóng</Button>
                         </div>
-                    </Typography>
+                    </div>
 
                 </Box>
             </Modal>

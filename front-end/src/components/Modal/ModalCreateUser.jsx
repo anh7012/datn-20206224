@@ -32,7 +32,6 @@ const style = {
     p: 4,
 };
 
-
 function ModalCreateUser() {
     const names = [
         'Quản trị viên', 'Nhân viên', 'Giám đốc'
@@ -99,12 +98,12 @@ function ModalCreateUser() {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box sx={style} className={'!border-0 overflow-scroll h-[90vh]'}>
-                    <Typography id="modal-modal-title" variant="h6" compnent="h2" className={'!font-bold'}>
+                <Box sx={style} className={'!border-0 overflow-scroll h-[90vh] !bg-[#F4F4F4]'}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2" className={'!font-bold !mb-4'}>
                         Thêm nhân viên mới
                     </Typography>
-                    <Typography id="modal-modal-description" sx={{mt: 2}}>
-                        <Accordion defaultExpanded>
+                    <div id="modal-modal-description">
+                        <Accordion defaultExpanded className={'!shadow-none '}>
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon/>}
                                 aria-controls="panel2-content"
@@ -119,6 +118,7 @@ function ModalCreateUser() {
                                         <TextField
                                             id="outlined-read-only-input"
                                             label="UserName"
+                                            autoComplete="off"
                                             name="username"
                                             onChange={handleChange}
                                             sx={{width: '100%'}}
@@ -130,6 +130,7 @@ function ModalCreateUser() {
                                                 type={showPassword ? 'text' : 'password'}
                                                 name="password"
                                                 onChange={handleChange}
+                                                autoComplete="off"
                                                 endAdornment={
                                                     <InputAdornment position="end">
                                                         <IconButton
@@ -150,7 +151,7 @@ function ModalCreateUser() {
                             </AccordionDetails>
                         </Accordion>
 
-                        <Accordion defaultExpanded>
+                        <Accordion defaultExpanded className={'!shadow-none'}>
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon/>}
                                 aria-controls="panel1-content"
@@ -166,6 +167,7 @@ function ModalCreateUser() {
                                             id="outlined-helperText-name"
                                             label="Họ và tên"
                                             name="HoTen"
+                                            autoComplete="off"
                                             onChange={handleChange}
                                             sx={{width: '100%'}}
                                         />
@@ -179,6 +181,7 @@ function ModalCreateUser() {
                                             InputLabelProps={{
                                                 shrink: true
                                             }}
+                                            autoComplete="off"
                                         />
                                     </div>
                                     <div className={'flex gap-8'}>
@@ -186,6 +189,7 @@ function ModalCreateUser() {
                                             id="outlined-helperText-address"
                                             label="Địa chỉ"
                                             name="DiaChi"
+                                            autoComplete="off"
                                             onChange={handleChange}
                                             sx={{width: '100%'}}
                                         />
@@ -196,6 +200,7 @@ function ModalCreateUser() {
                                                 aria-labelledby="demo-row-radio-buttons-group-label"
                                                 name="GioiTinh"
                                                 onChange={handleChange}
+                                                autoComplete="off"
                                             >
                                                 <FormControlLabel value="1" control={<Radio/>} label="Nam"/>
                                                 <FormControlLabel value="0" control={<Radio/>} label="Nữ"/>
@@ -211,6 +216,7 @@ function ModalCreateUser() {
                                                 label="Chức vụ"
                                                 name={'roleName'}
                                                 onChange={handleChange}
+                                                autoComplete="off"
                                             >
                                                 {names.map((name) => (
                                                     <MenuItem
@@ -226,6 +232,7 @@ function ModalCreateUser() {
                                             id="outlined-helperText-email"
                                             label="Email"
                                             name="email"
+                                            autoComplete="off"
                                             onChange={handleChange}
                                             sx={{width: '100%'}}
                                         />
@@ -240,7 +247,7 @@ function ModalCreateUser() {
                             <Button variant="outlined" className={'w-[120px] h-12 !mx-4'}
                                     onClick={handleCloseModal}>Đóng</Button>
                         </div>
-                    </Typography>
+                    </div>
                 </Box>
             </Modal>
         </div>

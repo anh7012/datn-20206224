@@ -53,7 +53,7 @@ function DetailUserUnfo() {
         try {
             await updateUserInfoToManeger(userData, accessToken);
             notify('success', 'Cập nhật thông tin thành công');
-            fetchData();
+            await fetchData();
             if (idUserInfoManager === id) {
                 await getUserInfo(idUserInfoManager, accessToken, dispatch)
             }

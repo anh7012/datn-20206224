@@ -116,58 +116,62 @@ function QuanLyNhanVien() {
     }, [])
 
     function handleViewUser(idUser) {
-       nav(`/home/${idUser}`)
+        nav(`/home/${
+            idUser}`)
     }
 
     return (
         <div>
             <p className={'pb-2 font-bold'}>Danh sách nhân viên</p>
-            <div className={'grid grid-cols-[70%,30%] gap-2 px-4 py-4 bg-white mb-2 rounded-sm'}>
-                <div className={''}>
-                    <div className={'grid grid-cols-[80%,auto] gap-x-8 '}>
-                        <div className={'grid grid-cols-[25%,25%,25%,25%] gap-x-4'}>
-                            <div className="input-container">
-                                <label htmlFor="username-input" className={'label'}>Nhập tài khoản</label>
-                                <input type="text" id="username-input" className={'input'} placeholder="Tài khoản"
-                                       value={filterUsername} onChange={handleUsernameChange}/>
-                            </div>
+            <form autoComplete="off">
+                <div className={'grid grid-cols-[70%,30%] gap-2 px-4 py-4 bg-white mb-2 rounded-sm'}>
+                    <div className={''}>
+                        <div className={'grid grid-cols-[80%,auto] gap-x-8 '}>
+                            <div className={'grid grid-cols-[25%,25%,25%,25%] gap-x-4'}>
+                                <div className="input-container">
+                                    <label className={'label'}>Nhập tài khoản</label>
+                                    <input type="text" className={'input'} placeholder="Tài khoản"
+                                           value={filterUsername} onChange={handleUsernameChange} autoComplete="off"/>
+                                </div>
 
-                            <div className="input-container">
-                                <label htmlFor="fullname-input" className={'label'}>Nhập họ tên:</label>
-                                <input type="text" id="fullname-input" className={'input'} placeholder="Họ tên"
-                                       value={filterFullName} onChange={handleFullNameChange}/>
-                            </div>
-                            <div className="select-container">
-                                <label htmlFor="chuc-vu" className={'label'}>Chức vụ</label>
-                                <select id="chuc-vu" className={'select'} value={filterRole}
-                                        onChange={handleRoleChange}>
-                                    <option value="">Tất cả</option>
-                                    {uniqueRoleNames.map((role, index) => (
-                                        <option key={index} value={role}>{role}</option>
-                                    ))}
-                                </select>
-                            </div>
+                                <div className="input-container">
+                                    <label className={'label'}>Nhập họ tên:</label>
+                                    <input type="text" className={'input'} placeholder="Họ tên"
+                                           value={filterFullName} onChange={handleFullNameChange} autoComplete="off"/>
+                                </div>
+                                <div className="select-container">
+                                    <label htmlFor="chuc-vu" className={'label'}>Chức vụ</label>
+                                    <select id="chuc-vu" className={'select'} value={filterRole}
+                                            onChange={handleRoleChange}>
+                                        <option value="">Tất cả</option>
+                                        {uniqueRoleNames.map((role, index) => (
+                                            <option key={index} value={role}>{role}</option>
+                                        ))}
+                                    </select>
+                                </div>
 
-                            <div className="select-container">
-                                <label htmlFor="status" className={'label'}>Trạng thái</label>
-                                <select id="status" className={'select'} value={filterStatus}
-                                        onChange={handleStatusChange}>
-                                    <option value="">Tất cả</option>
-                                    {uniqueStatuses.map((status, index) => (
-                                        <option key={index} value={status}>{status}</option>
-                                    ))}
-                                </select>
+                                <div className="select-container">
+                                    <label htmlFor="status" className={'label'}>Trạng thái</label>
+                                    <select id="status" className={'select'} value={filterStatus}
+                                            onChange={handleStatusChange}>
+                                        <option value="">Tất cả</option>
+                                        {uniqueStatuses.map((status, index) => (
+                                            <option key={index} value={status}>{status}</option>
+                                        ))}
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div className={'flex items-end justify-end'}>
-                            <Button variant="outlined" onClick={handleResetFilters} className={'    '}><RestartAltIcon/></Button>
+                            <div className={'flex items-end justify-end'}>
+                                <Button variant="outlined" onClick={handleResetFilters}
+                                        className={'    '}><RestartAltIcon/></Button>
+                            </div>
                         </div>
                     </div>
+                    <div className={'flex justify-end items-end'}>
+                        <ModalCreateUser/>
+                    </div>
                 </div>
-                <div className={'flex justify-end items-end'}>
-                    <ModalCreateUser/>
-                </div>
-            </div>
+            </form>
             <div className={'grid grid-cols-[10%,15%,20%,15%,10%,auto] gap-2 py-2'}>
                 <div className={'text-gray-500 flex justify-center'}>STT</div>
                 <div className={'text-gray-500'}>Tài Khoản</div>
@@ -197,7 +201,9 @@ function QuanLyNhanVien() {
                                 )}
                             </div>
                             <div className={'flex justify-center items-center gap-2'}>
-                                <Button variant={'contained'} color={'primary'} size={'small'} onClick={()=>handleViewUser(item.idUser)} ><p className={' text-[12px]'}>Xem</p></Button>
+                                <Button variant={'contained'} color={'primary'} size={'small'}
+                                        onClick={() => handleViewUser(item.idUser)}><p
+                                    className={' text-[12px]'}>Xem</p></Button>
                                 {/*<ModalInfoUserManager/>*/}
                                 <Button variant={'contained'} color={'error'} size={'small'}
                                         onClick={() => handleDeleteClick(item)}
