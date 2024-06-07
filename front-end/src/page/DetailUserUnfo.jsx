@@ -1,32 +1,19 @@
-import {Link, useParams} from "react-router-dom";
-import React, {useEffect, useState} from "react";
+import { Link, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import {createUser, getUser, getUserInfo, updateUserInfoToManeger} from "../redux/apiRequest.js";
-import {useDispatch, useSelector} from "react-redux";
-import {
-    Button,
-    FormControl, FormControlLabel, FormLabel,
-    InputAdornment,
-    InputLabel,
-    MenuItem,
-    OutlinedInput, Radio, RadioGroup,
-    Select,
-    TextField
-} from "@mui/material";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import IconButton from "@mui/material/IconButton";
-import {Visibility, VisibilityOff} from "@mui/icons-material";
-import {notify} from "../utils/notify.js";
+import { useDispatch, useSelector } from "react-redux";
+import { notify } from "../utils/notify.js";
 import moment from "moment";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 function DetailUserUnfo() {
     const dispatch = useDispatch();
     const idUserInfoManager = useSelector(state => state.auth?.login?.currentUser?.data?.user?.idUser);
     const [userInfo, setUserInfo] = useState({});
-    const {id} = useParams();
+    const { id } = useParams();
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
-    const names = [
-        'Quản trị viên', 'Nhân viên', 'Giám đốc'
-    ];
+    const names = ['Quản trị viên', 'Nhân viên', 'Giám đốc'];
     const [userData, setUserData] = useState({
         HoTen: '',
         email: '',
@@ -36,11 +23,11 @@ function DetailUserUnfo() {
         roleName: '',
         username: '',
         password: '',
-        status: '', // Thêm trường status vào state
+        status: '',
     });
 
     const handleChange = (event) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         setUserData((prevState) => ({
             ...prevState,
             [name]: value
@@ -50,7 +37,7 @@ function DetailUserUnfo() {
     const formattedNgaySinh = userInfo?.NgaySinh ? moment(userInfo.NgaySinh).format('YYYY-MM-DD') : '';
 
     const handleUpdate = async (event) => {
-        event.preventDefault(); // Prevent form submission
+        event.preventDefault();
         try {
             await updateUserInfoToManeger(userData, accessToken);
             notify('success', 'Cập nhật thông tin thành công');
@@ -95,175 +82,183 @@ function DetailUserUnfo() {
             NgaySinh: formattedNgaySinh || '',
             roleName: userInfo.roleName || '',
             username: userInfo.username || '',
-            password: '', // Keep password empty for security reasons
-            status: userInfo.status || '', // Set status from userInfo
+            password: '',
+            status: userInfo.status || '',
         }));
     }, [userInfo, formattedNgaySinh]);
 
     return (
-        <div>
-            <Link to={'/home/quanlynhanvien'}
-                  className={'flex items-center justify-start text-gray-500 hover:text-black mb-6'}>
-                <ArrowBackIcon className={'mr-2'}/> <p>Trở về trang quản lý</p>
-            </Link>
-            <div className={'text-[18px] mb-4'}>
-                Trang thông tin chi tiết của <strong>{userInfo?.HoTen}</strong>
+        <div className="container mx-auto p-6">
+            <div className='flex items-center justify-start mb-6'>
+                <Link to={'/home/quanlynhanvien'} className='text-gray-500 hover:text-black'>
+                    <ArrowBackIcon className='mr-2' />
+                </Link>
+                <div className='text-[18px]'>
+                    Trang thông tin chi tiết của <strong>{userInfo?.HoTen}</strong>
+                </div>
             </div>
+
             <form onSubmit={handleUpdate}>
-                <div className={'mb-4'}>
-                    <h2 className={'bg-white rounded-t-md pt-2 px-2'}>Thông tin cá nhân</h2>
-                    <div className={'px-8 py-6 bg-white rounded-b-md'}>
-                        <div className={'flex gap-x-4 items-center mb-4'}>
-                            <TextField
-                                label="Họ và tên"
-                                name="HoTen"
-                                onChange={handleChange}
-                                value={userData.HoTen}
-                                autoComplete="off"
-                                sx={{width: '100%'}}
-                            />
-                            <TextField
-                                label="Ngày sinh"
-                                name="NgaySinh"
-                                type="date"
-                                onChange={handleChange}
-                                value={userData.NgaySinh}
-                                variant="outlined"
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                                autoComplete="off"
-                                sx={{width: '100%'}}
-                            />
+                <div className='mb-4'>
+                    <h2 className='bg-white rounded-t-md pt-2 px-2 text-green-600 font-bold border-b-[1px] text-xl'>I. Thông tin cá nhân:</h2>
+                    <div className='px-8 py-6 bg-white rounded-b-md'>
+                        <div className='flex gap-x-4 items-center mb-4'>
+                            <div className="w-full">
+                                <label className="block text-gray-700">1. Họ và tên:</label>
+                                <input
+                                    type="text"
+                                    name="HoTen"
+                                    onChange={handleChange}
+                                    value={userData.HoTen}
+                                    autoComplete="off"
+                                    className="w-full p-2 border border-gray-300 rounded-md"
+                                />
+                            </div>
+                            <div className="w-full">
+                                <label className="block text-gray-700">2. Ngày sinh:</label>
+                                <input
+                                    type="date"
+                                    name="NgaySinh"
+                                    onChange={handleChange}
+                                    value={userData.NgaySinh}
+                                    className="w-full p-2 border border-gray-300 rounded-md"
+                                />
+                            </div>
                         </div>
-                        <FormControl fullWidth>
-                            <FormLabel>Giới tính</FormLabel>
-                            <RadioGroup
-                                row
-                                name="GioiTinh"
-                                value={userData.GioiTinh}
-                                onChange={handleChange}
-                                autoComplete="off"
-                            >
-                                <FormControlLabel value="1" control={<Radio />} label="Nam" />
-                                <FormControlLabel value="0" control={<Radio />} label="Nữ" />
-                            </RadioGroup>
-                        </FormControl>
+                        <div className="w-full">
+                            <label className="block text-gray-700">3. Giới tính:</label>
+                            <div className="flex gap-x-4 items-center">
+                                <label className="flex items-center">
+                                    <input
+                                        type="radio"
+                                        name="GioiTinh"
+                                        value="1"
+                                        checked={userData.GioiTinh === "1"}
+                                        onChange={handleChange}
+                                        className="mr-2"
+                                    />
+                                    Nam
+                                </label>
+                                <label className="flex items-center">
+                                    <input
+                                        type="radio"
+                                        name="GioiTinh"
+                                        value="0"
+                                        checked={userData.GioiTinh === "0"}
+                                        onChange={handleChange}
+                                        className="mr-2"
+                                    />
+                                    Nữ
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className={'mb-4'}>
-                    <h2 className={'bg-white rounded-t-md pt-2 px-2'}>Thông tin tài khoản</h2>
-                    <div className={'px-8 py-6 bg-white rounded-b-md'}>
-                        <div className={'flex gap-x-4 items-center mb-4'}>
-                            <TextField
-                                label="Tên đăng nhập"
-                                value={userData.username}
-                                sx={{width: '100%'}}
-                                InputProps={{
-                                    readOnly: true,
-                                }}
-                                autoComplete="off"
-                            />
-                            <FormControl sx={{width: '100%'}} variant="outlined">
-                                <InputLabel htmlFor="outlined-adornment-password">Mật khẩu</InputLabel>
-                                <OutlinedInput
-                                    id="outlined-adornment-password"
-                                    type={showPassword ? 'text' : 'password'}
-                                    name="password"
-                                    onChange={handleChange}
-                                    value={userData.password}
-                                    autoComplete="new-password"
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                aria-label="toggle password visibility"
-                                                onClick={handleClickShowPassword}
-                                                onMouseDown={handleMouseDownPassword}
-                                                edge="end"
-                                            >
-                                                {showPassword ? <VisibilityOff /> : <Visibility />}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    }
-                                    label="Password"
+
+                <div className='mb-4'>
+                    <h2 className='bg-white rounded-t-md pt-2 px-2 text-green-600 font-bold border-b-[1px] text-xl'>II. Thông tin tài khoản:</h2>
+                    <div className='px-8 py-6 bg-white rounded-b-md'>
+                        <div className='flex gap-x-4 items-center mb-4'>
+                            <div className="w-full">
+                                <label className="block text-gray-700">1. Tên đăng nhập:</label>
+                                <input
+                                    type="text"
+                                    value={userData.username}
+                                    readOnly
+                                    className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
                                 />
-                            </FormControl>
+                            </div>
+                            <div className="w-full">
+                                <label className="block text-gray-700">2. Mật khẩu:</label>
+                                <div className="relative">
+                                    <input
+                                        type={showPassword ? 'text' : 'password'}
+                                        name="password"
+                                        onChange={handleChange}
+                                        value={userData.password}
+                                        autoComplete="new-password"
+                                        className="w-full p-2 border border-gray-300 rounded-md"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                        className="absolute inset-y-0 right-0 px-3 py-2"
+                                    >
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <FormControl fullWidth sx={{mt: 2}}>
-                            <InputLabel>Trạng thái</InputLabel>
-                            <Select
+                        <div className="w-full mt-2">
+                            <label className="block text-gray-700">3. Trạng thái</label>
+                            <select
                                 value={userData.status}
-                                label="Trạng thái"
                                 onChange={handleChange}
                                 name="status"
-                                autoComplete="off"
+                                className="w-full p-2 border border-gray-300 rounded-md"
                             >
-                                <MenuItem value={'active'}>
-                                    <div className={'w-12 h-6 bg-green-200 flex items-center justify-center rounded-xl '}>
-                                        <p className={'text-[10px] font-bold'}>Active</p>
-                                    </div>
-                                </MenuItem>
-                                <MenuItem value={'close'}>
-                                    <div className={'w-12 h-6 bg-red-300 flex items-center justify-center rounded-xl '}>
-                                        <p className={'text-[10px] font-bold'}>Close</p>
-                                    </div>
-                                </MenuItem>
-                            </Select>
-                        </FormControl>
-                    </div>
-                </div>
-                <div className={'mb-4'}>
-                    <h2 className={'bg-white rounded-t-md pt-2 px-2'}>Thông tin liên hệ</h2>
-                    <div className={'px-8 py-6 bg-white rounded-b-md'}>
-                        <div className={'flex gap-x-4 items-center mb-4'}>
-                            <TextField
-                                label="Địa chỉ"
-                                name="DiaChi"
-                                onChange={handleChange}
-                                value={userData.DiaChi}
-                                autoComplete="off"
-                                sx={{width: '100%'}}
-                            />
-                            <TextField
-                                label="Email"
-                                name="email"
-                                onChange={handleChange}
-                                value={userData.email}
-                                autoComplete="off"
-                                sx={{width: '100%'}}
-                            />
+                                <option value="active">Active</option>
+                                <option value="close">Close</option>
+                            </select>
                         </div>
                     </div>
                 </div>
-                <div className={'mb-4'}>
-                    <h2 className={'bg-white rounded-t-md pt-2 px-2'}>Quyền hạn</h2>
-                    <div className={'px-8 py-6 bg-white rounded-b-md'}>
-                        <div className={'grid grid-cols-[30%,auto] gap-4'}>
-                            <FormControl fullWidth>
-                                <InputLabel>Chức vụ</InputLabel>
-                                <Select
-                                    label="Chức vụ"
+
+                <div className='mb-4'>
+                    <h2 className='bg-white rounded-t-md pt-2 px-2 text-green-600 font-bold border-b-[1px] text-xl'>III. Thông tin liên hệ:</h2>
+                    <div className='px-8 py-6 bg-white rounded-b-md'>
+                        <div className='flex gap-x-4 items-center mb-4'>
+                            <div className="w-full">
+                                <label className="block text-gray-700">1. Địa chỉ:</label>
+                                <input
+                                    type="text"
+                                    name="DiaChi"
+                                    onChange={handleChange}
+                                    value={userData.DiaChi}
+                                    autoComplete="off"
+                                    className="w-full p-2 border border-gray-300 rounded-md"
+                                />
+                            </div>
+                            <div className="w-full">
+                                <label className="block text-gray-700">2. Email:</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    onChange={handleChange}
+                                    value={userData.email}
+                                    autoComplete="off"
+                                    className="w-full p-2 border border-gray-300 rounded-md"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className='mb-4'>
+                    <h2 className='bg-white rounded-t-md pt-2 px-2 text-green-600 font-bold border-b-[1px] text-xl'>IV. Quyền hạn:</h2>
+                    <div className='px-8 py-6 bg-white rounded-b-md'>
+                        <div className='grid grid-cols-[30%,auto] gap-4'>
+                            <div className="w-full">
+                                <label className="block text-gray-700">1. Chức vụ:</label>
+                                <select
                                     name="roleName"
                                     onChange={handleChange}
                                     value={userData.roleName}
-                                    autoComplete="off"
+                                    className="w-full p-2 border border-gray-300 rounded-md"
                                 >
                                     {names.map((name) => (
-                                        <MenuItem
-                                            key={name}
-                                            value={name}
-                                        >
-                                            {name}
-                                        </MenuItem>
+                                        <option key={name} value={name}>{name}</option>
                                     ))}
-                                </Select>
-                            </FormControl>
-                            <div className={'bg-red-300'}>Permisstion is going to update</div>
+                                </select>
+                            </div>
+                            <div className="bg-red-300 w-full flex items-center justify-center">Permission is going to update</div>
                         </div>
                     </div>
                 </div>
-                <div className={'flex justify-center mt-8'}>
-                    <Button variant={'contained'} type="submit">Cập nhật</Button>
+
+                <div className='flex justify-center mt-8'>
+                    <button type="submit" className="px-6 py-2 bg-green-600 text-white rounded-md">Cập nhật</button>
                 </div>
             </form>
         </div>
