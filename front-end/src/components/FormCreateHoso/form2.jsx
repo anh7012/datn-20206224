@@ -1,26 +1,49 @@
-import {useState} from "react";
+import { useState } from "react";
 
-function Form2({updateFormValues,typeClient,formValues}) {
+function Form2({ updateFormValues, typeClient, formValues }) {
     const handleChange = (event) => {
         const { name, value } = event.target;
         updateFormValues({ [name]: value });
     };
-    const mappingSelect = ()=>{
+
+    const mappingSelect = () => {
         switch (formValues.traGoc) {
             case "Trả gốc đều":
                 return [
-
-                ]
+                    'Lãi đơn tính trên số gốc đã trả',
+                    'Lãi tích hợp tính trên số gốc đã trả',
+                    'Lãi tính trên số dư gốc còn lại'
+                ];
+            case "Trả gốc và lãi đều từng kỳ":
+                return ['Trả gốc và lãi đều từng kỳ'];
+            case "Trả gốc và lãi khi đáo hạn":
+                return ['Lãi đơn tính trên số gốc đã trả', 'Lãi nhập gốc'];
+            case "Trả gốc khi đáo hạn":
+                return ['Trả lãi đầu kỳ'];
+            default:
+                return ["Vui lòng chọn hình thức trả gốc"];
         }
-    }
+    };
+
     return (
         <div className="w-full h-full flex items-center flex-col">
-            <div className={'w-full p-8'}>
+            <div className="w-full p-8">
                 <h2 className="text-2xl font-semibold mb-2 text-green-800">I. THÔNG TIN KHOẢN VAY</h2>
                 <div className="mb-12 mt-8 pt-8 border-t-[1px] border-black">
                     <label className="block text-gray-700 mb-4">1. Mục đích vay:</label>
                     <div className="grid grid-cols-2 gap-4">
-                        {(typeClient === 'KHCN'?["Vay mua ô tô", "Vay nhu cầu nhà ở", "Vay tiêu dùng không tài sản đảm bảo", "Vay du học", "Vay tiêu dùng có tài sản đảm bảo", "Vay sản xuất kinh doanh", "Vay cầm cố"]:['Vay đầu tư','Vay thông thường']).map((purpose) => (
+                        {(typeClient === 'KHCN' ? [
+                            "Vay mua ô tô",
+                            "Vay nhu cầu nhà ở",
+                            "Vay tiêu dùng không tài sản đảm bảo",
+                            "Vay du học",
+                            "Vay tiêu dùng có tài sản đảm bảo",
+                            "Vay sản xuất kinh doanh",
+                            "Vay cầm cố"
+                        ] : [
+                            'Vay đầu tư',
+                            'Vay thông thường'
+                        ]).map((purpose) => (
                             <label key={purpose} className="flex items-center">
                                 <input
                                     type="radio"
@@ -61,17 +84,10 @@ function Form2({updateFormValues,typeClient,formValues}) {
                         >
                             <option value="">Please Select</option>
                             {
-                                formValues.traGoc
+                                mappingSelect().map((e, i) => (
+                                    <option key={i} value={e}>{e}</option>
+                                ))
                             }
-                            {/*<option value="Lãi đơn tính trên số gốc đã trả">Lãi đơn tính trên số gốc đã trả</option>*/}
-                            {/*<option value="Lãi tích hợp tính trên số gốc đã trả">Lãi tích hợp tính trên số gốc đã*/}
-                            {/*    trả*/}
-                            {/*</option>*/}
-                            {/*<option value="Lãi tính trên số dư gốc còn lại">Lãi tính trên số dư gốc còn lại</option>*/}
-                            {/*<option value="Trả gốc và lãi đều từng kỳ">Trả gốc và lãi đều từng kỳ</option>*/}
-                            {/*<option value="Lãi đơn">Lãi đơn</option>*/}
-                            {/*<option value="Lãi nhập gốc">Lãi nhập gốc</option>*/}
-                            {/*<option value="Trả lãi đầu kỳ">Trả lãi đầu kỳ</option>*/}
                         </select>
                     </div>
                 </div>
