@@ -121,13 +121,13 @@ export const updateUserInfoToManeger = async (userInfo, accessToken) => {
                 Authorization: `Bearer ${accessToken}`
             }
         })
-      if (userInfo.password !== "") {
-          const changePassword = await axios.post(`http://localhost:7012/users/${id}/changePassword`, {new_password: userInfo.password}, {
-              headers: {
-                  Authorization: `Bearer ${accessToken}`
-              }
-          })
-      }
+        if (userInfo.password !== "") {
+            const changePassword = await axios.post(`http://localhost:7012/users/${id}/changePassword`, {new_password: userInfo.password}, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            })
+        }
         const changeUserData = await axios.put(`http://localhost:7012/users/${id}/updateUser`,
             {
                 email: userInfo.email,
@@ -156,15 +156,27 @@ export const updateUserInfoToManeger = async (userInfo, accessToken) => {
         console.log(e)
     }
 }
-export const  getListHoso = async (accessToken)=>{
-try {
-  const res = await axios.get(`http://localhost:7012/hoso/listHoSo`,{
-        headers: {
-            Authorization: `Bearer ${accessToken}`
-        }
-    })
-    return res.data
-}catch (e){
-    console.log(e)
+export const getListHoso = async (accessToken) => {
+    try {
+        const res = await axios.get(`http://localhost:7012/hoso/listHoSo`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
 }
+export const getCatoryKH = async (MaKH,accessToken) => {
+    try {
+        const res = await axios.post(`http://localhost:7012/client/loaiKH`, MaKH,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
 }
