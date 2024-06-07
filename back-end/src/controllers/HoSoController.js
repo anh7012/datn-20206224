@@ -11,8 +11,6 @@ const MoHinhEY = require('../models/mhey')
 
 
 const hoSoController = {
-
-
     // [GET] /hoso/
     listHoSo: async (req, res, next) => {
         try {
@@ -141,8 +139,8 @@ const hoSoController = {
                 TSDBTrenTongNo: TSDBTrenTongNo,
                 DiemTSDBTrenTongNo: DiemTSDBTrenTongNo,
                 DiemRuiRoGiamGiaTSDB: req.body.RuiRoGiamGiaTSDB?.diem,
-                TinhHinhTraNo: req.body.TinhHinhTraNo?.tinhhinhtrano,
-                DiemTinhHinhTraNo: req.body.TinhHinhTraNo?.diem,
+                TinhHinhTraNo: req.body.TinhHinhTraNoLai?.tinhhinhtrano,
+                DiemTinhHinhTraNo: req.body.TinhHinhTraNoLai?.diem,
             }
             const newmhbidv = await MoHinhBIDV.createBIDV(mhbidv)
             const duno = await Loan.getTongNoByID(hoso.idClient)
@@ -162,10 +160,10 @@ const hoSoController = {
                 DuNo: parseFloat(duno.TongNo),
                 TaiSanRong: req.body.TaiSanRong,
                 DiemDuNoTrenTSRong: diemDuNoTrenTSRong,
-                TinhHinhTraNo: req.body.tinhhinhtrano?.TinhHinhTraNo,
-                DiemTinhHinhTraNo: req.body.tinhhinhtrano?.diem,
-                TinhHinhTraLai: req.body.tinhhinhtralai?.TinhHinhTraLai,
-                DiemTinhHinhTraLai: req.body.tinhhinhtralai?.diem,
+                TinhHinhTraNo: req.body.TinhHinhTraNo?.tinhhinhtrano,
+                DiemTinhHinhTraNo: req.body.TinhHinhTraNo?.diem,
+                TinhHinhTraLai: req.body.TinhHinhTraLai?.tinhhinhtralai,
+                DiemTinhHinhTraLai: req.body.TinhHinhTraLai?.diem,
                 DanhGiaKNTra: req.body.danhgiakntra?.DanhGiaKNTra,
                 DiemDanhGiaKNTra: req.body.danhgiakntra?.diem,
                 LoiNhuan: req.body.LoiNhuan,
