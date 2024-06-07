@@ -11,6 +11,8 @@ const MoHinhEY = require('../models/mhey')
 
 
 const hoSoController = {
+
+
     // [GET] /hoso/
     listHoSo: async (req, res, next) => {
         try {

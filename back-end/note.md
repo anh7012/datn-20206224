@@ -54,3 +54,10 @@ Routes:http://localhost:7012/
     - Auth: accessToken
     - Param: idUser
     - Body: status: 1 trong 2 {"active", "close"}
+
+**Client Router**
+- getLoaiKH: [get] http://localhost:7012/client/loaiKH
+  - Auth: accessToken
+  - Body: maKhachHang
+
+**HoSo Router**

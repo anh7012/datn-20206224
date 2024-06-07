@@ -4,6 +4,24 @@ const validator = require('validator');
 
 
 const ClientController = {
+    // [GET] /hoso/loaiKH
+    getLoaiKH: async (req, res) => {
+        try {
+            const khachhang = await Client.getloaiClientByMaKH(req.body.maKhachHang)
+            return res.json({
+                code: 9992,
+                data: khachhang,
+                message: "Tìm thấy khách hàng thành công"
+            });
+
+        } catch (err) {
+            return res.json({
+                code: 9992,
+                message: "Không tìm thấy khách hàng "
+            });
+        }
+
+    },
     // [GET] Client/ -- list khach hang
     listClient: async (req, res, next) => {
         try {

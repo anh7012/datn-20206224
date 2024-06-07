@@ -49,6 +49,15 @@ module.exports = class Client {
         return rows[0];
     }
 
+    static getloaiClientByMaKH = async (maKH) => {
+        const [rows, fields] = await promisePool.query(
+            "SELECT maKhachHang, typeClient FROM client WHERE maKhachHang = ?;",
+            [maKH]
+        );
+        return rows[0];
+    }
+
+
     static createClient = async (client) => {
         const idClient = uuidv4({format: "hex"}).substring(0, 32);
         const Tuoi = (dateOfBirth) => {
