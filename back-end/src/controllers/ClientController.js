@@ -7,16 +7,23 @@ const ClientController = {
     // [GET] /hoso/loaiKH
     getLoaiKH: async (req, res) => {
         try {
-            const khachhang = await Client.getloaiClientByMaKH(req.body.maKhachHang)
-            return res.json({
-                code: 9992,
-                data: khachhang,
-                message: "Tìm thấy khách hàng thành công"
-            });
-
+            const khachhang = await Client.getloaiClientByMaKH(req.body.maKH)
+            if (khachhang){
+                return res.json({
+                    code: 1000,
+                    data: khachhang,
+                    message: "Tìm thấy khách hàng thành công"
+                });
+            } else {
+                return res.json({
+                    code: 9992,
+                    data: khachhang,
+                    message: "Không tìm thấy khách hàng"
+                });
+            }
         } catch (err) {
             return res.json({
-                code: 9992,
+                code: 9999,
                 message: "Không tìm thấy khách hàng "
             });
         }
