@@ -167,8 +167,8 @@ Routes:http://localhost:7012/
     
     + "NguonTraNo": 1000000000,
     
-    + "TSDB": {
-    "LoaiTSDB": "Giấy tờ có giá do tổ chức phát hành (trừ cổ phiếu)",
+    + "LoaiTSDB": {
+    "loaitsdb": "Giấy tờ có giá do tổ chức phát hành (trừ cổ phiếu)",
     "diem": 75
     },
     

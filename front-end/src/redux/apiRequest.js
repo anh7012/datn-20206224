@@ -180,3 +180,37 @@ export const getCatoryKH = async (MaKH,accessToken) => {
         console.log(e)
     }
 }
+export const createHoso = async (data,accessToken) => {
+    try {
+        const res = await axios.post(`http://localhost:7012/hoso/createHoSo`,{
+            ...data,
+            KyHan: +data.KyHan,
+            TongTienVay:+data.TongTienVay
+        },{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const createMHBIDVAndEY = async (data,accessToken) => {
+    try {
+        const res = await axios.post(`http://localhost:7012/hoso/createMHBIDVAndEY`,{
+            ...data,
+            TaiSanRong:+data.TaiSanRong,
+            LoiNhuan: +data.LoiNhuan,
+            DoanhThu:+data.DoanhThu,
+            NguonTraNo:+data.NguonTraNo
+        },{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}

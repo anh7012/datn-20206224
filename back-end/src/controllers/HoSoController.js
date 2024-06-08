@@ -48,7 +48,9 @@ const hoSoController = {
                 LoaiTraGoc: req.body.LoaiTraGoc,
                 LoaiTraLai: req.body.LoaiTraLai
             }
+            console.log('>>',loaivay)
             const idLoaiVay = await LoaiVay.getidLoaiVay(loaivay)
+            console.log('>>>>',idLoaiVay)
             const maHoSo = await generateUniqueHoSo()
             const dichvusudung = await DVSD(req.body.MaKH)
             const sotientra = await tinhGocLaiTBTheoThang({
