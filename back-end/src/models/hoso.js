@@ -1,6 +1,7 @@
 const promisePool = require("../config/db/db");
 const {v4: uuidv4} = require("uuid");
 const moment = require("moment");
+const updateIfNull = require('../utils/updateIfNull')
 
 module.exports = class HoSo{
 
@@ -54,6 +55,27 @@ module.exports = class HoSo{
         );
         return rows[0];
     }
+
+    static getHoSoFullByIdHoSo = async (id) => {
+        const [rows, fields] = await promisePool.query(
+            "SELECT * FROM hoso JOIN mhbidv ON hoso.idHoSo = mhbidv.idHoSo JOIN mhey ON hoso.idHoSo = mhey.idHoSo  WHERE hoso.idHoSo = ?;",
+            [id]
+        );
+        return rows[0];
+    };
+
+   static updateHoSoDetails = async (idHoSo, newValues) => {
+        try {
+            const result = await Promise.all([
+                updateIfNull('hoso', 'idHoSo', idHoSo, newValues),
+                updateIfNull('mhbidv', 'idHoSo', idHoSo, newValues),
+                updateIfNull('mhey', 'idHoSo', idHoSo, newValues)
+            ]);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    };
 
     static getHoSoByIdAccount= async (id) => {
         const [rows, fields] = await promisePool.query(

@@ -181,5 +181,11 @@ Routes:http://localhost:7012/
     + "ruirogiamgiatsdb": "1",
     "diem": 75
     }
-
+- getInforHoSo: [get] http://localhost:7012/hoso/:id/inforHoSo
+  - Auth: accessToken
+  - Params: idHoSo
+- updateHoSo: [put] http://localhost:7012/hoso/:id/updateHoSo
+  - Auth: accessToken
+  - Params: idHoSo
+  - Body: Tất cả key  chỗ form tạo mới
     

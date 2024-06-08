@@ -125,7 +125,7 @@ const usersController = {
                     });
                 }
             } catch (error) {
-                res.json({
+                return res.json({
                     code: 9999,
                     data: {
                         message: "Không thể thay đổi thông tin nhân viên",

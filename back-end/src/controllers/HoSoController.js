@@ -8,6 +8,9 @@ const Diem = require('../utils/Diem')
 const MoHinhBIDV = require('../models/mhbidv')
 const Loan = require('../models/loan')
 const MoHinhEY = require('../models/mhey')
+const User = require("../models/user");
+const {mergeFields} = require("../utils/mergeField");
+const {updateIfNull} = require("../utils/updateIfNull");
 
 
 const hoSoController = {
@@ -28,7 +31,7 @@ const hoSoController = {
         }
     },
 
-//     [Post] /hoso/themhoso/thongtin
+//     [Post] /hoso/createHoSo
     createHoSo: async (req, res, next) => {
         try {
             const existClient = await Client.getClientByMaKH(req.body.MaKH)
@@ -119,7 +122,7 @@ const hoSoController = {
         }
     },
 
-    // [POST] /hoso/themhoso/tsdb
+    // [POST] /hoso/createMHBIDVAndEY
     createMHBIDVAndEY: async (req, res, next) => {
         try {
             const hoso = await HoSo.getHoSoByMaHoSo(req.body.MaHoSo)
@@ -173,15 +176,69 @@ const hoSoController = {
                 DiemTienKeHoachTrenNguonTraNo: diemTienKeHoachTrenNguonTraNo
             }
             const newmhey = await MoHinhEY.createEY(mhey)
-            res.json({
+            return res.json({
                 code: 1000,
                 message: "Thêm hồ sơ mới thành công",
                 data: newmhbidv, newmhey
             });
         } catch (error) {
             console.log(error)
-            res.status(500).json({
+            return res.status(500).json({
                 message: "Không thể thêm hồ sơ mới",
+            });
+        }
+    },
+    // [PUT] /hoso/updateHoSo
+    updateHoSo: async (req, res) => {
+        try {
+            const result = await HoSo.getHoSoFullByIdHoSo(req.params.id)
+            if (result.length === 0) {
+                return res.json({
+                    code: 9998,
+                    data: {
+                        message: "Không tìm thấy hồ sơ",
+                    },
+                });
+            }
+            const updateResults = await HoSo.updateHoSoDetails(req.params.id, req.body);
+            if (updateResults) {
+                return res.json({
+                    code: 1000,
+                    message: "Bổ sung hồ sơ thành công",
+                    data: updateResults
+                });
+            } else {
+                return res.json({
+                    code: 9992,
+                    message: "Bổ sung hồ sơ thất bại"
+                });
+            }
+        } catch (err) {
+            return res.json({
+                code: 9999,
+                data: {
+                    message: "Không thể thay đổi thông tin hồ sơ",
+                },
+            });
+        }
+    },
+    // [GET] /hoso/inforHoSo
+    getInforHoSo: async (req, res) => {
+        try {
+            const hoso = await HoSo.getHoSoFullByIdHoSo(req.params.id)
+            return res.json({
+                code: 1000,
+                data: {
+                    hoso: hoso,
+                    message: "Lấy thông tin thành công",
+                },
+            });
+        } catch (err) {
+            return res.json({
+                code: 9999,
+                data: {
+                    message: "Không thể lấy thông tin hồ sơ",
+                },
             });
         }
     }
