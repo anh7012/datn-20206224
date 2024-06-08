@@ -142,7 +142,7 @@ const hoSoController = {
                 TSDBTrenTongNo: TSDBTrenTongNo,
                 DiemTSDBTrenTongNo: DiemTSDBTrenTongNo,
                 DiemRuiRoGiamGiaTSDB: req.body.RuiRoGiamGiaTSDB?.diem,
-                TinhHinhTraNo: req.body.TinhHinhTraNoLai?.tinhhinhtrano,
+                TinhHinhTraNo: req.body.TinhHinhTraNoLai?.tinhhinhtranolai,
                 DiemTinhHinhTraNo: req.body.TinhHinhTraNoLai?.diem,
             }
             const newmhbidv = await MoHinhBIDV.createBIDV(mhbidv)
