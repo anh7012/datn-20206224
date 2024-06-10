@@ -228,14 +228,14 @@ const hoSoController = {
     getInforHoSo: async (req, res) => {
         try {
             const hoso = await HoSo.getHoSoFullByIdHoSo(req.params.id)
+            console.log('>>>>>', hoso)
             return res.json({
                 code: 1000,
-                data: {
-                    hoso: hoso,
-                    message: "Lấy thông tin thành công",
-                },
+                data: hoso,
+                message: "Lấy thông tin thành công"
             });
         } catch (err) {
+            console.log(err)
             return res.json({
                 code: 9999,
                 data: {

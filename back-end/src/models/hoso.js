@@ -58,7 +58,7 @@ module.exports = class HoSo{
 
     static getHoSoFullByIdHoSo = async (id) => {
         const [rows, fields] = await promisePool.query(
-            "SELECT * FROM hoso JOIN mhbidv ON hoso.idHoSo = mhbidv.idHoSo JOIN mhey ON hoso.idHoSo = mhey.idHoSo  WHERE hoso.idHoSo = ?;",
+            "SELECT * FROM hoso JOIN mhbidv ON hoso.idHoSo = mhbidv.idHoSo JOIN mhey ON hoso.idHoSo = mhey.idHoSo JOIN loaivay ON loaivay.idloaiVay = hoso.idloaiVay WHERE hoso.idHoSo = ?;",
             [id]
         );
         return rows[0];

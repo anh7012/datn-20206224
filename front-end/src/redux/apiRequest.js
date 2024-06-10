@@ -214,3 +214,28 @@ export const createMHBIDVAndEY = async (data,accessToken) => {
         console.log(e)
     }
 }
+export const getHoso = async (id,accessToken)=>{
+    try {
+        const res = await  axios.get(`http://localhost:7012/hoso/${id}/inforHoSo`,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    }
+    catch (e){
+        console.log(e)
+    }
+}
+export const getInforKH = async (id,accessToken) => {
+    try {
+        const res = await axios.get(`http://localhost:7012/client/${id}/inforClient`,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}

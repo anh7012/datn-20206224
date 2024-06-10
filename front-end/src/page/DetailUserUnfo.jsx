@@ -6,6 +6,7 @@ import { notify } from "../utils/notify.js";
 import moment from "moment";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import eventEmitter from "../utils/eventEmitter.js";
 
 function DetailUserUnfo() {
     const dispatch = useDispatch();
@@ -42,6 +43,7 @@ function DetailUserUnfo() {
             await updateUserInfoToManeger(userData, accessToken);
             notify('success', 'Cập nhật thông tin thành công');
             await fetchData();
+            eventEmitter.emit('updateListUser')
             if (idUserInfoManager === id) {
                 await getUserInfo(idUserInfoManager, accessToken, dispatch);
             }

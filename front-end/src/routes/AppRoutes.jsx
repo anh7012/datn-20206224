@@ -6,6 +6,7 @@ import QuanLyNhanVien from "../page/QuanLyNhanVien.jsx";
 import DetailUserUnfo from "../page/DetailUserUnfo.jsx";
 import QuanLyHoSo from "../page/QuanLyHoSo.jsx";
 import FormCreateHoso from "../page/FormCreateHoso.jsx";
+import DetailHoso from "../page/DetailHoso.jsx";
 
 function AppRoutes() {
 
@@ -17,10 +18,13 @@ function AppRoutes() {
                 <Route path="/home" element={<App />}>
                     <Route index element={<Navigate to="danhgiatindung" replace />} />
                     <Route path="danhgiatindung" element={<DanhGiaTinDung />} />
-                    <Route path="quanlyhoso" element={<QuanLyHoSo />} />
-                    <Route path="quanlynhanvien" element={<QuanLyNhanVien />} />
-                    <Route path=":id" element={<DetailUserUnfo />} />
-                    <Route path="toahosomoi" element={<FormCreateHoso />} />
+                    <Route path="quanlyhoso" element={<QuanLyHoSo />} >
+                        <Route path=":idHoso" element={<DetailHoso />} />
+                    </Route>
+                    <Route path="quanlynhanvien" element={<QuanLyNhanVien />} >
+                        <Route path=":id" element={<DetailUserUnfo />} />
+                    </Route>
+                    <Route path="taohosomoi" element={<FormCreateHoso />} />
                 </Route>
             </Routes>
         </div>
