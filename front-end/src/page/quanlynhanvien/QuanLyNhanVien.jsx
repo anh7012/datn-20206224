@@ -1,11 +1,11 @@
 import {Button, Pagination, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import {deleteUser, listUser} from "../../redux/apiRequest.js";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
-import ModalCreateUser from "../../components/Modal/ModalCreateUser.jsx";
+import ModalCreateUser from "./ModalCreateUser.jsx";
 import eventEmitter from "../../utils/eventEmitter.js";
 import {notify} from "../../utils/notify.js";
 import {Outlet, useNavigate, useParams} from "react-router-dom";
@@ -21,7 +21,10 @@ function QuanLyNhanVien() {
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
     const nav = useNavigate()
-
+    const [page,setPage] = useState(6); // Number of items per page
+    useEffect(() => {
+        setPage(window.location.pathname);
+    },[window.location.pathname])
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
 
     useEffect(() => {
@@ -120,7 +123,7 @@ function QuanLyNhanVien() {
 const {id} = useParams()
     return (
         <div>
-            <div className={` ${ id? ' hidden' :''}`}>
+            <div className={` ${ page !== '/home/quanlynhanvien'? ' hidden' :'   '}`}>
                 <p className={'pb-2 font-bold'}>Danh sách nhân viên</p>
                 <form autoComplete="off">
                     <div className={'grid grid-cols-[70%,30%] gap-2 px-4 py-4 bg-white mb-2 rounded-sm'}>
@@ -169,7 +172,10 @@ const {id} = useParams()
                             </div>
                         </div>
                         <div className={'flex justify-end items-end'}>
-                            <ModalCreateUser/>
+                            <Button variant="contained" startIcon={<AddIcon />} color="success" onClick={()=>{
+                                nav(`/home/quanlynhanvien/themnhanvienmoi`)
+                            }}>Tạo mới</Button>
+                            {/*<ModalCreateUser/>*/}
                         </div>
                     </div>
                 </form>

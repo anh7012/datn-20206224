@@ -72,9 +72,7 @@ function QuanLyKhachHang() {
 
     return (
         <div>
-            <div
-                // className={` ${page !== '/home/quanlyhoso' ? '  hidden ' : ' '}   `}
-            >
+            <div className={` ${page !== '/home/quanlykhachhang' ? '  hidden ' : ' '}   `}>
                 <p className="pb-2 font-bold">Danh sách khách hàng</p>
                 <form autoComplete="off">
                     <div className="grid grid-cols-[70%,30%] gap-2 px-4 py-4 bg-white mb-2 rounded-sm">
@@ -96,8 +94,8 @@ function QuanLyKhachHang() {
                                         <select id="Kh" className={'select'} value={filterLoaiKH}
                                                 onChange={handleKyHanChange}>
                                             <option value="">Tất cả</option>
-                                            {listKhachHang.map((item, index) => (
-                                                <option key={index} value={item.typeClient}>{item.typeClient}</option>
+                                            {['KHCN','KHDN','TCTD'].map((item, index) => (
+                                                <option key={index} value={item}>{item}</option>
                                             ))}
                                         </select>
                                     </div>
@@ -109,8 +107,8 @@ function QuanLyKhachHang() {
                                 </div>
                             </div>
                         </div>
-                        <Link to={'/home/quanlyhoso/taohosomoi'} className={'flex justify-end items-end'}><Button
-                            startIcon={<AddIcon/>} variant={'contained'}>Thêm hồ sơ mới</Button></Link>
+                        <Link to={'/home/quanlykhachhang/themkhachhangmoi'} className={'flex justify-end items-end'}><Button
+                            startIcon={<AddIcon/>} variant={'contained'}>Thêm mới</Button></Link>
                     </div>
                 </form>
                 <div className="grid grid-cols-[5%,15%,15%,15%,15%,15%,auto] gap-2 py-2">
