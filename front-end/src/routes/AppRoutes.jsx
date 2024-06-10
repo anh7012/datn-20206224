@@ -1,7 +1,7 @@
 import {Navigate, Route, Routes} from "react-router-dom";
 import DangNhap from "../page/DangNhap.jsx";
 import App from "../components/layout/App.jsx";
-import DanhGiaTinDung from "../page/DanhGiaTinDung.jsx";
+import DanhGiaTinDung from "../page/danhgiatindung/DanhGiaTinDung.jsx";
 import QuanLyNhanVien from "../page/quanlynhanvien/QuanLyNhanVien.jsx";
 import DetailUserUnfo from "../page/quanlynhanvien/DetailUserUnfo.jsx";
 import QuanLyHoSo from "../page/quanlyhoso/QuanLyHoSo.jsx";

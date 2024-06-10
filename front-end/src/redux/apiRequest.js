@@ -287,3 +287,29 @@ export const updateKH = async (id,data,accessToken) => {
         console.log(e)
     }
 }
+export const doneDanhGia = async (maHoSo,accessToken) => {
+    try {
+        const res = await axios.post(`http://localhost:7012/danhgiatindung/createDanhGia`,{
+            maHoSo:maHoSo
+        },{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const listDanhGia = async (accessToken) => {
+    try {
+        const res = await axios.get(`http://localhost:7012/danhgiatindung//listDanhGia`,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}
