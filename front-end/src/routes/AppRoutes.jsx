@@ -11,6 +11,7 @@ import QuanLyKhachHang from "../page/quankhachhang/QuanLyKhachHang.jsx";
 import CreateClient from "../page/quankhachhang/CreateClient.jsx";
 import ModalCreateUser from "../page/quanlynhanvien/ModalCreateUser.jsx";
 import CreateNV from "../page/quanlynhanvien/CreateNV.jsx";
+import DetailKH from "../page/quankhachhang/DetailKH.jsx";
 
 function AppRoutes() {
 
@@ -32,6 +33,7 @@ function AppRoutes() {
                     </Route>
                     <Route path="quanlykhachhang" element={<QuanLyKhachHang />} >
                         <Route path="themkhachhangmoi" element={<CreateClient />} />
+                        <Route path=":idKH" element={<DetailKH />} />
                     </Route>
                 </Route>
             </Routes>

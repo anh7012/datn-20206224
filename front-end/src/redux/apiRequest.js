@@ -251,3 +251,39 @@ export const getListInforKH = async (accessToken) => {
         console.log(e)
     }
 }
+export const createKH = async (data,accessToken) => {
+    try {
+        const res = await axios.post(`http://localhost:7012/client/createClient`,data,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const getKH = async (id,accessToken) => {
+    try {
+        const res = await axios.get(`http://localhost:7012/client/${id}/inforClient`,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const updateKH = async (id,data,accessToken) => {
+    try {
+        const res = await axios.put(`http://localhost:7012/client/${id}/updateClient`,data,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}

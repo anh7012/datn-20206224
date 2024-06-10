@@ -6,6 +6,7 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import AddIcon from '@mui/icons-material/Add';
 import {Link, Outlet, useNavigate, useParams} from "react-router-dom";
 import {formattedNgaySinh} from "../../utils/formetBithday.js";
+import eventEmitter from "../../utils/eventEmitter.js";
 
 function QuanLyKhachHang() {
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
@@ -69,7 +70,12 @@ function QuanLyKhachHang() {
     const indexOfLastItem = currentPage * rowsPerPage;
     const indexOfFirstItem = indexOfLastItem - rowsPerPage;
     const currentItems = filteredHoso.slice(indexOfFirstItem, indexOfLastItem);
-
+    useEffect(() => {
+        eventEmitter.on('updateListKH', fetch);
+        return () => {
+            eventEmitter.removeListener('updateListKH', fetch);
+        };
+    }, [accessToken]);
     return (
         <div>
             <div className={` ${page !== '/home/quanlykhachhang' ? '  hidden ' : ' '}   `}>
