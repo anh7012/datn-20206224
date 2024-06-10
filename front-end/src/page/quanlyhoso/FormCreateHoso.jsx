@@ -6,14 +6,14 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {Link, useNavigate} from 'react-router-dom';
-import Form1 from "../components/FormCreateHoso/form1.jsx";
-import Form2 from "../components/FormCreateHoso/form2.jsx";
-import Form3 from "../components/FormCreateHoso/form3.jsx";
-import Form4 from "../components/FormCreateHoso/form4.jsx";
-import Form5 from "../components/FormCreateHoso/form5.jsx";
-import {createHoso, createMHBIDVAndEY, getCatoryKH} from "../redux/apiRequest.js";
+import Form1 from "../../components/FormCreateHoso/form1.jsx";
+import Form2 from "../../components/FormCreateHoso/form2.jsx";
+import Form3 from "../../components/FormCreateHoso/form3.jsx";
+import Form4 from "../../components/FormCreateHoso/form4.jsx";
+import Form5 from "../../components/FormCreateHoso/form5.jsx";
+import {createHoso, createMHBIDVAndEY, getCatoryKH} from "../../redux/apiRequest.js";
 import {useSelector} from "react-redux";
-import {notify} from "../utils/notify.js";
+import {notify} from "../../utils/notify.js";
 
 function FormCreateHoso() {
     const theme = useTheme();

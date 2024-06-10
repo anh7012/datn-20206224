@@ -1,12 +1,13 @@
 import {Navigate, Route, Routes} from "react-router-dom";
 import DangNhap from "../page/DangNhap.jsx";
-import App from "../page/App.jsx";
+import App from "../components/layout/App.jsx";
 import DanhGiaTinDung from "../page/DanhGiaTinDung.jsx";
-import QuanLyNhanVien from "../page/QuanLyNhanVien.jsx";
-import DetailUserUnfo from "../page/DetailUserUnfo.jsx";
-import QuanLyHoSo from "../page/QuanLyHoSo.jsx";
-import FormCreateHoso from "../page/FormCreateHoso.jsx";
-import DetailHoso from "../page/DetailHoso.jsx";
+import QuanLyNhanVien from "../page/quanlynhanvien/QuanLyNhanVien.jsx";
+import DetailUserUnfo from "../page/quanlynhanvien/DetailUserUnfo.jsx";
+import QuanLyHoSo from "../page/quanlyhoso/QuanLyHoSo.jsx";
+import FormCreateHoso from "../page/quanlyhoso/FormCreateHoso.jsx";
+import DetailHoso from "../page/quanlyhoso/DetailHoso.jsx";
+import QuanLyKhachHang from "../page/quankhachhang/QuanLyKhachHang.jsx";
 
 function AppRoutes() {
 
@@ -20,11 +21,14 @@ function AppRoutes() {
                     <Route path="danhgiatindung" element={<DanhGiaTinDung />} />
                     <Route path="quanlyhoso" element={<QuanLyHoSo />} >
                         <Route path=":idHoso" element={<DetailHoso />} />
+                        <Route path="taohosomoi" element={<FormCreateHoso />} />
                     </Route>
                     <Route path="quanlynhanvien" element={<QuanLyNhanVien />} >
                         <Route path=":id" element={<DetailUserUnfo />} />
                     </Route>
-                    <Route path="taohosomoi" element={<FormCreateHoso />} />
+                    <Route path="quanlykhachhang" element={<QuanLyKhachHang />} >
+                        <Route path=":id" element={<DetailUserUnfo />} />
+                    </Route>
                 </Route>
             </Routes>
         </div>

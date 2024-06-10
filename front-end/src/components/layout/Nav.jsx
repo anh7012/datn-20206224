@@ -19,7 +19,7 @@ function Nav() {
             { title: 'Quản lý tài khoản tín dụng', icon: <ManageAccountsIcon />, path: '/home/quanlytaikhoantin' },
             { title: 'Quản lý hồ sơ', icon: <ManageAccountsIcon />, path: '/home/quanlyhoso' },
             { title: 'Quản lý hợp đồng', icon: <ManageAccountsIcon />, path: '/home/quanlyhopdong' },
-            { title: 'Danh sách khách hàng', icon: <ManageAccountsIcon />, path: '/home/danhsachkhachhang' },
+            { title: 'Danh sách khách hàng', icon: <ManageAccountsIcon />, path: '/home/quanlykhachhang' },
         ];
 
         if (roleUser === 'Quản trị viên') {

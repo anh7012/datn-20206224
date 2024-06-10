@@ -1,10 +1,11 @@
-import { getListHoso } from "../redux/apiRequest.js";
-import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { Button, TextField, Select, MenuItem, Pagination } from "@mui/material";
+import {getListHoso} from "../../redux/apiRequest.js";
+import {useSelector} from "react-redux";
+import {useEffect, useState} from "react";
+import {Button, TextField, Select, MenuItem, Pagination} from "@mui/material";
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import AddIcon from '@mui/icons-material/Add';
 import {Link, Outlet, useNavigate, useParams} from "react-router-dom";
+
 function QuanLyHoSo() {
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
     const nav = useNavigate()
@@ -13,8 +14,12 @@ function QuanLyHoSo() {
     const [filterHoTen, setFilterHoTen] = useState('');
     const [filterKyHan, setFilterKyHan] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [rowsPerPage] = useState(6); // Number of items per page
-const {idHoso} = useParams()
+    const [rowsPerPage] = useState(6);
+    const [page,setPage] = useState(6); // Number of items per page
+    useEffect(() => {
+        setPage(window.location.pathname);
+    }, [window.location.pathname]);
+
     const fetch = async () => {
         try {
             const res = await getListHoso(accessToken);
@@ -70,7 +75,7 @@ const {idHoso} = useParams()
 
     return (
         <div>
-            <div className={` ${idHoso? '  hidden ' :' '}`}>
+            <div className={` ${page !== '/home/quanlyhoso' ? '  hidden ' : ' '}   `}>
                 <p className="pb-2 font-bold">Danh sách hồ sơ</p>
                 <form autoComplete="off">
                     <div className="grid grid-cols-[70%,30%] gap-2 px-4 py-4 bg-white mb-2 rounded-sm">
@@ -105,7 +110,7 @@ const {idHoso} = useParams()
                                 </div>
                             </div>
                         </div>
-                        <Link to={'/home/taohosomoi'} className={'flex justify-end items-end'}><Button
+                        <Link to={'/home/quanlyhoso/taohosomoi'} className={'flex justify-end items-end'}><Button
                             startIcon={<AddIcon/>} variant={'contained'}>Thêm hồ sơ mới</Button></Link>
                     </div>
                 </form>

@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useParams} from "react-router-dom";
-import {getHoso, getInforKH} from "../redux/apiRequest.js";
+import {getHoso, getInforKH} from "../../redux/apiRequest.js";
 import {useSelector} from "react-redux";
-import {formatString} from "../utils/formatString.js";
-import {scoringData} from "../redux/data/scoringData.js";
+import {formatString} from "../../utils/formatString.js";
+import {scoringData} from "../../redux/data/scoringData.js";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 function DetailHoso() {

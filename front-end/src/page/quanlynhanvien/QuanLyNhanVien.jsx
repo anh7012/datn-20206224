@@ -1,13 +1,13 @@
 import {Button, Pagination, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
-import {deleteUser, listUser} from "../redux/apiRequest.js";
+import {deleteUser, listUser} from "../../redux/apiRequest.js";
 import {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
-import ModalCreateUser from "../components/Modal/ModalCreateUser.jsx";
-import eventEmitter from "../utils/eventEmitter.js";
-import {notify} from "../utils/notify.js";
+import ModalCreateUser from "../../components/Modal/ModalCreateUser.jsx";
+import eventEmitter from "../../utils/eventEmitter.js";
+import {notify} from "../../utils/notify.js";
 import {Outlet, useNavigate, useParams} from "react-router-dom";
 
 function QuanLyNhanVien() {

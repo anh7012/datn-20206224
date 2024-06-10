@@ -239,3 +239,15 @@ export const getInforKH = async (id,accessToken) => {
         console.log(e)
     }
 }
+export const getListInforKH = async (accessToken) => {
+    try {
+        const res = await axios.get(`http://localhost:7012/client/listClient`,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}

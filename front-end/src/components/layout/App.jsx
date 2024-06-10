@@ -8,15 +8,15 @@ import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import logo from '../assets/image/logo.jpg'
+import logo from '../../assets/image/logo.jpg'
 import {Link, Outlet, useNavigate} from "react-router-dom";
 import { Menu, MenuItem, Tooltip, Typography} from "@mui/material";
-import Nav from "../components/Nav.jsx";
+import Nav from "./Nav.jsx";
 import PersonIcon from '@mui/icons-material/Person';
 import {useDispatch, useSelector} from "react-redux";
-import {logout} from "../redux/apiRequest.js";
-import ModalInfoUser from "../components/Modal/ModalInfoUser.jsx";
-import {createAxios} from "../utils/axiosInterceptor.js";
+import {logout} from "../../redux/apiRequest.js";
+import ModalInfoUser from "../Modal/ModalInfoUser.jsx";
+import {createAxios} from "../../utils/axiosInterceptor.js";
 
 
 const drawerWidth = 240;

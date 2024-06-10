@@ -1,12 +1,13 @@
 import { Link, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import {createUser, getUser, getUserInfo, updateUserInfoToManeger} from "../redux/apiRequest.js";
+import {createUser, getUser, getUserInfo, updateUserInfoToManeger} from "../../redux/apiRequest.js";
 import { useDispatch, useSelector } from "react-redux";
-import { notify } from "../utils/notify.js";
+import { notify } from "../../utils/notify.js";
 import moment from "moment";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import eventEmitter from "../utils/eventEmitter.js";
+import eventEmitter from "../../utils/eventEmitter.js";
+import {formattedNgaySinh} from "../../utils/formetBithday.js";
 
 function DetailUserUnfo() {
     const dispatch = useDispatch();
@@ -35,7 +36,7 @@ function DetailUserUnfo() {
         }));
     };
 
-    const formattedNgaySinh = userInfo?.NgaySinh ? moment(userInfo.NgaySinh).format('YYYY-MM-DD') : '';
+    const formattedNS = userInfo?.NgaySinh ? formattedNgaySinh(userInfo?.NgaySinh) : '';
 
     const handleUpdate = async (event) => {
         event.preventDefault();
@@ -81,13 +82,13 @@ function DetailUserUnfo() {
             email: userInfo.email || '',
             DiaChi: userInfo.DiaChi || '',
             GioiTinh: userInfo.GioiTinh || '',
-            NgaySinh: formattedNgaySinh || '',
+            NgaySinh: formattedNS || '',
             roleName: userInfo.roleName || '',
             username: userInfo.username || '',
             password: '',
             status: userInfo.status || '',
         }));
-    }, [userInfo, formattedNgaySinh]);
+    }, [userInfo, formattedNS]);
 
     return (
         <div className="container mx-auto p-6">
