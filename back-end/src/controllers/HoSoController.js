@@ -18,51 +18,42 @@ const hoSoController = {
     listHoSo: async (req, res, next) => {
         try {
             const listHoSo = await HoSo.getAllHoSo();
+            const updatedHoSoList = [];
             for (const hoso of listHoSo) {
-                const hosoFull = await HoSo.getHoSoFullByIdHoSo(hoso.idHoSo)
+                const hosoFull = await HoSo.getHoSoFullByIdHoSo(hoso.idHoSo);
+
+                let trangthai;
                 if (!hosoFull) {
-                    const trangthai = await HoSo.updateTrangThai({
+                    trangthai = await HoSo.updateTrangThai({
                         trangthaihoso: "Cần bổ sung",
                         idHoSo: hoso.idHoSo
-                    })
-
-                    if (trangthai.affectedRows == 1) {
-                        return res.json({
-                            code: 1000,
-                            message: "Thay đổi trạng thái hồ sơ thành công",
-                        })
-                    } else {
-                        return res.json({
-                            code: 9992,
-                            message: "Thay đổi trạng thái hồ sơ thất bại",
-                        })
-                    }
+                    });
                 } else {
-                    const trangthai = HoSo.updateTrangThai({
+                    trangthai = await HoSo.updateTrangThai({
                         trangthaihoso: "Hoàn thiện",
                         idHoSo: hoso.idHoSo
-                    })
+                    });
+                }
 
-                    if (trangthai.affectedRows == 1) {
-                        return res.json({
-                            code: 1000,
-                            message: "Thay đổi trạng thái hồ sơ thành công",
-                        })
-                    } else {
-
-                        return res.json({
-                            code: 9992,
-                            message: "Thay đổi trạng thái hồ sơ thất bại",
-                        })
-                    }
+                if (trangthai.affectedRows == 1) {
+                    updatedHoSoList.push({
+                        ...hoso,
+                        trangthaihoso: !hosoFull ? "Cần bổ sung" : "Hoàn thiện"
+                    });
+                } else {
+                    return res.json({
+                        code: 9992,
+                        message: "Thay đổi trạng thái hồ sơ thất bại cho hồ sơ " + hoso.idHoSo,
+                    });
                 }
             }
             res.json({
                 code: 1000,
-                data: listHoSo,
+                data: updatedHoSoList,
                 message: "Danh sách hồ sơ tìm thấy thành công"
             })
         } catch (error) {
+            console.log(error)
             res.json({
                 code: 9992,
                 data: {message: "Không tìm thấy danh sách hồ sơ"},
@@ -87,9 +78,9 @@ const hoSoController = {
                 LoaiTraGoc: req.body.LoaiTraGoc,
                 LoaiTraLai: req.body.LoaiTraLai
             }
-            console.log('>>',loaivay)
+            console.log('>>', loaivay)
             const idLoaiVay = await LoaiVay.getidLoaiVay(loaivay)
-            console.log('>>>>',idLoaiVay)
+            console.log('>>>>', idLoaiVay)
             const maHoSo = await generateUniqueHoSo()
             const dichvusudung = await DVSD(req.body.MaKH)
             const sotientra = await tinhGocLaiTBTheoThang({
@@ -300,7 +291,7 @@ const hoSoController = {
             if (trangthai.affectedRows == 1) {
                 return res.json({
                     code: 1000,
-                    data: newHoSo ,
+                    data: newHoSo,
                     message: "Thay đổi trạng thái hồ sơ thành công",
                 })
             } else {

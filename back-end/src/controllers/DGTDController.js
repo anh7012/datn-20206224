@@ -10,7 +10,19 @@ const DGTDController = {
     listDanhGia: async (req, res, next) => {
         try {
             const listDanhGia = await DanhGiaTinDung.getAllDanhGia()
-            res.json(listDanhGia)
+            if (listDanhGia) {
+                return res.json({
+                    code: 1000,
+                    data: listHoSo,
+                    message: "Danh sách đánh giá tìm thấy thành công"
+                })
+            } else {
+                res.json({
+                    code: 1000,
+                    message: "Không tìm thấy danh sách đánh giá"
+                })
+            }
+
         } catch (error) {
             res.json({
                 code: 9992,

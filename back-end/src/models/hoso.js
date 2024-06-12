@@ -41,6 +41,8 @@ module.exports = class HoSo{
         this.trangthaihoso = hoso.trangthaihoso
         this.SoTienTraHangThang = hoso.SoTienTraHangThang
         this.DiemTuoi = hoso.DiemTuoi
+        this.created_at = hoso.created_at
+        this.updated_at = hoso.updated_at
     }
     static getAllHoSo = async () => {
     const [rows, fields] = await promisePool.query(
@@ -100,7 +102,7 @@ module.exports = class HoSo{
         const effDate = moment()
         const trangthaihoso = 'Đã nộp'
         const [result] = await promisePool.query(
-            "INSERT INTO hoso (idHoSo,  typeTienTra, LaiSuatVay, TrinhDoHocVan, TienAn, TinhTrangCuTru, SoNguoiAnTheo, CoCauGD, BHNhanTho, CongViec, ThoiGianLamViec, RuiRoNN,ThuNhapRong,effDate,DiemTrinhDoHocVan,DiemTienAn,DiemTTCuTru,DiemSoNguoiAnTheo,DiemCoCauGD,DiemBHNhanTho,DiemCongViec,DiemTGLamViec,DiemRuiRoNN,DiemThuNhapRong, TongTienVay, CacDVSD, DiemCacDVSD,idClient,trangthaihoso,maHoSo,idloaiVay,SoTienTraHangThang, KyHan,DiemTuoi) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);",
+            "INSERT INTO hoso (idHoSo,  typeTienTra, LaiSuatVay, TrinhDoHocVan, TienAn, TinhTrangCuTru, SoNguoiAnTheo, CoCauGD, BHNhanTho, CongViec, ThoiGianLamViec, RuiRoNN,ThuNhapRong,effDate,DiemTrinhDoHocVan,DiemTienAn,DiemTTCuTru,DiemSoNguoiAnTheo,DiemCoCauGD,DiemBHNhanTho,DiemCongViec,DiemTGLamViec,DiemRuiRoNN,DiemThuNhapRong, TongTienVay, CacDVSD, DiemCacDVSD,idClient,trangthaihoso,maHoSo,idloaiVay,SoTienTraHangThang, KyHan,DiemTuoi,created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);",
             [
                 idHoSo,
                 hoso.typeTienTra,
@@ -141,4 +143,12 @@ module.exports = class HoSo{
         const newData = {id: result.insertId, ...hoso};
         return newData;
     }
+
+    static updateTrangThai = async ({trangthaihoso, idHoSo}) => {
+        const [result] = await promisePool.query(
+            "update hoso set trangthaihoso = ?, updated_at = CURRENT_TIMESTAMP where idHoSo = ?",
+            [trangthaihoso, idHoSo]
+        )
+        return result
+}
 }
