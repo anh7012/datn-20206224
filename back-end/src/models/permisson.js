@@ -5,6 +5,7 @@ module.exports = class Permission {
         this.idPermission = permisson.idPermission
         this.maPermission = permisson.maPermission
         this.permissonName = permisson.permissonName
+        this.parentPermission = permisson.parentPermission
     }
     static getPermissonByIdRole = async (idRole) => {
         const [rows, fields] = await promisePool.query(
