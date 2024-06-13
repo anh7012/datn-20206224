@@ -21,5 +21,9 @@ router.get("/listUser",verifyToken,checkPermisson, usersController.listUsers);
 router.get("/:id/getUser",verifyToken, usersController.getUser);
 // lấy all thong tin 1 nhan vien
 router.get("/:id/getUserAll",checkAdmin, usersController.getUserAll);
+// router.get("/listPermission",checkAdmin, usersController.listPermission);
+// router.post("/:id/updateListPermission",checkAdmin, usersController.updateListPermission);
+
+
 
 module.exports = router;
