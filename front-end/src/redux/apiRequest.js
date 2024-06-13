@@ -303,13 +303,27 @@ export const doneDanhGia = async (maHoSo,accessToken) => {
 }
 export const listDanhGia = async (accessToken) => {
     try {
-        const res = await axios.get(`http://localhost:7012/danhgiatindung//listDanhGia`,{
+        const res = await axios.get(`http://localhost:7012/danhgiatindung/listDanhGia`,{
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
         })
         return res.data
     } catch (e) {
+        console.log(e)
+    }
+}
+export const updateHoSo = async ( trangthaihoso ,id, accessToken) => {
+    try {
+        await axios.put(`/http://localhost:7012/${id}/updateHoSo`,{
+            trangthaihoso: trangthaihoso
+        },{
+            headers:{
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+    }
+    catch (e){
         console.log(e)
     }
 }

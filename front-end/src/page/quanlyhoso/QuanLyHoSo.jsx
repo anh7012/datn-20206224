@@ -1,4 +1,4 @@
-import {getListHoso} from "../../redux/apiRequest.js";
+import {getListHoso, updateHoSo} from "../../redux/apiRequest.js";
 import {useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {Button, TextField, Select, MenuItem, Pagination} from "@mui/material";
@@ -72,6 +72,15 @@ function QuanLyHoSo() {
     const indexOfLastItem = currentPage * rowsPerPage;
     const indexOfFirstItem = indexOfLastItem - rowsPerPage;
     const currentItems = filteredHoso.slice(indexOfFirstItem, indexOfLastItem);
+    const handleChangeStatus = async (hoso,status) => {
+        try {
+            console.log(hoso,status)
+            await updateHoSo(hoso.trangthaihoso,hoso.idHoSo,accessToken);
+            await fetch();
+        } catch (error) {
+            console.error("Error updating user role:", error);
+        }
+    };
 
     return (
         <div>
@@ -134,7 +143,19 @@ function QuanLyHoSo() {
                             <div>{item?.TongTienVay.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}</div>
                             <div>{item?.LaiSuatVay}%</div>
                             <div>{item?.KyHan} tháng</div>
-                            <div className="flex justify-center">{item?.trangthaihoso}</div>
+                            <div className="flex justify-center">
+                                {/**/}
+                                <Select
+                                    value={item?.trangthaihoso}
+                                    onChange={(e) => {
+                                        handleChangeStatus(item, e.target.value)
+                                    }}
+                                >
+                                    {['Cần bổ sung', 'Hoàn thiện', 'Đã đánh giá', 'Thông qua' , 'Từ chối' , 'Huỷ bỏ'].map((e, index) => (
+                                            <MenuItem key={index} value={e}>{e}</MenuItem>
+                                        ))}
+                                </Select>
+                            </div>
                             <div><Button variant={'outlined'} color={'success'} onClick={() => {
                                 nav(`/home/quanlyhoso/${item?.idHoSo}`)
                             }}>Xem chi tiết</Button></div>
