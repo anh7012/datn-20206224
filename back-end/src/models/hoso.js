@@ -100,7 +100,6 @@ module.exports = class HoSo{
     static createHoSo = async (hoso) => {
         const idHoSo = uuidv4({format: "hex"}).substring(0, 32);
         const effDate = moment()
-        const trangthaihoso = 'Đã nộp'
         const [result] = await promisePool.query(
             "INSERT INTO hoso (idHoSo,  typeTienTra, LaiSuatVay, TrinhDoHocVan, TienAn, TinhTrangCuTru, SoNguoiAnTheo, CoCauGD, BHNhanTho, CongViec, ThoiGianLamViec, RuiRoNN,ThuNhapRong,effDate,DiemTrinhDoHocVan,DiemTienAn,DiemTTCuTru,DiemSoNguoiAnTheo,DiemCoCauGD,DiemBHNhanTho,DiemCongViec,DiemTGLamViec,DiemRuiRoNN,DiemThuNhapRong, TongTienVay, CacDVSD, DiemCacDVSD,idClient,trangthaihoso,maHoSo,idloaiVay,SoTienTraHangThang, KyHan,DiemTuoi,created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);",
             [
@@ -132,7 +131,7 @@ module.exports = class HoSo{
                 hoso.CacDVSD,
                 hoso.DiemCacDVSD,
                 hoso.idClient,
-                trangthaihoso,
+                hoso.trangthaihoso,
                 hoso.maHoSo,
                 hoso.idloaiVay,
                 hoso.SoTienTraHangThang,
