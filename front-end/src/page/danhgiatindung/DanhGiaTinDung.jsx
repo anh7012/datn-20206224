@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { TextField, List, ListItem, ListItemText, Paper, Container, Grid, Checkbox, Button } from '@mui/material';
-import { doneDanhGia, getListHoso, listDanhGia } from "../../redux/apiRequest.js";
-import { useSelector } from "react-redux";
+import {useState, useEffect} from 'react';
+import {TextField, List, ListItem, ListItemText, Paper, Container, Grid, Checkbox, Button} from '@mui/material';
+import {doneDanhGia, getListHoso, listDanhGia, updateTrangThai} from "../../redux/apiRequest.js";
+import {useSelector} from "react-redux";
 
 const DanhGiaTinDung = () => {
     const accessToken = useSelector(state => state.auth?.login?.currentUser?.data?.accessToken);
@@ -21,7 +21,7 @@ const DanhGiaTinDung = () => {
         try {
             const response = await getListHoso(accessToken);
             if (response && response.data) {
-                setPendingProfiles(response.data.filter(profile => profile.trangthaihoso === "Đã nộp") || []);
+                setPendingProfiles(response.data.filter(profile => profile.trangthaihoso === "Hoàn thiện") || []);
             }
         } catch (error) {
             console.error('Error fetching pending profiles:', error);
@@ -34,7 +34,7 @@ const DanhGiaTinDung = () => {
             const response = await listDanhGia(accessToken);
             if (response) {
                 console.log(response);
-                setReviewedProfiles(response);
+                setReviewedProfiles(response.data);
             }
         } catch (error) {
             console.error('Error fetching reviewed profiles:', error);
@@ -44,9 +44,13 @@ const DanhGiaTinDung = () => {
 
     const handlePendingProfileClick = async (profile) => {
         try {
-            await doneDanhGia(profile.maHoSo, accessToken); // Thay thế bằng API thực tế của bạn
-            setPendingProfiles(pendingProfiles.filter((p) => p.maHoSo !== profile.maHoSo));
-            setReviewedProfiles([...reviewedProfiles, profile]);
+            const res = await doneDanhGia(profile.maHoSo, accessToken);
+            if (res.code === 1000) {
+                await updateTrangThai('Đã đánh giá', profile.idHoSo, accessToken)
+                setPendingProfiles(pendingProfiles.filter((p) => p.maHoSo !== profile.maHoSo));
+                setReviewedProfiles([...reviewedProfiles, profile]);
+            }
+
         } catch (error) {
             console.error('Error reviewing profile:', error);
         }
@@ -79,7 +83,7 @@ const DanhGiaTinDung = () => {
                                             className="flex justify-between items-center bg-yellow-50 hover:bg-red-300 mb-2 p-2 rounded"
                                         >
 
-                                                <ListItemText primary={profile?.maHoSo} />
+                                            <ListItemText primary={profile?.maHoSo}/>
 
                                             <Button
                                                 variant="contained"
@@ -92,7 +96,7 @@ const DanhGiaTinDung = () => {
                                     ))
                             ) : (
                                 <ListItem>
-                                    <ListItemText primary="Trống" />
+                                    <ListItemText primary="Trống"/>
                                 </ListItem>
                             )}
                         </List>
@@ -113,20 +117,20 @@ const DanhGiaTinDung = () => {
                             {reviewedProfiles?.length > 0 ? (
                                 reviewedProfiles
                                     .filter((profile) =>
-                                        profile?.idHoSo?.toLowerCase().includes(searchReviewed.toLowerCase())
+                                        profile?.maHoSo?.toLowerCase().includes(searchReviewed.toLowerCase())
                                     )
                                     .map((profile, i) => (
                                         <ListItem
                                             key={i}
                                             className="flex justify-between items-center bg-green-50 hover:bg-green-100 mb-2 p-2 rounded"
                                         >
-                                            <ListItemText primary={profile?.idHoSo} />
-                                            <Checkbox checked={true} color="primary" />
+                                            <ListItemText primary={profile?.maHoSo}/>
+                                            <Checkbox checked={true} color="primary"/>
                                         </ListItem>
                                     ))
                             ) : (
                                 <ListItem>
-                                    <ListItemText primary="Trống" />
+                                    <ListItemText primary="Trống"/>
                                 </ListItem>
                             )}
                         </List>

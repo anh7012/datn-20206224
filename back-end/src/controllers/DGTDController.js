@@ -10,10 +10,11 @@ const DGTDController = {
     listDanhGia: async (req, res, next) => {
         try {
             const listDanhGia = await DanhGiaTinDung.getAllDanhGia()
+            console.log(listDanhGia)
             if (listDanhGia) {
                 return res.json({
                     code: 1000,
-                    data: listHoSo,
+                    data: listDanhGia,
                     message: "Danh sách đánh giá tìm thấy thành công"
                 })
             } else {

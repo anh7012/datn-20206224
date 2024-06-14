@@ -118,13 +118,13 @@ function QuanLyKhachHang() {
                     </div>
                 </form>
                 <div className="grid grid-cols-[5%,15%,15%,15%,15%,15%,auto] gap-2 py-2">
-                    <div className="text-gray-500 flex justify-center">STT</div>
-                    <div className="text-gray-500">Mã khách hàng</div>
-                    <div className="text-gray-500">Họ tên khách hàng</div>
-                    <div className="text-gray-500 flex items-center justify-center">Ngày sinh</div>
-                    <div className="text-gray-500 flex items-center justify-center">CMND/CCCD</div>
-                    <div className="text-gray-500 flex items-center justify-center">Loại Khách hàng</div>
-                    <div className="text-gray-500"></div>
+                    <div className="font-bold flex justify-center">STT</div>
+                    <div className="font-bold">Mã khách hàng</div>
+                    <div className="font-bold">Họ tên khách hàng</div>
+                    <div className="font-bold flex items-center justify-center">Ngày sinh</div>
+                    <div className="font-bold flex items-center justify-center">CMND/CCCD</div>
+                    <div className="font-bold flex items-center justify-center">Loại Khách hàng</div>
+                    <div className="font-bold"></div>
                 </div>
                 <div className="bg-white rounded-sm min-h-[calc(100vh-285px)] relative">
                     {currentItems?.map((item, i) => (

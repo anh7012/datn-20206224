@@ -180,11 +180,11 @@ const {id} = useParams()
                     </div>
                 </form>
                 <div className={'grid grid-cols-[10%,15%,20%,15%,10%,auto] gap-2 py-2'}>
-                    <div className={'text-gray-500 flex justify-center'}>STT</div>
-                    <div className={'text-gray-500'}>Tài Khoản</div>
-                    <div className={'text-gray-500'}>Họ tên</div>
-                    <div className={'text-gray-500'}>Chức vụ</div>
-                    <div className={'text-gray-500 flex justify-center'}>Trạng thái</div>
+                    <div className={'font-bold flex justify-center'}>STT</div>
+                    <div className={'font-bold'}>Tài Khoản</div>
+                    <div className={'font-bold'}>Họ tên</div>
+                    <div className={'font-bold'}>Chức vụ</div>
+                    <div className={'font-bold flex justify-center'}>Trạng thái</div>
                     <div></div>
                 </div>
                 <div className={'bg-white rounded-sm  min-h-[calc(100vh-285px)] relative '}>

@@ -313,9 +313,9 @@ export const listDanhGia = async (accessToken) => {
         console.log(e)
     }
 }
-export const updateHoSo = async ( trangthaihoso ,id, accessToken) => {
+export const updateTrangThai = async ( trangthaihoso ,id, accessToken) => {
     try {
-        await axios.put(`/http://localhost:7012/${id}/updateHoSo`,{
+        await axios.put(`http://localhost:7012/hoso/${id}/updateTrangThai`,{
             trangthaihoso: trangthaihoso
         },{
             headers:{
