@@ -62,6 +62,7 @@ function DetailKh() {
             setData(()=>{
                 return {
                     ...res.data,
+                    GioiTinh: res.data.GioiTinh + '',
                     NgaySinh: formattedNgaySinh(res.data.NgaySinh)
                 }
             });

@@ -1,30 +1,33 @@
 import {useState, useEffect} from 'react';
 import {
-    TextField,
-    List,
     ListItem,
     ListItemText,
     Paper,
-    Container,
     Grid,
-    Checkbox,
     Button,
-    dividerClasses
 } from '@mui/material';
+import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
+import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import {doneDanhGia, getListHoso, listDanhGia, updateTrangThai} from "../../redux/apiRequest.js";
 import {useSelector} from "react-redux";
+import {formattedDate} from "../../utils/formetBithday.js";
 
 const DanhGiaTinDung = () => {
     const accessToken = useSelector(state => state.auth?.login?.currentUser?.data?.accessToken);
 
     const [searchMaHS, setSearchMaHS] = useState('');
+    const [searchMaHSRv, setSearchMaHSRv] = useState('');
     const [searchHoten, setSearchHoten] = useState('');
-    const [searchCCCD, setSearchCCCD] = useState('');
+    const [searchHotenRv, setSearchHotenRv] = useState('');
+    const [startDateRv, setStartDateRv] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDateRv, setEndDateRv] = useState('');
+    const [endDate, setEndDate] = useState('');
     const [pendingProfiles, setPendingProfiles] = useState([]);
     const [reviewedProfiles, setReviewedProfiles] = useState([]);
 
     useEffect(() => {
-        // Fetch initial data for pending and reviewed profiles
         fetchPendingProfiles();
         fetchReviewedProfiles();
     }, []);
@@ -58,14 +61,41 @@ const DanhGiaTinDung = () => {
         try {
             const res = await doneDanhGia(profile.maHoSo, accessToken);
             if (res.code === 1000) {
-                await updateTrangThai('Đã đánh giá', profile.idHoSo, accessToken)
+                await updateTrangThai('Đã đánh giá', profile.idHoSo, accessToken);
                 setPendingProfiles(pendingProfiles.filter((p) => p.maHoSo !== profile.maHoSo));
                 setReviewedProfiles([...reviewedProfiles, profile]);
             }
-
         } catch (error) {
             console.error('Error reviewing profile:', error);
         }
+    };
+
+    const filterProfilesByDate = (profile) => {
+        if (startDate && new Date(profile.created_at) < new Date(startDate)) {
+            return false;
+        }
+        return !(endDate && new Date(profile.created_at) > new Date(endDate));
+    };
+
+    const filterProfilesByDateRv = (profile) => {
+        if (startDateRv && new Date(profile.created_at) < new Date(startDateRv)) {
+            return false;
+        }
+        return !(endDateRv && new Date(profile.created_at) > new Date(endDateRv));
+    };
+
+    const clearPendingProfiles = () => {
+        setSearchMaHS('')
+        setSearchHoten('')
+        setStartDate('')
+        setEndDate('')
+    };
+
+    const clearReviewedProfiles = () => {
+        setSearchMaHSRv('')
+        setSearchHotenRv('')
+        setStartDateRv('')
+        setEndDateRv('')
     };
 
     return (
@@ -74,56 +104,96 @@ const DanhGiaTinDung = () => {
             <Grid container spacing={2}>
                 <Grid item xs={6} className={''}>
                     <Paper className="p-2">
-                        <h2 className="text-xl font-semibold text-red-600 uppercase text-center mb-4">Danh sách hồ sơ chờ
-                            đánh giá</h2>
-                        <div
-                            className={'flex items-center gap-4 mb-4 px-4 py-4  rounded-lg bg-red-100'}>
+                        <h2 className="text-xl font-semibold text-red-600 uppercase text-center mb-4">Danh sách hồ sơ
+                            chờ đánh giá</h2>
+                        <div className={'flex items-center gap-2 mb-4 px-2 py-4 rounded-lg bg-yellow-100 relative'}>
+                           <div className={'absolute top-0 right-0'}>
+                               <Button variant="contained" color="secondary" size={'small'} onClick={clearPendingProfiles} className={''}>
+                                   Clear
+                               </Button>
+                           </div>
                             <div className="input-container">
                                 <label className={'label'}>Mã hồ sơ</label>
                                 <input type="text" className={'input'}
-                                       value={searchMaHS} onChange={(e) => setSearchMaHS(e.target.value)} autoComplete="off"/>
+                                       value={searchMaHS} onChange={(e) => setSearchMaHS(e.target.value)}
+                                       autoComplete="off"/>
                             </div>
                             <div className="input-container">
                                 <label className={'label'}>Tên khách hàng</label>
                                 <input type="text" className={'input'}
-                                       value={searchHoten} onChange={(e) => setSearchHoten(e.target.value)} autoComplete="off"/>
+                                       value={searchHoten} onChange={(e) => setSearchHoten(e.target.value)}
+                                       autoComplete="off"/>
                             </div>
-                            <div className="input-container">
-                                <label className={'label'}>CCCD</label>
-                                <input type="text" className={'input '}
-                                       value={searchCCCD} onChange={(e) => setSearchCCCD(e.target.value)} autoComplete="off"/>
+                            <div className={'flex flex-col'}>
+                                <label className={'label'}>Ngày đăng ký</label>
+                                <div className={'flex items-center'}>
+                                    <input
+                                        type="date"
+                                        style={{
+                                            width: '100%',
+                                            padding: '5px',
+                                            fontSize: '14px',
+                                            border: '1px solid #ccc',
+                                            borderRadius: '4px',
+                                        }}
+                                        value={startDate}
+                                        onChange={(e) => {
+                                            setStartDate(e.target.value);
+                                            if (new Date(e.target.value) > new Date(endDate)) {
+                                                setEndDate(e.target.value);
+                                            }
+                                        }}
+                                    />
+                                    <div><ArrowRightAltIcon/></div>
+                                    <input
+                                        style={{
+                                            width: '100%',
+                                            padding: '5px',
+                                            fontSize: '14px',
+                                            border: '1px solid #ccc',
+                                            borderRadius: '4px',
+                                        }}
+                                        type="date"
+                                        value={endDate}
+                                        onChange={(e) => {
+                                            if (new Date(e.target.value) >= new Date(startDate)) {
+                                                setEndDate(e.target.value);
+                                            }
+                                        }}
+                                    />
+                                </div>
                             </div>
                         </div>
-                        <div className={'grid grid-cols-[10%,15%,25%,20%,15%,auto]'}>
-                            {['STT', 'Mã hồ sơ', 'Tên khách hàng', 'CCCD', 'Ngày đăng ký', ''].map((e, i) => (
-                                <p key={i} className={'font-bold text-[12px] text-center '}>{e}</p>
+
+                        <div className={'grid grid-cols-[10%,20%,25%,20%,auto]'}>
+                            {['STT', 'Mã hồ sơ', 'Tên khách hàng', 'Ngày đăng ký', 'Đánh giá'].map((e, i) => (
+                                <p key={i} className={'font-bold text-center '}>{e}</p>
                             ))}
                         </div>
-                        <div className={'h-[calc(55vh)] overflow-y-scroll'}>
+                        <div className={''}>
                             {pendingProfiles?.length > 0 ? (
                                 pendingProfiles
                                     .filter((profile) => profile?.maHoSo?.toLowerCase().includes(searchMaHS.toLowerCase()))
                                     .filter((profile) => profile?.HoTen?.toLowerCase().includes(searchHoten.toLowerCase()))
-                                    .filter((profile) => profile?.CCCD?.toLowerCase().includes(searchCCCD.toLowerCase()))
+                                    .filter(filterProfilesByDate)
                                     .map((profile, i) => (
                                         <div
                                             key={i}
-                                            className="bg-yellow-50 hover:bg-red-300 mb-2  rounded grid grid-cols-[10%,15%,25%,20%,15%,auto]"
+                                            className="bg-yellow-50 hover:bg-red-300 mb-2 rounded grid grid-cols-[10%,20%,25%,20%,auto] items-center"
                                         >
                                             <p className={'text-center'}>{i + 1}</p>
                                             <p className={'text-center'}>{profile?.maHoSo}</p>
                                             <p className={'text-center'}>{profile?.HoTen}</p>
-                                            <p className={'text-center'}>{profile?.HoTen}</p>
-                                            <p className={'text-center'}>{profile?.HoTen}</p>
+                                            <p className={'text-center'}>{formattedDate(profile?.created_at)}</p>
 
-                                            <div className={'flex items-center justify-center'}>
+                                            <div className={'flex items-center justify-center p-2'}>
                                                 <Button
                                                     variant="contained"
                                                     color="error"
                                                     className={'!p-0 h-8 w-20'}
                                                     onClick={() => handlePendingProfileClick(profile)}
                                                 >
-                                                    Đánh giá
+                                                    <ElectricBoltIcon className={'text-yellow-400'}/>
                                                 </Button>
                                             </div>
                                         </div>
@@ -134,14 +204,110 @@ const DanhGiaTinDung = () => {
                                 </ListItem>
                             )}
                         </div>
-
-
                     </Paper>
                 </Grid>
                 <Grid item xs={6}>
-                    <Paper className="p-4">
-                        <h2 className="text-xl font-semibold text-green-600 uppercase text-center">Danh sách đã đánh
-                            giá</h2>
+                    <Paper className="p-2">
+                        <h2 className="text-xl font-semibold text-green-600 uppercase text-center mb-4">Danh sách đã
+                            đánh giá</h2>
+                        <div className={'flex items-center gap-2 mb-4 px-2 py-4 rounded-lg bg-green-200 relative'}>
+                            <div className={'absolute top-0 right-0'}>
+                                <Button variant="contained" color="secondary" size={'small'}
+                                        onClick={clearReviewedProfiles} className={''}>
+                                    Clear
+                                </Button>
+                            </div>
+                            <div className="input-container">
+                                <label className={'label'}>Mã hồ sơ</label>
+                                <input type="text" className={'input'}
+                                       value={searchMaHSRv} onChange={(e) => setSearchMaHSRv(e.target.value)}
+                                       autoComplete="off"/>
+                            </div>
+                            <div className="input-container">
+                                <label className={'label'}>Tên khách hàng</label>
+                                <input type="text" className={'input'}
+                                       value={searchHotenRv} onChange={(e) => setSearchHotenRv(e.target.value)}
+                                       autoComplete="off"/>
+                            </div>
+                            <div className={'flex flex-col'}>
+                                <label className={'label'}>Ngày đăng ký</label>
+                                <div className={'flex items-center'}>
+                                    <input
+                                        type="date"
+                                        style={{
+                                            width: '100%',
+                                            padding: '5px',
+                                            fontSize: '14px',
+                                            border: '1px solid #ccc',
+                                            borderRadius: '4px',
+                                        }}
+                                        value={startDateRv}
+                                        onChange={(e) => {
+                                            setStartDateRv(e.target.value);
+                                            if (new Date(e.target.value) > new Date(endDateRv)) {
+                                                setEndDateRv(e.target.value);
+                                            }
+                                        }}
+                                    />
+                                    <div><ArrowRightAltIcon/></div>
+                                    <input
+                                        style={{
+                                            width: '100%',
+                                            padding: '5px',
+                                            fontSize: '14px',
+                                            border: '1px solid #ccc',
+                                            borderRadius: '4px',
+                                        }}
+                                        type="date"
+                                        value={endDateRv}
+                                        onChange={(e) => {
+                                            if (new Date(e.target.value) >= new Date(startDateRv)) {
+                                                setEndDateRv(e.target.value);
+                                            }
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className={'grid grid-cols-[10%,20%,25%,20%,auto]'}>
+                        {['STT', 'Mã hồ sơ', 'Tên khách hàng', 'Ngày đăng ký', 'Đánh giá'].map((e, i) => (
+                                <p key={i} className={'font-bold text-center '}>{e}</p>
+                            ))}
+                        </div>
+                        <div className={''}>
+                            {reviewedProfiles?.length > 0 ? (
+                                reviewedProfiles
+                                    .filter((profile) => profile?.maHoSo?.toLowerCase().includes(searchMaHSRv.toLowerCase()))
+                                    .filter((profile) => profile?.HoTen?.toLowerCase().includes(searchHotenRv.toLowerCase()))
+                                    .filter(filterProfilesByDateRv)
+                                    .map((profile, i) => (
+                                        <div
+                                            key={i}
+                                            className="bg-green-100 hover:bg-green-300 mb-2 rounded grid grid-cols-[10%,20%,25%,20%,auto] items-center"
+                                        >
+                                            <p className={'text-center'}>{i + 1}</p>
+                                            <p className={'text-center'}>{profile?.maHoSo}</p>
+                                            <p className={'text-center'}>{profile?.HoTen}</p>
+                                            <p className={'text-center'}>{formattedDate(profile?.created_at)}</p>
+
+                                            <div className={'flex items-center justify-center p-2'}>
+                                                <Button
+                                                    variant="contained"
+                                                    color="success"
+                                                    className={'!p-0 h-8 w-20'}
+                                                    onClick={() => handlePendingProfileClick(profile)}
+                                                >
+                                                    <DoubleArrowIcon className={'text-white'}/>
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    ))
+                            ) : (
+                                <ListItem>
+                                    <ListItemText primary="Trống"/>
+                                </ListItem>
+                            )}
+                        </div>
                     </Paper>
                 </Grid>
             </Grid>

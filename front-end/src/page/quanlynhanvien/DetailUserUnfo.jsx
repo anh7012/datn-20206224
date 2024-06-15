@@ -40,6 +40,7 @@ function DetailUserUnfo() {
 
     const handleUpdate = async (event) => {
         event.preventDefault();
+        console.log(userData)
         try {
             await updateUserInfoToManeger(userData, accessToken);
             notify('success', 'Cập nhật thông tin thành công');
@@ -75,13 +76,14 @@ function DetailUserUnfo() {
     }, [id]);
 
     useEffect(() => {
+       let gender = userInfo.GioiTinh + ''
         setUserData((prevState) => ({
             ...prevState,
             idUser: id,
             HoTen: userInfo.HoTen || '',
             email: userInfo.email || '',
             DiaChi: userInfo.DiaChi || '',
-            GioiTinh: userInfo.GioiTinh || '',
+            GioiTinh: gender || '',
             NgaySinh: formattedNS || '',
             roleName: userInfo.roleName || '',
             username: userInfo.username || '',
@@ -89,6 +91,7 @@ function DetailUserUnfo() {
             status: userInfo.status || '',
         }));
     }, [userInfo, formattedNS]);
+    console.log('aaaa',userData.GioiTinh, typeof (userData.GioiTinh))
 
     return (
         <div className="container mx-auto p-6">
@@ -123,7 +126,7 @@ function DetailUserUnfo() {
                                     type="date"
                                     name="NgaySinh"
                                     onChange={handleChange}
-                                    value={userData.NgaySinh}
+                                    value={formattedNS}
                                     className="w-full p-2 border border-gray-300 rounded-md"
                                 />
                             </div>
@@ -135,8 +138,8 @@ function DetailUserUnfo() {
                                     <input
                                         type="radio"
                                         name="GioiTinh"
-                                        value="1"
-                                        checked={userData.GioiTinh === "1"}
+                                        value={'1'}
+                                        checked={userData.GioiTinh === '1'}
                                         onChange={handleChange}
                                         className="mr-2"
                                     />
@@ -146,8 +149,8 @@ function DetailUserUnfo() {
                                     <input
                                         type="radio"
                                         name="GioiTinh"
-                                        value="0"
-                                        checked={userData.GioiTinh === "0"}
+                                        value={'0'}
+                                        checked={userData.GioiTinh === '0'}
                                         onChange={handleChange}
                                         className="mr-2"
                                     />
@@ -159,7 +162,8 @@ function DetailUserUnfo() {
                 </div>
 
                 <div className='mb-4'>
-                    <h2 className='bg-white rounded-t-md pt-2 px-2 text-green-600 font-bold border-b-[1px] text-xl'>II. Thông tin tài khoản:</h2>
+                    <h2 className='bg-white rounded-t-md pt-2 px-2 text-green-600 font-bold border-b-[1px] text-xl'>II.
+                        Thông tin tài khoản:</h2>
                     <div className='px-8 py-6 bg-white rounded-b-md'>
                         <div className='flex gap-x-4 items-center mb-4'>
                             <div className="w-full">
