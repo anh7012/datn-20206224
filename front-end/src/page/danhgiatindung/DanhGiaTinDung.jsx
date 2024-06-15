@@ -1,13 +1,25 @@
 import {useState, useEffect} from 'react';
-import {TextField, List, ListItem, ListItemText, Paper, Container, Grid, Checkbox, Button} from '@mui/material';
+import {
+    TextField,
+    List,
+    ListItem,
+    ListItemText,
+    Paper,
+    Container,
+    Grid,
+    Checkbox,
+    Button,
+    dividerClasses
+} from '@mui/material';
 import {doneDanhGia, getListHoso, listDanhGia, updateTrangThai} from "../../redux/apiRequest.js";
 import {useSelector} from "react-redux";
 
 const DanhGiaTinDung = () => {
     const accessToken = useSelector(state => state.auth?.login?.currentUser?.data?.accessToken);
 
-    const [searchPending, setSearchPending] = useState('');
-    const [searchReviewed, setSearchReviewed] = useState('');
+    const [searchMaHS, setSearchMaHS] = useState('');
+    const [searchHoten, setSearchHoten] = useState('');
+    const [searchCCCD, setSearchCCCD] = useState('');
     const [pendingProfiles, setPendingProfiles] = useState([]);
     const [reviewedProfiles, setReviewedProfiles] = useState([]);
 
@@ -57,87 +69,83 @@ const DanhGiaTinDung = () => {
     };
 
     return (
-        <Container className={'h-[calc(100vh-129px)]'}>
-            <h1 className="text-2xl font-bold text-center my-4 uppercase mb-10">Đánh giá tín dụng</h1>
-            <Grid container spacing={3}>
+        <div className={'h-[calc(100vh-129px)] w-full'}>
+            <h1 className="text-2xl font-bold text-center uppercase mb-10">Đánh giá tín dụng</h1>
+            <Grid container spacing={2}>
                 <Grid item xs={6} className={''}>
-                    <Paper className="p-4">
-                        <h2 className="text-xl font-semibold text-red-600 uppercase">Danh sách hồ sơ chờ đánh giá</h2>
-                        <TextField
-                            fullWidth
-                            label="Tìm kiếm theo mã hồ sơ"
-                            value={searchPending}
-                            onChange={(e) => setSearchPending(e.target.value)}
-                            variant="outlined"
-                            className="!mt-4 mb-4"
-                        />
-                        <List className={'h-[calc(55vh)] overflow-y-scroll'}>
+                    <Paper className="p-2">
+                        <h2 className="text-xl font-semibold text-red-600 uppercase text-center mb-4">Danh sách hồ sơ chờ
+                            đánh giá</h2>
+                        <div
+                            className={'flex items-center gap-4 mb-4 px-4 py-4  rounded-lg bg-red-100'}>
+                            <div className="input-container">
+                                <label className={'label'}>Mã hồ sơ</label>
+                                <input type="text" className={'input'}
+                                       value={searchMaHS} onChange={(e) => setSearchMaHS(e.target.value)} autoComplete="off"/>
+                            </div>
+                            <div className="input-container">
+                                <label className={'label'}>Tên khách hàng</label>
+                                <input type="text" className={'input'}
+                                       value={searchHoten} onChange={(e) => setSearchHoten(e.target.value)} autoComplete="off"/>
+                            </div>
+                            <div className="input-container">
+                                <label className={'label'}>CCCD</label>
+                                <input type="text" className={'input '}
+                                       value={searchCCCD} onChange={(e) => setSearchCCCD(e.target.value)} autoComplete="off"/>
+                            </div>
+                        </div>
+                        <div className={'grid grid-cols-[10%,15%,25%,20%,15%,auto]'}>
+                            {['STT', 'Mã hồ sơ', 'Tên khách hàng', 'CCCD', 'Ngày đăng ký', ''].map((e, i) => (
+                                <p key={i} className={'font-bold text-[12px] text-center '}>{e}</p>
+                            ))}
+                        </div>
+                        <div className={'h-[calc(55vh)] overflow-y-scroll'}>
                             {pendingProfiles?.length > 0 ? (
                                 pendingProfiles
-                                    .filter((profile) =>
-                                        profile?.maHoSo?.toLowerCase().includes(searchPending.toLowerCase())
-                                    )
+                                    .filter((profile) => profile?.maHoSo?.toLowerCase().includes(searchMaHS.toLowerCase()))
+                                    .filter((profile) => profile?.HoTen?.toLowerCase().includes(searchHoten.toLowerCase()))
+                                    .filter((profile) => profile?.CCCD?.toLowerCase().includes(searchCCCD.toLowerCase()))
                                     .map((profile, i) => (
-                                        <ListItem
+                                        <div
                                             key={i}
-                                            className="flex justify-between items-center bg-yellow-50 hover:bg-red-300 mb-2 p-2 rounded"
+                                            className="bg-yellow-50 hover:bg-red-300 mb-2  rounded grid grid-cols-[10%,15%,25%,20%,15%,auto]"
                                         >
+                                            <p className={'text-center'}>{i + 1}</p>
+                                            <p className={'text-center'}>{profile?.maHoSo}</p>
+                                            <p className={'text-center'}>{profile?.HoTen}</p>
+                                            <p className={'text-center'}>{profile?.HoTen}</p>
+                                            <p className={'text-center'}>{profile?.HoTen}</p>
 
-                                            <ListItemText primary={profile?.maHoSo}/>
-
-                                            <Button
-                                                variant="contained"
-                                                color="error"
-                                                onClick={() => handlePendingProfileClick(profile)}
-                                            >
-                                                Đánh giá
-                                            </Button>
-                                        </ListItem>
+                                            <div className={'flex items-center justify-center'}>
+                                                <Button
+                                                    variant="contained"
+                                                    color="error"
+                                                    className={'!p-0 h-8 w-20'}
+                                                    onClick={() => handlePendingProfileClick(profile)}
+                                                >
+                                                    Đánh giá
+                                                </Button>
+                                            </div>
+                                        </div>
                                     ))
                             ) : (
                                 <ListItem>
                                     <ListItemText primary="Trống"/>
                                 </ListItem>
                             )}
-                        </List>
+                        </div>
+
+
                     </Paper>
                 </Grid>
                 <Grid item xs={6}>
                     <Paper className="p-4">
-                        <h2 className="text-xl font-semibold text-green-600 uppercase">Danh sách đã đánh giá</h2>
-                        <TextField
-                            fullWidth
-                            label="Tìm kiếm theo mã hồ sơ"
-                            value={searchReviewed}
-                            onChange={(e) => setSearchReviewed(e.target.value)}
-                            variant="outlined"
-                            className="mb-4 !mt-4"
-                        />
-                        <List className={'h-[calc(55vh)] overflow-y-scroll'}>
-                            {reviewedProfiles?.length > 0 ? (
-                                reviewedProfiles
-                                    .filter((profile) =>
-                                        profile?.maHoSo?.toLowerCase().includes(searchReviewed.toLowerCase())
-                                    )
-                                    .map((profile, i) => (
-                                        <ListItem
-                                            key={i}
-                                            className="flex justify-between items-center bg-green-50 hover:bg-green-100 mb-2 p-2 rounded"
-                                        >
-                                            <ListItemText primary={profile?.maHoSo}/>
-                                            <Checkbox checked={true} color="primary"/>
-                                        </ListItem>
-                                    ))
-                            ) : (
-                                <ListItem>
-                                    <ListItemText primary="Trống"/>
-                                </ListItem>
-                            )}
-                        </List>
+                        <h2 className="text-xl font-semibold text-green-600 uppercase text-center">Danh sách đã đánh
+                            giá</h2>
                     </Paper>
                 </Grid>
             </Grid>
-        </Container>
+        </div>
     );
 };
 
