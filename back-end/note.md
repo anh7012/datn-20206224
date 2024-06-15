@@ -54,6 +54,11 @@ Routes:http://localhost:7012/
     - Auth: accessToken
     - Param: idUser
     - Body: status: 1 trong 2 {"active", "close"}
+- listPermission: [get] http://localhost:7012/users/listPermission
+  - Auth: accessToken
+- permissionsUser: [get] http://localhost:7012/users/:id/permissionsUser
+  - Auth: accessToken
+  - Param: idUser
 
 **Client Router**
 - getLoaiKH: [get] http://localhost:7012/client/loaiKH

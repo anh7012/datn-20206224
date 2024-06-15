@@ -1,6 +1,11 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const {mergeFields} = require("../utils/mergeField");
+const Permission = require("../models/permisson");
+const User_Permissions = require("../models/user_permissions");
+const Role_Permissions = require("../models/role_permissions");
+const {v4: uuidv4} = require("uuid");
+
 
 const usersController = {
         // [GET] /users/list
@@ -83,7 +88,19 @@ const usersController = {
                     const saltRounds = 10; // Number of salt round for bcrypt
                     data.password = await bcrypt.hash(data.password, saltRounds);
                     // Create new User
-                    const newUser = await User.createUser(data);
+                    const idUser = uuidv4({format: "hex"}).substring(0, 32);
+                    const newUser = await User.createUser({
+                            user: data,
+                            idUser: idUser
+                        }
+                    );
+                    const rolePermissions = await Role_Permissions.getAllRolePerByName(data.roleName)
+                    for (const rolePermission of rolePermissions) {
+                        await User_Permissions.addPermission({
+                            idUser: idUser,
+                            idPermission: rolePermission.idPermission
+                        });
+                    }
                     res.json({
                         code: 1000,
                         message: "Thêm nhân viên mới thành công",
@@ -91,6 +108,7 @@ const usersController = {
                     });
                 }
             } catch (error) {
+                console.log(error)
                 res.status(500).json({
                     message: "Không thể thêm nhân viên mới",
                 });
@@ -139,7 +157,7 @@ const usersController = {
             try {
                 const deletedUser = await User.deleteUser(req.params.id);
                 if (deletedUser.affectedRows == 1) {
-                   return res.json({
+                    return res.json({
                         code: 1000,
                         data: {
                             message: "Đã được xoá thành công",
@@ -254,34 +272,101 @@ const usersController = {
             }
         },
 // CHANGE ROLE, PERMISSON
-        changeRole:
-            async (req, res) => {
-                try {
-                    const data = await User.changeRole({
-                        id: req.params.id,
-                        newRole: req.body.roleName
+        changeRole: async (req, res) => {
+            try {
+                const data = await User.changeRole({
+                    id: req.params.id,
+                    newRole: req.body.roleName
+                })
+                if (data.affectedRows == 1) {
+                    res.json({
+                        code: 1000,
+                        data: {
+                            id: req.params.id,
+                            username: req.body.roleName,
+                            message: "Role has been changed successfully!",
+                        }
                     })
-                    if (data.affectedRows == 1) {
-                        res.json({
-                            code: 1000,
-                            data: {
-                                id: req.params.id,
-                                username: req.body.roleName,
-                                message: "Role has been changed successfully!",
-                            }
-                        })
-                    } else {
-                        res.json({
-                            code: 1006,
-                            data: {
-                                message: "Role has been changed and failed!",
-                            },
-                        })
-                    }
-                } catch (error) {
-                    res.json({code: 9999, error: error.message});
+                } else {
+                    res.json({
+                        code: 1006,
+                        data: {
+                            message: "Role has been changed and failed!",
+                        },
+                    })
                 }
+            } catch (error) {
+                res.json({code: 9999, error: error.message});
             }
+        },
+        listPermission: async (req, res) => {
+            try {
+                const listPermission = await Permission.getAllPermission()
+                if (listPermission) {
+                    res.json({
+                        code: 1000,
+                        data: listPermission,
+                        message: "Hiển thị danh sách quyền thành công!",
+                    })
+                } else {
+                    res.json({
+                        code: 9992,
+                        data: {
+                            message: "Hiển thị danh sách quyền thất bại!",
+                        },
+                    })
+                }
+            } catch (err) {
+                return res.json({
+                    code: 9999,
+                    message: "Không thể lấy danh sách quyền",
+                });
+            }
+        },
+        permissionsUser: async (req, res) => {
+            try {
+                const listPermission = await Permission.getPermissonById(req.params.id)
+                if (listPermission) {
+                    res.json({
+                        code: 1000,
+                        data: listPermission,
+                        message: "Hiển thị danh sách quyền thành công!",
+                    })
+                } else {
+                    res.json({
+                        code: 9992,
+                        data: {
+                            message: "Hiển thị danh sách quyền thất bại!",
+                        },
+                    })
+                }
+            } catch (err) {
+                return res.json({
+                    code: 9999,
+                    message: "Không thể lấy danh sách quyền",
+                });
+            }
+        },
+        addPermission: async (req, res) => {
+            try {
+                const newPermission = await User_Permissions.addPermission({
+                    idUser: req.params.id,
+                    idPermission: req.body.idPermission
+                })
+                if (newPermission.affectedRows == 1) {
+                    return res.json({
+                        code: 1000,
+                        data: newPermission,
+                        message: "Thêm quyền cho nhân viên này thành công!",
+                    });
+                }
+            } catch (err) {
+                return res.json({
+                    code: 9999,
+                    message: "Không thể thêm quyền cho nhân viên này",
+                });
+            }
+        }
     }
 ;
 module.exports = usersController;

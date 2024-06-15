@@ -33,14 +33,7 @@ const DGTDController = {
     },
     findDanhGia: async (req, res, next) => {
         try {
-            const hoso = await HoSo.getHoSoByMaHoSo(req.body.maHoSo)
-            if (!hoso) {
-                return res.json({
-                    code: 9993,
-                    message: "Chưa có hồ sơ này",
-                });
-            }
-            const danhgia = await DanhGiaTinDung.getDanhGiaByMaHoSo(req.body.maHoSo)
+            const danhgia = await DanhGiaTinDung.getDanhGiaById(req.params.id)
             if (!danhgia) {
                 return res.json({
                     code: 9993,
@@ -99,22 +92,6 @@ const DGTDController = {
         }
     }
     ,
-    test: async (req, res, next) => {
-        try {
-            const danhgia = await modelEY(req.body.maHoSo)
-            console.log(danhgia)
-            return res.json({
-                code: 1000,
-                message: "hồ sơ đã được đánh giá",
-                data: danhgia
-            });
-        } catch (err) {
-            console.log(err)
-            return res.json({
-                code: 9992,
-                data: {message: "Không thể thêm đánh giá cho hồ sơ này"},
-            });
-        }
-    }
+
 };
 module.exports = DGTDController;

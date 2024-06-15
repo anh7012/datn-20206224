@@ -19,6 +19,12 @@ const authController = {
           data: { message: "Tài khoản không tồn tại" },
         });
       }
+      if (user.status === 'close') {
+        return res.json({
+          code: 9992,
+          message: "Tài khoản đã bị khoá" ,
+        });
+      }
       const validPassword = await bcrypt.compare(
           req.body.password,
           user.password

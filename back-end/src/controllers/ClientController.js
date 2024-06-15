@@ -87,6 +87,10 @@ const ClientController = {
                 email: req.body.email,
                 CCCD: req.body.CCCD,
                 typeClient: req.body.typeClient,
+                HoKhau: req.body.HoKhau,
+                NoiCapCCCD: req.body.NoiCapCCCD,
+                NgayCapCCCD: req.body.NgayCapCCCD
+
             }
             const existClient = await Client.getClientByEmail(client.email)
             if (

@@ -17,6 +17,9 @@ module.exports = class Client {
         this.CCCD = client.CCCD;
         this.typeClient = client.typeClient;
         this.populationDate = client.populationDate;
+        this.HoKhau = client.HoKhau
+        this.NoiCapCCCD = client.NoiCapCCCD
+        this.NgayCapCCCD = client.NgayCapCCCD
         this.updateDate = client.updateDate
     }
 
@@ -76,9 +79,9 @@ module.exports = class Client {
             return age;
         };
         const MaKH = await generateUniqueMaKH()
-        const populationDate = moment();
+
         const [result] = await promisePool.query(
-            "INSERT INTO client (idClient, HoTen, NgaySinh, Tuoi, GioiTinh, DiaChi, sdt, email, CCCD, typeCLient, populationDate, maKhachHang) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?,?,?);",
+            "INSERT INTO client (idClient, HoTen, NgaySinh, Tuoi, GioiTinh, DiaChi, sdt, email, CCCD, typeCLient, populationDate,HoKhau,NoiCapCCCD,NgayCapCCCD, maKhachHang) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?,CURRENT_TIMESTAMP,?,?,?,?);",
             [
                 idClient,
                 client.HoTen,
@@ -90,7 +93,9 @@ module.exports = class Client {
                 client.email,
                 client.CCCD,
                 client.typeClient,
-                populationDate.format('YYYY-MM-DD'),
+                client.HoKhau,
+                client.NoiCapCCCD,
+                client.NgayCapCCCD,
                 MaKH
             ]
         )
@@ -99,7 +104,6 @@ module.exports = class Client {
     }
 
     static updateClient = async ({HoTen, NgaySinh, GioiTinh, DiaChi, sdt, email, id}) => {
-        const updateDate = moment();
         const Tuoi = (dateOfBirth) => {
             // Tạo một đối tượng Moment từ ngày sinh
             const birthDateMoment = moment(dateOfBirth, 'YYYY-MM-DD');
@@ -109,7 +113,7 @@ module.exports = class Client {
             return age;
         };
         const [result] = await promisePool.query(
-            "UPDATE client SET  HoTen =?, NgaySinh =?,Tuoi =?, GioiTinh =?, DiaChi =?, sdt =?, email =?, updateDate =? WHERE idClient = ?;",
+            "UPDATE client SET  HoTen =?, NgaySinh =?,Tuoi =?, GioiTinh =?, DiaChi =?, sdt =?, email =?, updateDate = CURRENT_TIMESTAMP  WHERE idClient = ?;",
             [
                 HoTen,
                 NgaySinh,
@@ -118,7 +122,6 @@ module.exports = class Client {
                 DiaChi,
                 sdt,
                 email,
-                updateDate.format('YYYY-MM-DD'),
                 id
             ]
         );
