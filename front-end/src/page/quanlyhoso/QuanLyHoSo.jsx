@@ -1,24 +1,30 @@
-import {getListHoso} from "../../redux/apiRequest.js";
-import {useSelector} from "react-redux";
-import {useEffect, useState} from "react";
-import {Button, TextField, Select, MenuItem, Pagination} from "@mui/material";
+import { getListHoso, updateTrangThai } from "../../redux/apiRequest.js";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { Button, Select, MenuItem, Pagination, Divider } from "@mui/material";
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import AddIcon from '@mui/icons-material/Add';
-import {Link, Outlet, useNavigate, useParams} from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 function QuanLyHoSo() {
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
-    const nav = useNavigate()
+    const nav = useNavigate();
     const [listHoso, setListHoso] = useState([]);
     const [filterMaHoSo, setFilterMaHoSo] = useState('');
     const [filterHoTen, setFilterHoTen] = useState('');
     const [filterKyHan, setFilterKyHan] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage] = useState(6);
-    const [page,setPage] = useState(6); // Number of items per page
+    const [page, setPage] = useState(6);
+    const [isSave, setIsSave] = useState([]);
+
     useEffect(() => {
         setPage(window.location.pathname);
     }, [window.location.pathname]);
+
+    useEffect(() => {
+        setIsSave(listHoso.map((e) => ({ idHoSo: e.idHoSo, save: false })));
+    }, [listHoso.length]);
 
     const fetch = async () => {
         try {
@@ -32,7 +38,6 @@ function QuanLyHoSo() {
             console.log(e);
         }
     };
-
 
     useEffect(() => {
         fetch();
@@ -68,10 +73,36 @@ function QuanLyHoSo() {
         );
     }) || [];
 
-
     const indexOfLastItem = currentPage * rowsPerPage;
     const indexOfFirstItem = indexOfLastItem - rowsPerPage;
     const currentItems = filteredHoso.slice(indexOfFirstItem, indexOfLastItem);
+
+    const handleChangeStatus = (hoso, status) => {
+        setListHoso(prevList =>
+            prevList.map(item =>
+                item.idHoSo === hoso.idHoSo ? { ...item, trangthaihoso: status } : item
+            )
+        );
+        setIsSave(prevIsSave =>
+            prevIsSave.map(item =>
+                item.idHoSo === hoso.idHoSo ? { ...item, save: true } : item
+            )
+        );
+    };
+
+    const handleSaveStatus = async (hoso) => {
+        try {
+            await updateTrangThai(hoso.trangthaihoso, hoso.idHoSo, accessToken);
+            setIsSave(prevIsSave =>
+                prevIsSave.map(item =>
+                    item.idHoSo === hoso.idHoSo ? { ...item, save: false } : item
+                )
+            );
+            await fetch();
+        } catch (error) {
+            console.error("Error updating user role:", error);
+        }
+    };
 
     return (
         <div>
@@ -115,29 +146,51 @@ function QuanLyHoSo() {
                     </div>
                 </form>
                 <div className="grid grid-cols-[5%,10%,15%,15%,10%,10%,15%,auto] gap-2 py-2">
-                    <div className="text-gray-500 flex justify-center">STT</div>
-                    <div className="text-gray-500">Mã hồ sơ</div>
-                    <div className="text-gray-500">Họ tên khách hàng</div>
-                    <div className="text-gray-500">Tổng tiền vay</div>
-                    <div className="text-gray-500">Lãi suất vay</div>
-                    <div className="text-gray-500">Kỳ hạn</div>
-                    <div className="text-gray-500 flex items-center justify-center">Trạng thái</div>
-                    <div className="text-gray-500"></div>
+                    <div className="font-bold  flex justify-center">STT</div>
+                    <div className="font-bold ">Mã hồ sơ</div>
+                    <div className="font-bold ">Họ tên khách hàng</div>
+                    <div className="font-bold ">Tổng tiền vay</div>
+                    <div className="font-bold ">Lãi suất vay</div>
+                    <div className="font-bold ">Kỳ hạn</div>
+                    <div className="font-bold  flex items-center justify-center">Trạng thái</div>
+                    <div className="font-bold "></div>
                 </div>
                 <div className="bg-white rounded-sm min-h-[calc(100vh-285px)] relative">
                     {currentItems?.map((item, i) => (
-                        <div key={i}
-                             className="grid grid-cols-[5%,10%,15%,15%,10%,10%,15%,auto] gap-2 py-3 hover:cursor-pointer hover:bg-gray-100">
-                            <div className="flex justify-center">{indexOfFirstItem + i + 1}</div>
-                            <div>{item?.maHoSo}</div>
-                            <div>{item?.HoTen}</div>
-                            <div>{item?.TongTienVay.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}</div>
-                            <div>{item?.LaiSuatVay}%</div>
-                            <div>{item?.KyHan} tháng</div>
-                            <div className="flex justify-center">{item?.trangthaihoso}</div>
-                            <div><Button variant={'outlined'} color={'success'} onClick={() => {
-                                nav(`/home/quanlyhoso/${item?.idHoSo}`)
-                            }}>Xem chi tiết</Button></div>
+                        <div key={i}>
+                            <div
+                                className="grid grid-cols-[5%,10%,15%,15%,10%,10%,15%,auto] gap-2 py-3 hover:cursor-pointer hover:bg-gray-100">
+                                <div className="flex justify-center ">{indexOfFirstItem + i + 1}</div>
+                                <div className={''}>{item?.maHoSo}</div>
+                                <div className={''}>{item?.HoTen}</div>
+                                <div className={''}>{item?.TongTienVay.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}</div>
+                                <div className={''}>{item?.LaiSuatVay}%</div>
+                                <div className={''}>{item?.KyHan} tháng</div>
+                                <div className="flex justify-center ">
+                                    <Select className={'min-w-[140px]'}
+                                            size={'small'}
+                                            value={item?.trangthaihoso}
+                                            onChange={(e) => {
+                                                handleChangeStatus(item, e.target.value)
+                                            }}
+                                    >
+                                        <MenuItem value={item?.trangthaihoso}>{item?.trangthaihoso}</MenuItem>
+                                        {
+                                            ['Thông qua', 'Từ chối', 'Huỷ bỏ'].filter(e => e !== item?.trangthaihoso).map((e, index) => (
+                                                <MenuItem key={index} value={e}>{e}</MenuItem>
+                                            ))}
+                                    </Select>
+                                </div>
+                                <div className={'flex items-center justify-center gap-2'}>
+                                    <Button variant={'outlined'} color={'success'} onClick={() => {
+                                        nav(`/home/quanlyhoso/${item?.idHoSo}`)
+                                    }}>Chi tiết</Button>
+                                    {isSave.find(saveItem => saveItem.idHoSo === item.idHoSo)?.save && (
+                                        <Button variant="contained" color="primary" onClick={() => handleSaveStatus(item)}>Lưu</Button>
+                                    )}
+                                </div>
+                            </div>
+                            <Divider />
                         </div>
                     ))}
                     <div className="flex  pt-4 items-center justify-end absolute bottom-4 right-0">
@@ -157,3 +210,4 @@ function QuanLyHoSo() {
 }
 
 export default QuanLyHoSo;
+    

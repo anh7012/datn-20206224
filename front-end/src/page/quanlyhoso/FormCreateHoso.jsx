@@ -14,6 +14,7 @@ import Form5 from "../../components/FormCreateHoso/form5.jsx";
 import {createHoso, createMHBIDVAndEY, getCatoryKH} from "../../redux/apiRequest.js";
 import {useSelector} from "react-redux";
 import {notify} from "../../utils/notify.js";
+import eventEmitter from "../../utils/eventEmitter.js";
 
 function FormCreateHoso() {
     const theme = useTheme();
@@ -44,6 +45,7 @@ function FormCreateHoso() {
             console.log(response)
             notify('success', 'Thêm hồ sơ mới thành công');
            nav('/home/quanlyhoso')
+            eventEmitter.emit('createHosoSuccess')
 
         } catch (error) {
             console.error('Error calling API:', error);
