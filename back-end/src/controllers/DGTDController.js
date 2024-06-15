@@ -13,7 +13,7 @@ const DGTDController = {
             if (listDanhGia) {
                 return res.json({
                     code: 1000,
-                    data: listHoSo,
+                    data: listDanhGia,
                     message: "Danh sách đánh giá tìm thấy thành công"
                 })
             } else {
@@ -26,7 +26,7 @@ const DGTDController = {
         } catch (error) {
             res.json({
                 code: 9992,
-                data: {message: "Không tìm thấy danh sách đánh giá"},
+                message: "Không tìm thấy danh sách đánh giá",
             });
         }
     },

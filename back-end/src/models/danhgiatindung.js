@@ -17,7 +17,7 @@ module.exports = class DanhGiaTinDung {
         this.KetQuaDanhGiaBIDV = danhgiatindung.KetQuaDanhGiaBIDV
     }
     static getAllDanhGia = async () => {
-        const [rows, fields] = await promisePool.query("SELECT * FROM danhgiatindung JOIN hoso ON hoso.idHoSo = danhgiatindung.idHoSo;");
+        const [rows, fields] = await promisePool.query("SELECT * FROM danhgiatindung JOIN hoso ON hoso.idHoSo = danhgiatindung.idHoSo JOIN client ON client.idClient = hoso.idClient");
         return rows;
     }
 
