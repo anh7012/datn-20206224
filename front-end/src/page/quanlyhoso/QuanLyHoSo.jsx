@@ -5,6 +5,7 @@ import { Button, Select, MenuItem, Pagination, Divider } from "@mui/material";
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import AddIcon from '@mui/icons-material/Add';
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import { formattedNgaySinh } from "../../utils/formetBithday.js";
 
 function QuanLyHoSo() {
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
@@ -23,7 +24,7 @@ function QuanLyHoSo() {
     }, [window.location.pathname]);
 
     useEffect(() => {
-        setIsSave(listHoso.map((e) => ({ idHoSo: e.idHoSo, save: false })));
+        setIsSave(listHoso.map((e) => ({ idHoSo: e.idHoSo, save: false, originalStatus: e.trangthaihoso })));
     }, [listHoso.length]);
 
     const fetch = async () => {
@@ -79,13 +80,16 @@ function QuanLyHoSo() {
 
     const handleChangeStatus = (hoso, status) => {
         setListHoso(prevList =>
-            prevList.map(item =>
-                item.idHoSo === hoso.idHoSo ? { ...item, trangthaihoso: status } : item
+            prevList.map(item => {
+                    if(item.idHoSo === hoso.idHoSo ){
+                       return  {...item, trangthaihoso: status}
+                    } else return  item
+                }
             )
         );
         setIsSave(prevIsSave =>
             prevIsSave.map(item =>
-                item.idHoSo === hoso.idHoSo ? { ...item, save: true } : item
+                item.idHoSo === hoso.idHoSo ? { ...item, save: true, originalStatus: item.originalStatus } : item
             )
         );
     };
@@ -95,13 +99,28 @@ function QuanLyHoSo() {
             await updateTrangThai(hoso.trangthaihoso, hoso.idHoSo, accessToken);
             setIsSave(prevIsSave =>
                 prevIsSave.map(item =>
-                    item.idHoSo === hoso.idHoSo ? { ...item, save: false } : item
+                    item.idHoSo === hoso.idHoSo ? { ...item, save: false, originalStatus: hoso.trangthaihoso } : item
                 )
             );
             await fetch();
         } catch (error) {
             console.error("Error updating user role:", error);
         }
+    };
+
+    const handleCancelStatus = (hoso) => {
+        const originalStatus = isSave.find(item => item.idHoSo === hoso.idHoSo)?.originalStatus
+        console.log( 'prev status', originalStatus)
+        setListHoso(prevList =>
+            prevList.map(item =>
+                item.idHoSo === hoso.idHoSo ? { ...item, trangthaihoso: originalStatus } : item
+            )
+        );
+        setIsSave(prevIsSave =>
+            prevIsSave.map(item =>
+                item.idHoSo === hoso.idHoSo ? { ...item, save: false } : item
+            )
+        );
     };
 
     return (
@@ -145,13 +164,14 @@ function QuanLyHoSo() {
                             startIcon={<AddIcon/>} variant={'contained'}>Thêm hồ sơ mới</Button></Link>
                     </div>
                 </form>
-                <div className="grid grid-cols-[5%,10%,15%,15%,10%,10%,15%,auto] gap-2 py-2">
+                <div className="grid grid-cols-[5%,10%,15%,10%,10%,8%,10%,12%,auto] gap-2 py-2">
                     <div className="font-bold  flex justify-center">STT</div>
                     <div className="font-bold ">Mã hồ sơ</div>
-                    <div className="font-bold ">Họ tên khách hàng</div>
+                    <div className="font-bold ">Khách hàng</div>
                     <div className="font-bold ">Tổng tiền vay</div>
                     <div className="font-bold ">Lãi suất vay</div>
                     <div className="font-bold ">Kỳ hạn</div>
+                    <div className="font-bold ">Ngày đăng ký</div>
                     <div className="font-bold  flex items-center justify-center">Trạng thái</div>
                     <div className="font-bold "></div>
                 </div>
@@ -159,13 +179,14 @@ function QuanLyHoSo() {
                     {currentItems?.map((item, i) => (
                         <div key={i}>
                             <div
-                                className="grid grid-cols-[5%,10%,15%,15%,10%,10%,15%,auto] gap-2 py-3 hover:cursor-pointer hover:bg-gray-100">
+                                className="grid grid-cols-[5%,10%,15%,10%,10%,8%,10%,12%,auto] gap-2 py-3 hover:cursor-pointer hover:bg-gray-100">
                                 <div className="flex justify-center ">{indexOfFirstItem + i + 1}</div>
                                 <div className={''}>{item?.maHoSo}</div>
                                 <div className={''}>{item?.HoTen}</div>
                                 <div className={''}>{item?.TongTienVay.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}</div>
                                 <div className={''}>{item?.LaiSuatVay}%</div>
                                 <div className={''}>{item?.KyHan} tháng</div>
+                                <div className={''}>{formattedNgaySinh(item?.created_at)}</div>
                                 <div className="flex justify-center ">
                                     <Select className={'min-w-[140px]'}
                                             size={'small'}
@@ -182,11 +203,14 @@ function QuanLyHoSo() {
                                     </Select>
                                 </div>
                                 <div className={'flex items-center justify-center gap-2'}>
-                                    <Button variant={'outlined'} color={'success'} onClick={() => {
+                                    {!isSave.find(saveItem => saveItem.idHoSo === item.idHoSo)?.save&&<Button variant={'contained'} color={'success'} size={'small'} onClick={() => {
                                         nav(`/home/quanlyhoso/${item?.idHoSo}`)
-                                    }}>Chi tiết</Button>
+                                    }}>Chi tiết</Button>}
                                     {isSave.find(saveItem => saveItem.idHoSo === item.idHoSo)?.save && (
-                                        <Button variant="contained" color="primary" onClick={() => handleSaveStatus(item)}>Lưu</Button>
+                                        <>
+                                            <Button variant="contained" size={'small'} color="primary" onClick={() => handleSaveStatus(item)}>Lưu</Button>
+                                            <Button variant="contained" size={'small'} color="secondary" onClick={() => handleCancelStatus(item)}>Huỷ</Button>
+                                        </>
                                     )}
                                 </div>
                             </div>
@@ -210,4 +234,3 @@ function QuanLyHoSo() {
 }
 
 export default QuanLyHoSo;
-    
