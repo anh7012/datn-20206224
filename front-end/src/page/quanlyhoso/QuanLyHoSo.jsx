@@ -195,9 +195,8 @@ function QuanLyHoSo() {
                                                 handleChangeStatus(item, e.target.value)
                                             }}
                                     >
-                                        <MenuItem value={item?.trangthaihoso}>{item?.trangthaihoso}</MenuItem>
                                         {
-                                            ['Thông qua', 'Từ chối', 'Huỷ bỏ'].filter(e => e !== item?.trangthaihoso).map((e, index) => (
+                                            ['Thông qua', 'Từ chối', 'Huỷ bỏ','Cần bổ sung', 'Hoàn thiện', 'Đã đánh giá'].map((e, index) => (
                                                 <MenuItem key={index} value={e}>{e}</MenuItem>
                                             ))}
                                     </Select>
