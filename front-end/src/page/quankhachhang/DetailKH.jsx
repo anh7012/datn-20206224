@@ -63,7 +63,6 @@ function DetailKh() {
                 return {
                     ...res.data,
                     GioiTinh: res.data.GioiTinh + '',
-                    NgaySinh: formattedNgaySinh(res.data.NgaySinh)
                 }
             });
         } catch (e) {
@@ -113,7 +112,7 @@ function DetailKh() {
                     <div className={'flex gap-8'}>
                         <TextField
                             id="outlined-helperText-address"
-                            label="Địa chỉ"
+                            label="Nơi ở hiện tại"
                             name="DiaChi"
                             value={data?.DiaChi || ''}
                             autoComplete="off"
@@ -139,7 +138,7 @@ function DetailKh() {
                                 id="outlined-helperText-address"
                                 label="Tuổi"
                                 name="Tuoi"
-                                value={data?.Tuoi || ''}
+                                value={data?.Tuoi.toString() || ''}
                                 autoComplete="off"
                                 onChange={handleChange}
                                 sx={{width: '100%'}}
@@ -200,9 +199,42 @@ function DetailKh() {
                             sx={{width: '100%'}}
                         />
                     </div>
+
+                        <div className={'flex gap-8'}>
+                            <TextField
+                                label="Nơi cấp"
+                                name="NoiCapCCCD"
+                                value={data?.NoiCapCCCD || ''}
+                                autoComplete="off"
+                                onChange={handleChange}
+                                sx={{width: '100%'}}
+                            />
+                            <TextField
+                                label="Ngày cấp"
+                                name="NgayCapCCCD"
+                                type={'date'}
+                                autoComplete="off"
+                                onChange={handleChange}
+                                value={formattedNgaySinh(data?.NgayCapCCCD) || ''}
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
+                                sx={{width: '100%'}}
+                            />
+                        </div>
+                    <TextField
+                        label=" Địa chỉ thường trú"
+                        name="HoKhau"
+                        value={data?.HoKhau || ''}
+                        autoComplete="off"
+                        onChange={handleChange}
+                        sx={{width: '100%'}}
+                    />
+
                     <div className={'w-full flex justify-end item-center !mt-10'}
                          style={{width: '100%'}}>
-                        <Button variant="contained" className={`w-[120px] h-12 !mx-4 ${isUpdate? ' ': ' hidden'}`} type="submit">Cập nhật</Button>
+                        <Button variant="contained" className={`w-[120px] h-12 !mx-4 ${isUpdate ? ' ' : ' hidden'}`}
+                                type="submit">Cập nhật</Button>
                     </div>
                 </div>
             </form>

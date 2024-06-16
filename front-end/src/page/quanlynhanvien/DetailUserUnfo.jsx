@@ -1,6 +1,13 @@
 import { Link, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import {createUser, getUser, getUserInfo, updateUserInfoToManeger} from "../../redux/apiRequest.js";
+import {
+    createUser,
+    getListPermission,
+    getListPermissionById,
+    getUser,
+    getUserInfo,
+    updateUserInfoToManeger
+} from "../../redux/apiRequest.js";
 import { useDispatch, useSelector } from "react-redux";
 import { notify } from "../../utils/notify.js";
 import moment from "moment";
@@ -16,6 +23,8 @@ function DetailUserUnfo() {
     const { id } = useParams();
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
     const names = ['Quản trị viên', 'Nhân viên', 'Giám đốc'];
+    const [listPermission,setListPermission] = useState()
+    const [currentPermission,setCurrentPermission] = useState()
     const [userData, setUserData] = useState({
         HoTen: '',
         email: '',
@@ -65,6 +74,10 @@ function DetailUserUnfo() {
     const fetchData = async () => {
         try {
             const res = await getUser(id, accessToken);
+            const res2 = await getListPermission(accessToken)
+            const res3 = await getListPermissionById(id,accessToken)
+            setCurrentPermission(res3.data)
+            setListPermission(res2.data)
             setUserInfo(res);
         } catch (e) {
             notify('error', 'Failed to fetch user data');
@@ -91,8 +104,6 @@ function DetailUserUnfo() {
             status: userInfo.status || '',
         }));
     }, [userInfo, formattedNS]);
-    console.log('aaaa',userData.GioiTinh, typeof (userData.GioiTinh))
-
     return (
         <div className="container mx-auto p-6">
             <div className='flex items-center justify-start mb-6'>
@@ -259,7 +270,7 @@ function DetailUserUnfo() {
                                     ))}
                                 </select>
                             </div>
-                            <div className="bg-red-300 w-full flex items-center justify-center">Permission is going to update</div>
+                            <div className=" w-full flex items-center justify-center">Permission is going to update</div>
                         </div>
                     </div>
                 </div>

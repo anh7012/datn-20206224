@@ -410,14 +410,13 @@ const DanhGiaTinDung = () => {
                                                     <p className={'text-center'}>{profile?.HoTen}</p>
                                                     <p className={'text-center'}>{formattedDate(profile?.created_at)}</p>
 
-                                                    <Link to={`/home/danhgiatindung/${profile?.maHoSo}`}
+                                                    <Link to={`/home/danhgiatindung/${profile?.idDGTD}`}
                                                           className={'flex items-center justify-center p-2'}
                                                           onClick={() => setOut(true)}>
                                                         <Button
                                                             variant="contained"
                                                             color="success"
                                                             className={'!p-0 h-8 w-20'}
-                                                            onClick={() => handlePendingProfileClick(profile)}
                                                         >
                                                             <DoubleArrowIcon className={'text-white'}/>
                                                         </Button>

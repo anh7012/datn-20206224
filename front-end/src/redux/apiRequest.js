@@ -327,3 +327,53 @@ export const updateTrangThai = async ( trangthaihoso ,id, accessToken) => {
         console.log(e)
     }
 }
+export const getDanhGia = async (idHoso,accessToken) => {
+    try {
+        const res = await axios.get(`http://localhost:7012/danhgiatindung/${idHoso}/findDanhGia`,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const getListPermission = async (accessToken) => {
+    try {
+        const res = await axios.get(`http://localhost:7012/users/listPermission`,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const getListPermissionById = async (id,accessToken) => {
+    try {
+        const res = await axios.get(`http://localhost:7012/users/${id}/permissionsUser`,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const updateListPermissionById = async (id,idPermission,accessToken) => {
+    try {
+        const res = await axios.post(`http://localhost:7012/users/${id}/addPermission`,{
+            idPermission : idPermission
+        },{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}

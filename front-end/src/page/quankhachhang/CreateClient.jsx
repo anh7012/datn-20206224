@@ -76,7 +76,7 @@ function CreateClient() {
                         <div className={'flex gap-8'}>
                             <TextField
                                 id="outlined-helperText-address"
-                                label="Địa chỉ"
+                                label="Nơi ở hiện tại"
                                 name="DiaChi"
                                 autoComplete="off"
                                 onChange={handleChange}
@@ -146,6 +146,33 @@ function CreateClient() {
                                 sx={{width: '100%'}}
                             />
                         </div>
+                        <div className={'flex gap-8'}>
+                            <TextField
+                                label="Nơi cấp"
+                                name="NoiCapCCCD"
+                                autoComplete="off"
+                                onChange={handleChange}
+                                sx={{width: '100%'}}
+                            />
+                            <TextField
+                                label="Ngày cấp"
+                                name="NgayCapCCCD"
+                                type={'date'}
+                                autoComplete="off"
+                                onChange={handleChange}
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
+                                sx={{width: '100%'}}
+                            />
+                        </div>
+                        <TextField
+                            label=" Địa chỉ thường trú"
+                            name="HoKhau"
+                            autoComplete="off"
+                            onChange={handleChange}
+                            sx={{width: '100%'}}
+                        />
                         <div className={'w-full flex justify-end item-center !mt-10'}
                              style={{width: '100%', maxWidth: 750, margin: 'auto'}}>
                             <Button variant="contained" className={'w-[120px] h-12 !mx-4'} type="submit">Tạo
