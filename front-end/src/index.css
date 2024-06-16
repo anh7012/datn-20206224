@@ -41,6 +41,7 @@
     margin-bottom: 4px;
     font-size: 14px;
     color: #333;
+    font-weight: bold;
 }
 .select {
     width: 100%;
@@ -66,4 +67,42 @@
     border-radius: 4px;
     background-color: #fff;
     color: #333;
+}
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+.slide-in {
+    animation: slideIn 0.5s forwards;
+}
+
+.slide-out {
+    animation: slideOut 0.5s forwards;
+}
+
+.hidden {
+    animation: hide 3.5s  forwards;
+}
+
+@keyframes hide {
+    from {
+        visibility: visible;
+    }
+    to {
+        visibility: hidden;
+    }
 }

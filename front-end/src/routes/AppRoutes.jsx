@@ -9,9 +9,9 @@ import FormCreateHoso from "../page/quanlyhoso/FormCreateHoso.jsx";
 import DetailHoso from "../page/quanlyhoso/DetailHoso.jsx";
 import QuanLyKhachHang from "../page/quankhachhang/QuanLyKhachHang.jsx";
 import CreateClient from "../page/quankhachhang/CreateClient.jsx";
-import ModalCreateUser from "../page/quanlynhanvien/ModalCreateUser.jsx";
 import CreateNV from "../page/quanlynhanvien/CreateNV.jsx";
 import DetailKH from "../page/quankhachhang/DetailKH.jsx";
+import Dashboard from "../page/danhgiatindung/Dashboard.jsx";
 
 function AppRoutes() {
 
@@ -22,7 +22,9 @@ function AppRoutes() {
                 <Route path="/dangnhap" element={<DangNhap/>}/>
                 <Route path="/home" element={<App />}>
                     <Route index element={<Navigate to="danhgiatindung" replace />} />
-                    <Route path="danhgiatindung" element={<DanhGiaTinDung />} />
+                    <Route path="danhgiatindung" element={<DanhGiaTinDung />} >
+                        <Route path=":idDashBoard" element={<Dashboard />} />
+                    </Route>
                     <Route path="quanlyhoso" element={<QuanLyHoSo />} >
                         <Route path=":idHoso" element={<DetailHoso />} />
                         <Route path="taohosomoi" element={<FormCreateHoso />} />
