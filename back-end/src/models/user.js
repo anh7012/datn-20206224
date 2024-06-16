@@ -74,8 +74,7 @@ module.exports = class Users {
         return rows[0];
     };
 
-    static createUser = async (user) => {
-        const idUser = uuidv4({format: "hex"}).substring(0, 32);
+    static createUser = async ({user,idUser}) => {
         const [result] = await promisePool.query(
             "INSERT INTO users (idUser, idRole, username, password, email, HoTen, NgaySinh, GioiTinh, DiaChi,created_at, updated_at) VALUES (?, (SELECT idRole FROM role WHERE roleName = ?), ?, ?, ?, ?, ?, ?, ?,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);",
             [

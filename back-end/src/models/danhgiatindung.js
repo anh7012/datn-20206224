@@ -29,6 +29,14 @@ module.exports = class DanhGiaTinDung {
         return rows[0];
     }
 
+    static getDanhGiaById = async (id) => {
+        const [rows, fields] = await promisePool.query(
+            "SELECT * FROM danhgiatindung WHERE idDGTD = ?; ",
+            [id]
+        );
+        return rows[0];
+    }
+
     static createDanhGiaTinDung = async (danhgia) => {
         const idDGTD = uuidv4({format: "hex"}).substring(0, 32);
         const populationDate = moment()
