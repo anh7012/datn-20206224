@@ -2,6 +2,7 @@ const HoSo = require('../models/hoso')
 const ModelBIDV = require('../models/mhbidv')
 const ModelEY = require('../models/mhey')
 const DanhGiaTinDung = require("../models/danhgiatindung");
+const Client = require('../models/client')
 const modelBIDV = require("../utils/modelBIDV");
 const {modelEY} = require("../utils/modelEY");
 
@@ -34,21 +35,25 @@ const DGTDController = {
     findDanhGia: async (req, res, next) => {
         try {
             const danhgia = await DanhGiaTinDung.getDanhGiaById(req.params.id)
-            if (!danhgia) {
+            const khachhang = await Client.getClientByIdHS(danhgia.idHoSo)
+            if (!danhgia || !khachhang) {
                 return res.json({
-                    code: 9993,
+                    code: 9992,
                     message: "Chưa có đánh giá của hồ sơ này",
                 });
             }
             return res.json({
                 code: 1000,
                 message: "hồ sơ đã được đánh giá",
-                data: danhgia
+                data: {
+                    danhgia: danhgia,
+                    idClient: khachhang.idClient
+                }
             });
 
         } catch (error) {
             return res.json({
-                code: 9992,
+                code: 9999,
                 data: {message: "Không tìm thấy đánh giá của hồ sơ này"},
             });
         }

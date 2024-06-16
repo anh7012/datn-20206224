@@ -35,6 +35,13 @@ module.exports = class Client {
         return rows[0];
     }
 
+    static getClientByIdHS = async (idHoSo) => {
+        const [rows, fields] = await promisePool.query(
+            "SELECT * FROM client JOIN hoso ON hoso.idClient = client.idClient WHERE hoso.idHoSo = ?;",
+            [idHoSo]);
+        return rows[0];
+    }
+
     static getClientByEmail = async (email) => {
         const [rows, fields] = await promisePool.query(
             "SELECT * FROM client WHERE email = ?;",
