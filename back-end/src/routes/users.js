@@ -21,9 +21,10 @@ router.get("/listUser",verifyToken, usersController.listUsers);
 router.get("/:id/getUser",verifyToken, usersController.getUser);
 // lấy all thong tin 1 nhan vien
 router.get("/:id/getUserAll",checkAdmin, usersController.getUserAll);
-router.get("/listPermission",checkAdmin, usersController.listPermission);
+router.get("/:id/listPermission",checkAdmin, usersController.listPermission);
 router.get("/:id/permissionsUser",checkAdmin, usersController.permissionsUser);
 router.post("/:id/addPermission",checkAdmin, usersController.addPermission);
+router.delete("/:id/deletePermission",checkAdmin, usersController.deletePermission);
 
 
 

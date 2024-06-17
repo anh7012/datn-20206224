@@ -8,6 +8,13 @@ module.exports = class User_Permissions {
         this.idPermission = user_permissions.idPermission
     }
 
+    static getPermissionByIdUser = async (idUser) => {
+        const [rows, field] = await promisePool.query(
+            "SELECT user_permissions.idPermission, maPermission, permissonName, parentPermission FROM user_permissions JOIN permission ON permission.idPermission = user_permissions.idPermission WHERE idUser = ?;",
+            [idUser]
+        )
+        return rows
+    }
     static addPermission = async ({idUser, idPermission}) => {
         const id = uuidv4({format: "hex"}).substring(0, 32);
         const [result] = await promisePool.query(
@@ -20,4 +27,11 @@ module.exports = class User_Permissions {
         );
         return result;
     };
+    static deletePermission = async ({idUser, idPermission}) => {
+        const [result] = await promisePool.query(
+            "DELETE FROM user_permissions WHERE idUser = ? AND idPermission = ?;",
+            [idUser, idPermission]
+        )
+        return result
+    }
 }

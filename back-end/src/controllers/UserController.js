@@ -301,21 +301,28 @@ const usersController = {
         },
         listPermission: async (req, res) => {
             try {
-                const listPermission = await Permission.getAllPermission()
-                if (listPermission) {
-                    res.json({
-                        code: 1000,
-                        data: listPermission,
-                        message: "Hiển thị danh sách quyền thành công!",
-                    })
+                const allPermissions = await Permission.getAllPermission()
+                const userPermission = await User_Permissions.getPermissionByIdUser(req.params.id)
+                // Tạo một tập hợp các permission mà người dùng đã có
+                const userPermissions = new Set(userPermission.map(permission => permission.idPermission));
+
+                // Lọc ra các permission mà người dùng còn thiếu
+                const missingPermissions = allPermissions.filter(permission => !userPermissions.has(permission.idPermission));
+
+                if (missingPermissions.length === 0) {
+                    return res.json({
+                        code: 1001,
+                        data: [],
+                        message: "Người dùng đã có tất cả các quyền",
+                    });
                 } else {
-                    res.json({
-                        code: 9992,
-                        data: {
-                            message: "Hiển thị danh sách quyền thất bại!",
-                        },
-                    })
+                    return res.json({
+                        code: 1000,
+                        data: missingPermissions,
+                        message: "Danh sách các quyền người dùng còn thiếu",
+                    });
                 }
+
             } catch (err) {
                 return res.json({
                     code: 9999,
@@ -349,21 +356,55 @@ const usersController = {
         },
         addPermission: async (req, res) => {
             try {
-                const newPermission = await User_Permissions.addPermission({
+                const listPermisson = req.body.listPermission
+                const addPermissions = await Promise.all(listPermisson.map(async (idPermission) => {
+                    await User_Permissions.addPermission({
+                        idUser: req.params.id,
+                        idPermission: idPermission
+                    })
+                    return Permission.getPermissonById(idPermission)
+                }))
+                if (addPermissions.every(permisson => permisson.affectedRows == 1)) {
+                    return res.json({
+                        code: 1000,
+                        data: addPermissions,
+                        message: "Thêm quyền cho nhân viên này thành công!",
+                    });
+                } else {
+                    return res.json({
+                        code: 9998,
+                        message: "Không thể thêm tất cả quyền cho nhân viên này",
+                    });
+                }
+            } catch (err) {
+                console.log(err)
+                return res.json({
+                    code: 9999,
+                    message: "Không thể thêm quyền cho nhân viên này",
+                });
+            }
+        },
+        deletePermission: async (req, res) => {
+            try {
+                const deletePermission = await User_Permissions.deletePermission({
                     idUser: req.params.id,
                     idPermission: req.body.idPermission
                 })
-                if (newPermission.affectedRows == 1) {
+                if (deletePermission.affectedRows === 1) {
                     return res.json({
                         code: 1000,
-                        data: newPermission,
-                        message: "Thêm quyền cho nhân viên này thành công!",
+                        message: "Xóa quyền của người dùng thành công!"
+                    });
+                } else {
+                    return res.json({
+                        code: 9998,
+                        message: "Người dùng không có quyền này hoặc xóa quyền không thành công"
                     });
                 }
             } catch (err) {
                 return res.json({
                     code: 9999,
-                    message: "Không thể thêm quyền cho nhân viên này",
+                    message: "Không thể xoá quyền cho nhân viên này",
                 });
             }
         }
