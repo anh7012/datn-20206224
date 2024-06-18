@@ -3,7 +3,7 @@ const {v4: uuidv4} = require("uuid");
 const moment = require("moment");
 const updateIfNull = require('../utils/updateIfNull')
 
-module.exports = class HoSo{
+module.exports = class HoSo {
 
     constructor(hoso) {
         this.id = hoso.idHoSo
@@ -44,12 +44,13 @@ module.exports = class HoSo{
         this.created_at = hoso.created_at
         this.updated_at = hoso.updated_at
     }
+
     static getAllHoSo = async () => {
-    const [rows, fields] = await promisePool.query(
-        "SELECT idHoSo, maHoSo, HoTen, TongTienVay, LaiSuatVay, KyHan, trangthaihoso, CCCD, hoso.created_at, hoso.updated_at  FROM hoso JOIN client ON client.idClient = hoso.idClient;"
-    );
-    return rows;
-  };
+        const [rows, fields] = await promisePool.query(
+            "SELECT idHoSo, maHoSo, HoTen, TongTienVay, LaiSuatVay, KyHan, trangthaihoso, CCCD, hoso.created_at, hoso.updated_at  FROM hoso JOIN client ON client.idClient = hoso.idClient;"
+        );
+        return rows;
+    };
     static getHoSoByIdHoSo = async (id) => {
         const [rows, fields] = await promisePool.query(
             "SELECT * FROM hoso WHERE idHoSo = ?;",
@@ -66,7 +67,7 @@ module.exports = class HoSo{
         return rows[0];
     };
 
-   static updateHoSoDetails = async (idHoSo, newValues) => {
+    static updateHoSoDetails = async (idHoSo, newValues) => {
         try {
             const result = await Promise.all([
                 updateIfNull('hoso', 'idHoSo', idHoSo, newValues),
@@ -79,7 +80,7 @@ module.exports = class HoSo{
         }
     };
 
-    static getHoSoByIdAccount= async (id) => {
+    static getHoSoByIdAccount = async (id) => {
         const [rows, fields] = await promisePool.query(
             "SELECT * FROM hoso WHERE idAccount = ?;",
             [id]
@@ -87,14 +88,13 @@ module.exports = class HoSo{
         return rows[0];
     }
 
-    static getHoSoByMaHoSo= async (MaHoSo) => {
+    static getHoSoByMaHoSo = async (MaHoSo) => {
         const [rows, fields] = await promisePool.query(
             "SELECT * FROM hoso WHERE maHoSo = ?;",
             [MaHoSo]
         );
         return rows[0];
     }
-
 
 
     static createHoSo = async (hoso) => {
@@ -149,5 +149,12 @@ module.exports = class HoSo{
             [trangthaihoso, idHoSo]
         )
         return result
-}
+    }
+    static TyLeThuNhapNo = async (id) => {
+        const [rows, fields] = await promisePool.query(
+            "SELECT idClient, ThuNhapRong, SoTienTraHangThang FROM hoso WHERE idHoSo = ?",
+            [id]
+        );
+        return rows;
+    }
 }

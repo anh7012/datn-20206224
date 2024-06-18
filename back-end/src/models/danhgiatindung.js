@@ -39,9 +39,8 @@ module.exports = class DanhGiaTinDung {
 
     static createDanhGiaTinDung = async (danhgia) => {
         const idDGTD = uuidv4({format: "hex"}).substring(0, 32);
-        const populationDate = moment()
         const [result] = await promisePool.query(
-            "INSERT INTO danhgiatindung (idDGTD, idHoSo, XHCaNhanBIDV, XHEY, DanhGiaXH, MucDoRuiRo, populationDate, DanhGiaCaNhanBIDV, XHTSDBBIDV, DanhGiaTSDBBIDV, KetQuaDanhGiaBIDV) VALUES (?,?,?,?,?,?,?,?,?,?,?);",
+            "INSERT INTO danhgiatindung (idDGTD, idHoSo, XHCaNhanBIDV, XHEY, DanhGiaXH, MucDoRuiRo, populationDate, DanhGiaCaNhanBIDV, XHTSDBBIDV, DanhGiaTSDBBIDV, KetQuaDanhGiaBIDV) VALUES (?,?,?,?,?,?,?,CURRENT_TIMESTAMP,?,?,?);",
             [
                 idDGTD,
                 danhgia.idHoSo,
@@ -49,7 +48,6 @@ module.exports = class DanhGiaTinDung {
                 danhgia.XHEY,
                 danhgia.DanhGiaXH,
                 danhgia.MucDoRuiRo,
-                populationDate.format('YYYY-MM-DD'),
                 danhgia.DanhGiaCaNhanBIDV,
                 danhgia.XHTSDBBIDV,
                 danhgia.DanhGiaTSDBBIDV,

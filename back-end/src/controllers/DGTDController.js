@@ -100,7 +100,7 @@ const DGTDController = {
     ,
     listVay: async (req, res) => {
         try {
-            const listVay = await Loan.listVayByIdClient(req.params.id)
+            const listVay = await Loan.listVayByIdClient(req.params.idClient)
             if (listVay) {
                 return res.json({
                     code: 1000,
@@ -112,6 +112,29 @@ const DGTDController = {
             return res.json({
                 code: 9999,
                 message: "Không thể hiển thị danh sách khoản vay"
+            });
+        }
+    },
+    tyleThuNo: async (req, res) => {
+        try {
+            const thunhap = await HoSo.TyLeThuNhapNo(req.params.idHoSo)
+            if (thunhap) {
+                return res.json({
+                    code: 1000,
+                    data: thunhap,
+                    message: "Tỷ lệ thu nhập trên nợ phải trả theo tháng"
+                });
+            } else {
+                return res.json({
+                    code: 9992,
+                    message: "Không thể hiển thị tỷ lệ thu nhập trên nợ phải trả theo tháng"
+                });
+            }
+
+        }catch (err) {
+            return res.json({
+                code: 9999,
+                message: "Có lỗi xảy ra trong quá trình lấy dữ liệu"
             });
         }
     }
