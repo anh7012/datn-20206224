@@ -42,9 +42,9 @@ const DanhGiaTinDung = () => {
     const [rowsPerPagePending, setRowsPerPagePending] = useState(4);
     const [pageReviewed, setPageReviewed] = useState(1);
     const [rowsPerPageReviewed, setRowsPerPageReviewed] = useState(4);
-    const [thongQuaData,setThongQuaData] = useState()
-    const [huyData,setHuyData] = useState()
-    const [tuChoiData,setTuChoiData] = useState()
+    const [thongQuaData, setThongQuaData] = useState()
+    const [huyData, setHuyData] = useState()
+    const [tuChoiData, setTuChoiData] = useState()
 
 
     useEffect(() => {
@@ -58,8 +58,8 @@ const DanhGiaTinDung = () => {
             const response = await getListHoso(accessToken);
             if (response && response.data) {
                 setPendingProfiles(response.data.filter(profile => profile.trangthaihoso === "Hoàn thiện") || []);
-                setThongQuaData(()=>{
-                    return response.data.filter(profile => profile.trangthaihoso === "Thông qua").filter(profile =>{
+                setThongQuaData(() => {
+                    return response.data.filter(profile => profile.trangthaihoso === "Thông qua").filter(profile => {
                         let today = new Date();
                         let todayDateOnly = today.toDateString();
                         let updatedAt = new Date(profile.updated_at);
@@ -67,8 +67,8 @@ const DanhGiaTinDung = () => {
                         return updatedAtDateOnly === todayDateOnly
                     })
                 })
-                setHuyData(()=>{
-                    return response.data.filter(profile => profile.trangthaihoso === "Huỷ bỏ").filter(profile =>{
+                setHuyData(() => {
+                    return response.data.filter(profile => profile.trangthaihoso === "Huỷ bỏ").filter(profile => {
                         let today = new Date();
                         let todayDateOnly = today.toDateString();
                         let updatedAt = new Date(profile.updated_at);
@@ -76,8 +76,8 @@ const DanhGiaTinDung = () => {
                         return updatedAtDateOnly === todayDateOnly
                     })
                 })
-                setTuChoiData(()=>{
-                    return response.data.filter(profile => profile.trangthaihoso === "Từ chối").filter(profile =>{
+                setTuChoiData(() => {
+                    return response.data.filter(profile => profile.trangthaihoso === "Từ chối").filter(profile => {
                         let today = new Date();
                         let todayDateOnly = today.toDateString();
                         let updatedAt = new Date(profile.updated_at);
@@ -110,8 +110,10 @@ const DanhGiaTinDung = () => {
             const res = await doneDanhGia(profile.maHoSo, accessToken);
             if (res.code === 1000) {
                 await updateTrangThai('Đã đánh giá', profile.idHoSo, accessToken);
-                setPendingProfiles(pendingProfiles.filter((p) => p.maHoSo !== profile.maHoSo));
-                setReviewedProfiles([...reviewedProfiles, profile]);
+                // setPendingProfiles(pendingProfiles.filter((p) => p.maHoSo !== profile.maHoSo));
+                // setReviewedProfiles([...reviewedProfiles, profile]);
+                fetchPendingProfiles();
+                fetchReviewedProfiles();
             }
         } catch (error) {
             console.error('Error reviewing profile:', error);
@@ -153,8 +155,34 @@ const DanhGiaTinDung = () => {
     const handleChangePageReviewed = (event, value) => {
         setPageReviewed(value);
     };
-
-
+    const [pendingFilter, setPendingFilter] = useState([])
+    const filterPending = () => {
+        const arr = pendingProfiles
+            .filter((profile) => profile?.maHoSo?.toLowerCase().includes(searchMaHS.toLowerCase()))
+            .filter((profile) => profile?.HoTen?.toLowerCase().includes(searchHoten.toLowerCase()))
+            .filter(filterProfilesByDate)
+        setPendingFilter(arr)
+    }
+    useEffect(() => {
+        setPendingFilter(pendingProfiles)
+    }, [pendingProfiles]);
+    useEffect(() => {
+        filterPending()
+    }, [searchMaHS,searchHoten,startDate,endDate]);
+    const [rvFilter, setRvFilter] = useState([])
+    const filterRv = () => {
+        const arr = reviewedProfiles
+            .filter((profile) => profile?.maHoSo?.toLowerCase().includes(searchMaHSRv.toLowerCase()))
+            .filter((profile) => profile?.HoTen?.toLowerCase().includes(searchHotenRv.toLowerCase()))
+            .filter(filterProfilesByDateRv)
+        setRvFilter(arr)
+    }
+    useEffect(() => {
+        setRvFilter(reviewedProfiles)
+    }, [reviewedProfiles]);
+    useEffect(() => {
+        filterRv()
+    }, [searchMaHSRv,searchHotenRv,startDateRv,endDateRv]);
     return (
         <div>
             <div className={` ${out ? ' slide-out hidden' : ' '}`}>
@@ -162,13 +190,14 @@ const DanhGiaTinDung = () => {
 
                 <div
                     className={`h-[calc(100vh-160px)] w-full    border-[1px] border-gray-300 bg-white  p-4 relative`}>
-                    <div className={`text-gray-500 hover:text-black cursor-pointer  ${main ? ' hidden' : ' '} absolute top-[-30px] left-0`}
-                         onClick={() => {
-                             setMain(true)
-                             setThongQua(false)
-                             setHuy(false)
-                             setTuChoi(false)
-                         }}>
+                    <div
+                        className={`text-gray-500 hover:text-black cursor-pointer  ${main ? ' hidden' : ' '} absolute top-[-30px] left-0`}
+                        onClick={() => {
+                            setMain(true)
+                            setThongQua(false)
+                            setHuy(false)
+                            setTuChoi(false)
+                        }}>
                         <ArrowBackIcon/>
                     </div>
                     <div className={'flex items-start  gap-10  justify-around mb-8  '}>
@@ -197,7 +226,7 @@ const DanhGiaTinDung = () => {
 
                     </div>
                     <div className={`${thongQua ? ' ' : ' !hidden'}`}>
-                       <DanhSachHosoTheoNgay data={thongQuaData}/>
+                        <DanhSachHosoTheoNgay data={thongQuaData}/>
                     </div>
                     <div className={`${huy ? ' ' : ' !hidden'}`}>
                         <DanhSachHosoTheoNgay data={huyData}/>
@@ -213,7 +242,8 @@ const DanhGiaTinDung = () => {
                                     hồ
                                     sơ
                                     chờ đánh giá</h2>
-                                <div className={'flex items-center gap-2 mb-4 px-2 py-4 rounded-lg bg-yellow-100 relative'}>
+                                <div
+                                    className={'flex items-center gap-2 mb-4 px-2 py-4 rounded-lg bg-yellow-100 relative'}>
                                     <div className={'absolute top-0 right-0'}>
                                         <Button variant="contained" color="secondary" size={'small'}
                                                 onClick={clearPendingProfiles} className={''}>
@@ -277,11 +307,8 @@ const DanhGiaTinDung = () => {
                                     ))}
                                 </div>
                                 <div className={'relative h-[calc(55vh-120px)]'}>
-                                    {pendingProfiles?.length > 0 ? (
-                                        pendingProfiles
-                                            .filter((profile) => profile?.maHoSo?.toLowerCase().includes(searchMaHS.toLowerCase()))
-                                            .filter((profile) => profile?.HoTen?.toLowerCase().includes(searchHoten.toLowerCase()))
-                                            .filter(filterProfilesByDate)
+                                    {pendingFilter?.length > 0 ? (
+                                        pendingFilter
                                             .slice((pagePending - 1) * rowsPerPagePending, pagePending * rowsPerPagePending)
                                             .map((profile, i) => (
                                                 <div
@@ -312,7 +339,7 @@ const DanhGiaTinDung = () => {
                                     )}
                                     <div className={'flex  pt-4 items-center justify-end absolute bottom-2 right-0'}>
                                         <Pagination
-                                            count={Math.ceil(pendingProfiles.length / rowsPerPagePending)}
+                                            count={Math.ceil(pendingFilter.length / rowsPerPagePending)}
                                             page={pagePending}
                                             onChange={handleChangePagePending}
                                             variant="outlined"
@@ -394,11 +421,8 @@ const DanhGiaTinDung = () => {
                                     ))}
                                 </div>
                                 <div className={'relative h-[calc(55vh-120px)]'}>
-                                    {reviewedProfiles?.length > 0 ? (
-                                        reviewedProfiles
-                                            .filter((profile) => profile?.maHoSo?.toLowerCase().includes(searchMaHSRv.toLowerCase()))
-                                            .filter((profile) => profile?.HoTen?.toLowerCase().includes(searchHotenRv.toLowerCase()))
-                                            .filter(filterProfilesByDateRv)
+                                    {rvFilter?.length > 0 ? (
+                                        rvFilter
                                             .slice((pageReviewed - 1) * rowsPerPageReviewed, pageReviewed * rowsPerPageReviewed)
                                             .map((profile, i) => (
                                                 <div
@@ -430,7 +454,7 @@ const DanhGiaTinDung = () => {
                                     )}
                                     <div className={'flex  pt-4 items-center justify-end absolute bottom-3 right-0'}>
                                         <Pagination
-                                            count={Math.ceil(reviewedProfiles.length / rowsPerPageReviewed)}
+                                            count={Math.ceil(rvFilter.length / rowsPerPageReviewed)}
                                             page={pageReviewed}
                                             onChange={handleChangePageReviewed}
                                             variant="outlined"

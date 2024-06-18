@@ -15,6 +15,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import eventEmitter from "../../utils/eventEmitter.js";
 import {formattedNgaySinh} from "../../utils/formetBithday.js";
+import Permission from "../../components/Permission.jsx";
 
 function DetailUserUnfo() {
     const dispatch = useDispatch();
@@ -49,7 +50,7 @@ function DetailUserUnfo() {
 
     const handleUpdate = async (event) => {
         event.preventDefault();
-        console.log(userData)
+
         try {
             await updateUserInfoToManeger(userData, accessToken);
             notify('success', 'Cập nhật thông tin thành công');
@@ -71,13 +72,16 @@ function DetailUserUnfo() {
         event.preventDefault();
     };
 
+    const fetchPermission = async ()=>{
+        const res2 = await getListPermission(id,accessToken)
+        const res3 = await getListPermissionById(id,accessToken)
+        setCurrentPermission(res3.data)
+        setListPermission(res2.data)
+    }
     const fetchData = async () => {
         try {
             const res = await getUser(id, accessToken);
-            const res2 = await getListPermission(accessToken)
-            const res3 = await getListPermissionById(id,accessToken)
-            setCurrentPermission(res3.data)
-            setListPermission(res2.data)
+            fetchPermission()
             setUserInfo(res);
         } catch (e) {
             notify('error', 'Failed to fetch user data');
@@ -104,6 +108,14 @@ function DetailUserUnfo() {
             status: userInfo.status || '',
         }));
     }, [userInfo, formattedNS]);
+    console.log(currentPermission,listPermission)
+    useEffect(() => {
+
+        eventEmitter.on('updatePermission',fetchPermission)
+        return ()=>{
+            eventEmitter.removeListener('updatePermission',fetchPermission)
+        }
+    }, []);
     return (
         <div className="container mx-auto p-6">
             <div className='flex items-center justify-start mb-6'>
@@ -270,7 +282,9 @@ function DetailUserUnfo() {
                                     ))}
                                 </select>
                             </div>
-                            <div className=" w-full flex items-center justify-center">Permission is going to update</div>
+                            <div className=" w-full flex items-center justify-center">
+                                <Permission listPermission={listPermission} currentPermission={currentPermission} id={id}/>
+                            </div>
                         </div>
                     </div>
                 </div>

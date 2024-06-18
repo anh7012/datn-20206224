@@ -364,7 +364,7 @@ const usersController = {
                     })
                     return Permission.getPermissonById(idPermission)
                 }))
-                if (addPermissions.every(permisson => permisson.affectedRows == 1)) {
+                if (addPermissions.every(permisson => permisson.affectedRows === 1)) {
                     return res.json({
                         code: 1000,
                         data: addPermissions,

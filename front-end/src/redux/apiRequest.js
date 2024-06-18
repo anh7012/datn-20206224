@@ -339,9 +339,9 @@ export const getDanhGia = async (idHoso,accessToken) => {
         console.log(e)
     }
 }
-export const getListPermission = async (accessToken) => {
+export const getListPermission = async (id,accessToken) => {
     try {
-        const res = await axios.get(`http://localhost:7012/users/listPermission`,{
+        const res = await axios.get(`http://localhost:7012/users/${id}/listPermission`,{
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -363,11 +363,21 @@ export const getListPermissionById = async (id,accessToken) => {
         console.log(e)
     }
 }
-export const updateListPermissionById = async (id,idPermission,accessToken) => {
+export const updateListPermissionById = async (id,idPermissioArr,accessToken) => {
     try {
-        const res = await axios.post(`http://localhost:7012/users/${id}/addPermission`,{
-            idPermission : idPermission
-        },{
+        const res = await axios.post(`http://localhost:7012/users/${id}/addPermission`, {listPermission: idPermissioArr},{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const deletePermissionById = async (id,idPermission,accessToken) => {
+    try {
+        const res = await axios.delete(`http://localhost:7012/users/${id}/deletePermission`, {idPermission: idPermission},{
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
