@@ -12,7 +12,6 @@ const DGTDController = {
     listDanhGia: async (req, res, next) => {
         try {
             const listDanhGia = await DanhGiaTinDung.getAllDanhGia()
-            console.log(listDanhGia)
             if (listDanhGia) {
                 return res.json({
                     code: 1000,
