@@ -141,7 +141,7 @@ const DGTDController = {
     TrungBinhVay: async (req, res) => {
         try {
             const trungbinhvay = await Loan.TrungBinhVay(req.params.idClient)
-            if (thunhap) {
+            if (trungbinhvay) {
                 return res.json({
                     code: 1000,
                     data: trungbinhvay,
@@ -161,5 +161,28 @@ const DGTDController = {
             });
         }
     },
+    PhanPhoiLoaiGD: async (req, res) => {
+        try {
+            const loaigiaodich = await Loan.TyLeLoaiGiaoDich(req.params.idClient)
+            if (loaigiaodich) {
+                return res.json({
+                    code: 1000,
+                    data: loaigiaodich,
+                    message: "Tỷ lệ giao dịch của khách hàng"
+                });
+            } else {
+                return res.json({
+                    code: 9992,
+                    message: "Không thể hiển thị tỷ lệ giao dịch của khách hàng"
+                });
+            }
+
+        }catch (err) {
+            return res.json({
+                code: 9999,
+                message: "Có lỗi xảy ra trong quá trình lấy dữ liệu"
+            });
+        }
+    }
 };
 module.exports = DGTDController;
