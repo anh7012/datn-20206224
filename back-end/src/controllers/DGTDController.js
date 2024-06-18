@@ -136,6 +136,29 @@ const DGTDController = {
                 message: "Có lỗi xảy ra trong quá trình lấy dữ liệu"
             });
         }
-    }
+    },
+    TrungBinhVay: async (req, res) => {
+        try {
+            const trungbinhvay = await Loan.TrungBinhVay(req.params.idClient)
+            if (thunhap) {
+                return res.json({
+                    code: 1000,
+                    data: trungbinhvay,
+                    message: "Trung bình vay theo năm của khách hàng"
+                });
+            } else {
+                return res.json({
+                    code: 9992,
+                    message: "Không thể hiển thị trung bình vay của khách hàng"
+                });
+            }
+
+        }catch (err) {
+            return res.json({
+                code: 9999,
+                message: "Có lỗi xảy ra trong quá trình lấy dữ liệu"
+            });
+        }
+    },
 };
 module.exports = DGTDController;

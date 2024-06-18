@@ -41,7 +41,13 @@ module.exports = class Loan {
         );
         return rows;
     }
-
+    static TrungBinhVay = async (idClient) => {
+        const [rows, fields] = await promisePool.query(
+            "SELECT YEAR(effDate) AS loanYear, AVG(SoTienVay) AS averageLoan FROM loan WHERE idClient = ? GROUP BY YEAR(effDate) ORDER BY loanYear;",
+            [idClient]
+        );
+        return rows;
+    }
 
 
 }
