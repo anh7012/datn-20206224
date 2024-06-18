@@ -40,7 +40,7 @@ module.exports = class DanhGiaTinDung {
     static createDanhGiaTinDung = async (danhgia) => {
         const idDGTD = uuidv4({format: "hex"}).substring(0, 32);
         const [result] = await promisePool.query(
-            "INSERT INTO danhgiatindung (idDGTD, idHoSo, XHCaNhanBIDV, XHEY, DanhGiaXH, MucDoRuiRo, populationDate, DanhGiaCaNhanBIDV, XHTSDBBIDV, DanhGiaTSDBBIDV, KetQuaDanhGiaBIDV) VALUES (?,?,?,?,?,?,?,CURRENT_TIMESTAMP,?,?,?);",
+            "INSERT INTO danhgiatindung (idDGTD, idHoSo, XHCaNhanBIDV, XHEY, DanhGiaXH, MucDoRuiRo, populationDate, DanhGiaCaNhanBIDV, XHTSDBBIDV, DanhGiaTSDBBIDV, KetQuaDanhGiaBIDV) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP,?,?,?,?);",
             [
                 idDGTD,
                 danhgia.idHoSo,
