@@ -41,7 +41,20 @@ module.exports = class Loan {
         );
         return rows;
     }
-
+    static TrungBinhVay = async (idClient) => {
+        const [rows, fields] = await promisePool.query(
+            "SELECT YEAR(effDate) AS loanYear, AVG(SoTienVay) AS averageLoan FROM loan WHERE idClient = ? GROUP BY YEAR(effDate) ORDER BY loanYear;",
+            [idClient]
+        );
+        return rows;
+    }
+    static TyLeLoaiGiaoDich = async (idClient) => {
+        const [rows, fields] = await promisePool.query(
+            "SELECT LoaiGiaoDich, COUNT(*) AS TransactionCount FROM giaodich JOIN account ON account.idAccount = giaodich.idAccount  WHERE idClient = ? GROUP BY LoaiGiaoDich ORDER BY TransactionCount DESC;",
+            [idClient]
+        );
+        return rows;
+    }
 
 
 }

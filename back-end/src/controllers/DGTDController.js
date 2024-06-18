@@ -100,11 +100,12 @@ const DGTDController = {
     listVay: async (req, res) => {
         try {
             const listVay = await Loan.listVayByIdClient(req.params.idClient)
+            const typeTien = await HoSo.typeTienTra(req.params.idClient)
             if (listVay) {
                 return res.json({
                     code: 1000,
                     message: "hiển thị danh sách khoản vay của khách hàng thành công",
-                    data: listVay
+                    data: listVay, typeTien
                 });
             }
         }catch (err) {
@@ -127,6 +128,52 @@ const DGTDController = {
                 return res.json({
                     code: 9992,
                     message: "Không thể hiển thị tỷ lệ thu nhập trên nợ phải trả theo tháng"
+                });
+            }
+
+        }catch (err) {
+            return res.json({
+                code: 9999,
+                message: "Có lỗi xảy ra trong quá trình lấy dữ liệu"
+            });
+        }
+    },
+    TrungBinhVay: async (req, res) => {
+        try {
+            const trungbinhvay = await Loan.TrungBinhVay(req.params.idClient)
+            if (trungbinhvay) {
+                return res.json({
+                    code: 1000,
+                    data: trungbinhvay,
+                    message: "Trung bình vay theo năm của khách hàng"
+                });
+            } else {
+                return res.json({
+                    code: 9992,
+                    message: "Không thể hiển thị trung bình vay của khách hàng"
+                });
+            }
+
+        }catch (err) {
+            return res.json({
+                code: 9999,
+                message: "Có lỗi xảy ra trong quá trình lấy dữ liệu"
+            });
+        }
+    },
+    PhanPhoiLoaiGD: async (req, res) => {
+        try {
+            const loaigiaodich = await Loan.TyLeLoaiGiaoDich(req.params.idClient)
+            if (loaigiaodich) {
+                return res.json({
+                    code: 1000,
+                    data: loaigiaodich,
+                    message: "Tỷ lệ giao dịch của khách hàng"
+                });
+            } else {
+                return res.json({
+                    code: 9992,
+                    message: "Không thể hiển thị tỷ lệ giao dịch của khách hàng"
                 });
             }
 

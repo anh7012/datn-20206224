@@ -152,8 +152,15 @@ module.exports = class HoSo {
     }
     static TyLeThuNhapNo = async (id) => {
         const [rows, fields] = await promisePool.query(
-            "SELECT idClient, ThuNhapRong, SoTienTraHangThang FROM hoso WHERE idHoSo = ?",
+            "SELECT idClient, ThuNhapRong, SoTienTraHangThang FROM hoso WHERE idHoSo = ?;",
             [id]
+        );
+        return rows;
+    }
+    static typeTienTra = async (idClient) => {
+        const [rows, fields] = await promisePool.query(
+            "SELECT typeTienTra FROM loan JOIN hopdong ON loan.idHopDong = hopdong.idHopDong JOIN hoso ON hopdong.idHoSo = hoso.idHoSo WHERE hopdong.idClient = ?;",
+            [idClient]
         );
         return rows;
     }
