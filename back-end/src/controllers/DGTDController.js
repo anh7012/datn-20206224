@@ -100,11 +100,12 @@ const DGTDController = {
     listVay: async (req, res) => {
         try {
             const listVay = await Loan.listVayByIdClient(req.params.idClient)
+            const typeTien = await HoSo.typeTienTra(req.params.idClient)
             if (listVay) {
                 return res.json({
                     code: 1000,
                     message: "hiển thị danh sách khoản vay của khách hàng thành công",
-                    data: listVay
+                    data: listVay, typeTien
                 });
             }
         }catch (err) {
