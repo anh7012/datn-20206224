@@ -183,6 +183,39 @@ const DGTDController = {
                 message: "Có lỗi xảy ra trong quá trình lấy dữ liệu"
             });
         }
+    },
+    ParetoMucDich: async (req, res) => {
+        try {
+            const mucdichvay = await Loan.ParetoMucDich(req.params.idClient)
+            let totalSum = 0;
+            mucdichvay.forEach(row => {
+                totalSum += row.SoLuongVay;
+                row.TongTichLuot = totalSum;
+            });
+            const paretoData = mucdichvay.map(row => ({
+                MucDichVay: row.MucDichVay,
+                SoLuongVay: row.SoLuongVay,
+                TongTichLuot: row.TongTichLuot
+            }));
+            if (paretoData) {
+                return res.json({
+                    code: 1000,
+                    data: paretoData,
+                    message: "Số lượng vay theo mục đích của khách hàng"
+                });
+            } else {
+                return res.json({
+                    code: 9992,
+                    message: "Không thể hiển thị Số lượng vay theo mục đích của khách hàng"
+                });
+            }
+
+        }catch (err) {
+            return res.json({
+                code: 9999,
+                message: "Có lỗi xảy ra trong quá trình lấy dữ liệu"
+            });
+        }
     }
 };
 module.exports = DGTDController;
