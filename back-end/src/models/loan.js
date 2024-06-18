@@ -55,6 +55,12 @@ module.exports = class Loan {
         );
         return rows;
     }
-
+    static ParetoMucDich = async (idClient) => {
+        const [rows, fields] = await promisePool.query(
+            "SELECT MucDich, COUNT(*) AS SoLuongVay FROM loan WHERE idClient = ? GROUP BY MucDich ORDER BY SoLuongVay DESC;",
+            [idClient]
+        );
+        return rows;
+    }
 
 }
