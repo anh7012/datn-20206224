@@ -332,7 +332,7 @@ const usersController = {
         },
         permissionsUser: async (req, res) => {
             try {
-                const listPermission = await Permission.getPermissonById(req.params.id)
+                const listPermission = await Permission.getPermissonByIdUser(req.params.id)
                 if (listPermission) {
                     res.json({
                         code: 1000,
