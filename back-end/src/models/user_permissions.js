@@ -15,6 +15,16 @@ module.exports = class User_Permissions {
         )
         return rows
     }
+    static checkPermission = async ({idUser, idPermission}) => {
+        const [rows, field] = await promisePool.query(
+            "SELECT * FROM user_permissions WHERE idUser = ? AND idPermission = ?;",
+            [
+                idUser,
+                idPermission
+            ]
+        );
+        return rows
+    };
     static addPermission = async ({idUser, idPermission}) => {
         const id = uuidv4({format: "hex"}).substring(0, 32);
         const [result] = await promisePool.query(

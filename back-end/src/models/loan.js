@@ -34,6 +34,13 @@ module.exports = class Loan {
         );
         return rows[0];
     }
+    static listVayByIdClient = async (idClient) => {
+        const [rows, fields] = await promisePool.query(
+            "SELECT * FROM loan WHERE idClient = ?;",
+            [idClient]
+        );
+        return rows;
+    }
 
 
 }

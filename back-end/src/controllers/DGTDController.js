@@ -5,6 +5,7 @@ const DanhGiaTinDung = require("../models/danhgiatindung");
 const Client = require('../models/client')
 const modelBIDV = require("../utils/modelBIDV");
 const {modelEY} = require("../utils/modelEY");
+const Loan = require("../models/loan");
 
 const DGTDController = {
     // [GET] danhgiatindung/ -- list hop dong
@@ -91,12 +92,28 @@ const DGTDController = {
 
         } catch (error) {
             return res.json({
-                code: 9992,
-                data: {message: "Không thể tạo đánh giá cho hồ sơ này"},
+                code: 9999,
+                message: "Không thể tạo đánh giá cho hồ sơ này"
             });
         }
     }
     ,
-
+    listVay: async (req, res) => {
+        try {
+            const listVay = await Loan.listVayByIdClient(req.params.id)
+            if (listVay) {
+                return res.json({
+                    code: 1000,
+                    message: "hiển thị danh sách khoản vay của khách hàng thành công",
+                    data: listVay
+                });
+            }
+        }catch (err) {
+            return res.json({
+                code: 9999,
+                message: "Không thể hiển thị danh sách khoản vay"
+            });
+        }
+    }
 };
 module.exports = DGTDController;

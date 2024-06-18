@@ -332,7 +332,7 @@ const usersController = {
         },
         permissionsUser: async (req, res) => {
             try {
-                const listPermission = await Permission.getPermissonById(req.params.id)
+                const listPermission = await Permission.getPermissonByIdUser(req.params.id)
                 if (listPermission) {
                     res.json({
                         code: 1000,
@@ -358,21 +358,37 @@ const usersController = {
             try {
                 const listPermisson = req.body.listPermission
                 const addPermissions = await Promise.all(listPermisson.map(async (idPermission) => {
-                    await User_Permissions.addPermission({
+                    const existPermission = await User_Permissions.checkPermission({
                         idUser: req.params.id,
                         idPermission: idPermission
                     })
-                    return Permission.getPermissonById(idPermission)
+                    if (existPermission.length > 0) {
+                        return null;
+                    }
+                    const addPermissionResult = await User_Permissions.addPermission({
+                        idUser: req.params.id,
+                        idPermission: idPermission
+                    })
+                    const permission = await Permission.getPermissonById(idPermission)
+                    return permission;
                 }))
-                if (addPermissions.every(permisson => permisson.affectedRows === 1)) {
+                // Lọc bỏ các giá trị null (các quyền đã tồn tại)
+                const filteredPermissions = addPermissions.filter(permission => permission !== null);
+                if (filteredPermissions.length > 0 && filteredPermissions.every(permission => permission && permission.affectedRows === 1)) {
                     return res.json({
                         code: 1000,
-                        data: addPermissions,
+                        data: filteredPermissions,
                         message: "Thêm quyền cho nhân viên này thành công!",
+                    });
+                } else if (filteredPermissions.length === 0) {
+                    return res.json({
+                        code: 9993,
+                        message: "Nhân viên đã có tất cả các quyền được yêu cầu",
                     });
                 } else {
                     return res.json({
-                        code: 9998,
+                        code: 9999,
+                        data: filteredPermissions,
                         message: "Không thể thêm tất cả quyền cho nhân viên này",
                     });
                 }

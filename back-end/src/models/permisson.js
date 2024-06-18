@@ -21,8 +21,15 @@ module.exports = class Permission {
     };
     static getPermissonById = async (id) => {
         const [rows, fields] = await promisePool.query(
-            "SELECT u.idUser, p.parentPermission, p.maPermission, p.permissonName FROM users u JOIN user_permissions up ON u.idUser = up.idUser JOIN permission p ON up.idPermission = p.idPermission WHERE u.idUser = ?;",
+            "SELECT * FROM permission WHERE idPermission = ?;",
             [id]
+        );
+        return rows;
+    };
+    static getPermissonByIdUser = async (idUser) => {
+        const [rows, fields] = await promisePool.query(
+            "SELECT * FROM permission JOIN user_permissions ON user_permissions.idPermission = permission.idPermission WHERE idUser =?;",
+            [idUser]
         );
         return rows;
     };
