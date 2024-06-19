@@ -221,17 +221,17 @@ const DGTDController = {
     },
     PhanPhoiPhuongThucGD: async (req, res) => {
         try {
-
-            if (paretoData) {
+            const phuongthuc = await Loan.TyLePhuongThucGD(req.params.idClient)
+            if (phuongthuc) {
                 return res.json({
                     code: 1000,
-                    data: paretoData,
-                    message: "Số lượng vay theo mục đích của khách hàng"
+                    data: phuongthuc,
+                    message: "Số lượng giao dịch theo phương thức giao dịch của khách hàng"
                 });
             } else {
                 return res.json({
                     code: 9992,
-                    message: "Không thể hiển thị Số lượng vay theo mục đích của khách hàng"
+                    message: "Không thể hiển thị Số lượng giao dịch theo phương thức giao dịch của khách hàng"
                 });
             }
 

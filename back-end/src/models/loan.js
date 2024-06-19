@@ -57,10 +57,16 @@ module.exports = class Loan {
     }
     static ParetoThoiHan = async (idClient) => {
         const [rows, fields] = await promisePool.query(
-            "SELECT ThoiHanVay, COUNT(*) AS SoLuongVay FROM loan WHERE idClient = ? GROUP BY ThoiHanVay ORDER BY ThoiHanVay DESC;",
+            "SELECT ThoiHanVay, COUNT(*) AS SoLuongVay FROM loan WHERE idClient = ? GROUP BY ThoiHanVay ORDER BY ThoiHanVay;",
             [idClient]
         );
         return rows;
     }
-
+    static TyLePhuongThucGD = async (idClient) => {
+        const [rows, fields] = await promisePool.query(
+            "SELECT PhuongThuc, COUNT(*) AS SoLuongGiaoDich FROM giaodich JOIN account ON account.idAccount = giaodich.idAccount JOIN client ON account.idClient = client.idClient WHERE account.idClient = ? GROUP BY PhuongThuc ORDER BY SoLuongGiaoDich DESC;",
+            [idClient]
+        );
+        return rows;
+    }
 }
