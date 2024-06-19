@@ -43,6 +43,7 @@ module.exports = class HoSo {
         this.DiemTuoi = hoso.DiemTuoi
         this.created_at = hoso.created_at
         this.updated_at = hoso.updated_at
+        this.urlHoSo = hoso.urlHoSo
     }
 
     static getAllHoSo = async () => {
@@ -163,5 +164,23 @@ module.exports = class HoSo {
             [idClient]
         );
         return rows;
+    }
+    static saveIdCloud = async ({urlHoSo, idHoSo}) => {
+        const [result] = await promisePool.query(
+            "UPDATE hoso SET urlHoSo = ? WHERE idHoSo = ?;",
+            [urlHoSo, idHoSo]
+        );
+        return result
+    }
+    static getIdCloud = async (idHoSo) => {
+        const [rows, field] = await promisePool.query(
+            "SELECT urlHoSo FROM hoso WHERE idHoSo = ?;",
+            [idHoSo]
+        );
+        if (rows.length > 0) {
+            return rows[0].urlHoSo; // Trả về giá trị của urlHoSo từ đối tượng đầu tiên
+        } else {
+            return null; // Hoặc giá trị mặc định tùy vào yêu cầu của ứng dụng của bạn
+        }
     }
 }
