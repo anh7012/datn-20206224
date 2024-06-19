@@ -8,10 +8,7 @@ const Diem = require('../utils/Diem')
 const MoHinhBIDV = require('../models/mhbidv')
 const Loan = require('../models/loan')
 const MoHinhEY = require('../models/mhey')
-const User = require("../models/user");
-const {mergeFields} = require("../utils/mergeField");
-const {updateIfNull} = require("../utils/updateIfNull");
-
+const cloudinary = require('../config/cloud');
 
 const hoSoController = {
     // [GET] /hoso/
@@ -307,7 +304,104 @@ const hoSoController = {
                 message: "Không thể thay đổi trạng thái hồ sơ",
             })
         }
-    }
+    },
+    uploadFiles: async (req, res) => {
+        try {
+            // Cloudinary
+            const {files} = req
+            const myFile = files.HoSoFiles
 
+            if (Array.isArray(myFile)) {
+                //     multiple file upload
+                const filesUploadPromise = myFile.map(async (file) => {
+                    const cloudRes = await cloudinary.uploader.upload(file.filepath, {
+                        resource_type: "auto"
+                    })
+                    return cloudRes.public_id;
+                })
+                // Đợi tất cả các Promise hoàn thành và lấy danh sách các public_id
+                const idClouds = await Promise.all(filesUploadPromise);
+                // Nối các public_id lại với nhau thành một chuỗi ngăn cách bằng dấu phẩy
+                const cloudIdsString = idClouds.join(',');
+                const id = await HoSo.saveIdCloud({
+                    urlHoSo: cloudIdsString,
+                    idHoSo: req.params.idHoSo
+                })
+                return res.json({
+                    code: 1000,
+                    data: {
+                        public_id: idClouds
+                    },
+                    message: "Tải lên tệp hồ sơ và cập nhật cloud_id thành công",
+                })
+            } else {
+                const cloudRes = await cloudinary.uploader.upload(myFile.filepath, {
+                    resource_type: "auto"
+                })
+                await HoSo.saveIdCloud({
+                    idHoSo: req.params.idHoSo,
+                    urlHoSo: cloudRes.public_id
+                })
+                return res.json({
+                    code: 1000,
+                    data: cloudRes.public_id,
+                    message: "Tải lên tệp hồ sơ thành công",
+                })
+            }
+        } catch (err) {
+            console.log(err)
+            return res.json({
+                code: 9999,
+                message: "Không thể tải lên tệp hồ sơ và cập nhật cloud_id",
+            })
+        }
+    },
+    getFiles: async (req, res) => {
+        try {
+            const idCloud = await HoSo.getIdCloud(req.params.idHoSo)
+            if (!idCloud) {
+                return res.json({
+                    code: 9992,
+                    message: "Hồ sơ không tồn tại hoặc không có dữ liệu idCloud",
+                })
+            }
+            let idPublics = [];
+            if (typeof idCloud === 'string') {
+                idPublics = idCloud.split(',');
+            } else {
+                console.error('Invalid idCloud:', idCloud);
+                return res.json({
+                    code: 9993,
+                    message: "Lỗi khi lấy đường dẫn URL của hồ sơ",
+                });
+            }
+            const urls = idPublics.map(public_id => {
+                return cloudinary.url(public_id + '.pdf', {
+                    secure: true, // Sử dụng HTTPS để đảm bảo an toàn
+                    resource_type: 'image'
+                });
+            })
+            if (urls) {
+                return res.json({
+                    code: 1000,
+                    data: urls,// Chuyển hướng người dùng đến URL của tệp PDF để xem nó trong trình duyệt
+                    message: "Đã lấy danh sách đường dẫn URL thành công",
+                })
+            } else {
+                return res.json({
+                    code: 9993,
+                    data: urls,// Chuyển hướng người dùng đến URL của tệp PDF để xem nó trong trình duyệt
+                    message: "Lỗi khi lấy đường dẫn URL của hồ sơ",
+                })
+            }
+        } catch (err) {
+            console.log(err)
+            return res.json({
+                code: 9999,
+                message: "Không thể hiển thị tệp hồ sơ",
+            })
+        }
+    }
 }
+
 module.exports = hoSoController;
