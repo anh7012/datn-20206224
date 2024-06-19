@@ -155,6 +155,7 @@ const DGTDController = {
             }
 
         } catch (err) {
+            console.log(err)
             return res.json({
                 code: 9999,
                 message: "Có lỗi xảy ra trong quá trình lấy dữ liệu"
