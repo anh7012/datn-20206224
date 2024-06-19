@@ -108,7 +108,7 @@ const DGTDController = {
                     data: listVay, typeTien
                 });
             }
-        }catch (err) {
+        } catch (err) {
             return res.json({
                 code: 9999,
                 message: "Không thể hiển thị danh sách khoản vay"
@@ -131,7 +131,7 @@ const DGTDController = {
                 });
             }
 
-        }catch (err) {
+        } catch (err) {
             return res.json({
                 code: 9999,
                 message: "Có lỗi xảy ra trong quá trình lấy dữ liệu"
@@ -154,7 +154,7 @@ const DGTDController = {
                 });
             }
 
-        }catch (err) {
+        } catch (err) {
             return res.json({
                 code: 9999,
                 message: "Có lỗi xảy ra trong quá trình lấy dữ liệu"
@@ -177,26 +177,28 @@ const DGTDController = {
                 });
             }
 
-        }catch (err) {
+        } catch (err) {
             return res.json({
                 code: 9999,
                 message: "Có lỗi xảy ra trong quá trình lấy dữ liệu"
             });
         }
     },
-    ParetoMucDich: async (req, res) => {
+    ParetoThoiHan: async (req, res) => {
         try {
-            const mucdichvay = await Loan.ParetoMucDich(req.params.idClient)
-            let totalSum = 0;
-            mucdichvay.forEach(row => {
-                totalSum += row.SoLuongVay;
-                row.TongTichLuot = totalSum;
+            const thoihan = await Loan.ParetoThoiHan(req.params.idClient)
+            // Tính tổng tích lũy và tỷ lệ phần trăm
+            let totalLoans = thoihan.reduce((sum, row) => sum + row.SoLuongVay, 0);
+            let cumulativeSum = 0;
+            const paretoData = thoihan.map(row => {
+                cumulativeSum += row.SoLuongVay;
+                return {
+                    LoanTermMonths: row.ThoiHanVay,
+                    LoanCount: row.SoLuongVay,
+                    CumulativePercentage: ((cumulativeSum / totalLoans) * 100).toFixed(2)
+                };
             });
-            const paretoData = mucdichvay.map(row => ({
-                MucDichVay: row.MucDichVay,
-                SoLuongVay: row.SoLuongVay,
-                TongTichLuot: row.TongTichLuot
-            }));
+
             if (paretoData) {
                 return res.json({
                     code: 1000,
@@ -210,7 +212,30 @@ const DGTDController = {
                 });
             }
 
-        }catch (err) {
+        } catch (err) {
+            return res.json({
+                code: 9999,
+                message: "Có lỗi xảy ra trong quá trình lấy dữ liệu"
+            });
+        }
+    },
+    PhanPhoiPhuongThucGD: async (req, res) => {
+        try {
+
+            if (paretoData) {
+                return res.json({
+                    code: 1000,
+                    data: paretoData,
+                    message: "Số lượng vay theo mục đích của khách hàng"
+                });
+            } else {
+                return res.json({
+                    code: 9992,
+                    message: "Không thể hiển thị Số lượng vay theo mục đích của khách hàng"
+                });
+            }
+
+        } catch (err) {
             return res.json({
                 code: 9999,
                 message: "Có lỗi xảy ra trong quá trình lấy dữ liệu"
