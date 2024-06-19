@@ -1,19 +1,19 @@
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 
-const TreemapChart = ({ data }) => {
-    const chuyenDoi = (e)=>{
+const TreemapChart = ({data}) => {
+    const chuyenDoi = (e) => {
         switch (e) {
             case 'Cash Withdrawal':
-                return 'A'
+                return 'Rút tiền mặt'
             case 'Remittance to Another Bank':
-                return 'B'
+                return 'Chuyển tiền tới ngân hàng khác'
             case 'Credit in Cash':
-                return 'C'
+                return 'Cho vay tiền mặt'
             case 'Collection from Another Bank':
-                return 'D'
+                return 'Nhận tiền từ ngân hàng khác'
             case 'Credit Card Withdrawal':
-                return 'E'
+                return 'Rút tiền thẻ tín dụng'
             default:
                 return 'F'
 
@@ -77,7 +77,7 @@ const TreemapChart = ({ data }) => {
     };
 
     return (
-            <ReactApexChart options={options} series={series} type="treemap" className={'!p-4'} />
+        <ReactApexChart options={options} series={series} type="treemap" className={'!p-4'}/>
     );
 };
 

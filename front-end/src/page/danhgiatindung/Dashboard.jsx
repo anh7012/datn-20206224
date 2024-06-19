@@ -33,6 +33,8 @@ import TreemapChart from "../../components/TreemapChart.jsx";
 
 function Dashboard() {
     const {idDashBoard} = useParams()
+    const [initialValue, setInitialValue] = useState('Thông qua');
+    const [currentValue, setCurrentValue] = useState(initialValue);
     const [data, setData] = useState();
     const [client, setClient] = useState();
     const [ListVay, setListVay] = useState([])
@@ -49,6 +51,7 @@ function Dashboard() {
     const [dataPhanPhoi, setDataPhanPhoi] = useState([])
     const [dataPhanPhoiKyHan, setDataPhanPhoiKyHan] = useState([])
     const [dataBieuDoPhanPhoiPhuongThucGD, setDataBieuDoPhanPhoiPhuongThucGD] = useState([])
+    const [isChange,setIsChange] = useState(false)
 
     useEffect(() => {
         setDataBieuDoDuongNam(() => {
@@ -117,6 +120,8 @@ function Dashboard() {
     }, [])
 
     function handleDenghi(e) {
+        setIsChange(true)
+        setCurrentValue(e.target.value)
         setStatus(e.target.value)
     }
 
@@ -127,11 +132,19 @@ function Dashboard() {
         } catch (e) {
             console.log(e)
         }
+        finally {
+            setIsChange(false)
+        }
     }
     const series = [
         {type: 'bar', dataKey: 'LoanCount', color: '#62D1D2'},
     ];
     const dataset = dataPhanPhoiKyHan || []
+
+    function cancelbtn() {
+        setIsChange(false);
+        setCurrentValue(initialValue);
+    }
 
     return (
         <div className={`${out !== '/home/danhgiatindung' ? ' slide-in' : ' slide-out'} `}>
@@ -141,7 +154,7 @@ function Dashboard() {
                 </Link>
             </div>
             <div className={'font-bold text-center text-2xl uppercase mb-6'}>Đánh giá tín dụng</div>
-            <div className={' p-4 bg-white mb-4'}>
+            <div className={' p-4 bg-white mb-8'}>
                 <p className={'pb-2 border-b-[1px] border-gray-500 text-green-700 font-bold text-xl uppercase'}>A. Thông
                     tin khách hàng</p>
                 <div className={' grid grid-cols-2 gap-4 mt-6 '}>
@@ -172,7 +185,7 @@ function Dashboard() {
                 </div>
 
             </div>
-            <div className={' p-4 bg-white'}>
+            <div className={' p-4 bg-white mb-8'}>
                 <p className={'pb-2 border-b-[1px] border-gray-500 text-green-700 font-bold text-xl uppercase'}>B. Đánh
                     giá tín dụng</p>
                 <div className={'grid grid-cols-[50%,50%] mt-8'}>
@@ -404,23 +417,23 @@ function Dashboard() {
                     </div>
 
                 </div>
-                <div className={'grid grid-cols-[55%,auto] gap-4 mb-8'}>
-                    <div className={'flex items-center justify-end '}>
-                        <div className={'p-6 shadow-[0px_3px_16px] shadow-gray-300 bg-green-200 rounded-xl  '}>
-                            <label htmlFor="denghi" className={'!font-bold !text-red-500'}>Đề nghị: </label>
-                            <select name="denghi" id="denghi" onChange={handleDenghi}>
-                                {
-                                    ['Thông qua', 'Từ chối', 'Huỷ bỏ'].map((e, i) => (
-                                        <option value={e} key={i}>{e}</option>
-                                    ))
-                                }
-                            </select>
-                        </div>
-                    </div>
-                    <div className={'flex items-center justify-start  '}>
-                        <Button variant={'contained'} color={'success'} onClick={save}>Lưu</Button>
+            </div>
+            <div className={' p-4 bg-white mb-4 '}>
+                <div className={'pb-2 border-b-[1px] border-gray-500 flex items-center gap-8'}>
+                    <p className={'text-green-700 font-bold text-xl uppercase'}>C. Đề nghị:</p>
+                    <div className={'mr-40 flex'}>
+                        <select name="denghi" id="denghi" onChange={handleDenghi}  value={currentValue} className={'mr-10 !w-40 !p-4 shadow-[0px_0px_12px] shadow-gray-300'}>
+                            {
+                                ['Thông qua', 'Từ chối', 'Huỷ bỏ'].map((e, i) => (
+                                    <option value={e} key={i}>{e}</option>
+                                ))
+                            }
+                        </select>
+                        <div className={'flex gap-4 '}><Button variant={'contained'} color={'success'} onClick={save}>Lưu</Button>
+                            <Button variant={'contained'} color={'error'} onClick={cancelbtn} className={`${ isChange? ' ':' hidden'}`}>Huỷ</Button></div>
                     </div>
                 </div>
+
             </div>
         </div>
     );
