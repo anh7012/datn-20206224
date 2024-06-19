@@ -57,7 +57,7 @@ module.exports = class Loan {
     }
     static ParetoThoiHan = async (idClient) => {
         const [rows, fields] = await promisePool.query(
-            "SELECT ThoiHanVay, COUNT(*) AS SoLuongVay FROM loan WHERE idClient = ? GROUP BY ThoiHanVay ORDER BY ThoiHanVay;",
+            "SELECT ThoiHanVay, COUNT(*) AS SoLuongVay FROM loan WHERE idClient = ? GROUP BY ThoiHanVay ORDER BY ThoiHanVay DESC;",
             [idClient]
         );
         return rows;
