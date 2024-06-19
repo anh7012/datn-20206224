@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Pagination} from "@mui/material";
 import {formattedDate} from "../../utils/formetBithday.js";
 
@@ -16,6 +16,18 @@ function DanhSachHosoTheoNgay({data}) {
         setSearchMaHS('');
         setSearchHoten('');
     };
+    const [filterData, setfilterData] = useState([])
+    const filterDataF = () => {
+        const arr = data? data.filter((profile) => profile?.maHoSo?.toLowerCase().includes(searchMaHS.toLowerCase()))
+            .filter((profile) => profile?.HoTen?.toLowerCase().includes(searchHoten.toLowerCase())):[]
+        setfilterData(arr)
+    }
+    useEffect(() => {
+        filterDataF()
+    }, [searchMaHS, searchHoten]);
+    useEffect(() => {
+        setfilterData(data)
+    }, [data]);
 
     return (
         <div className={'h-full'}>
@@ -48,10 +60,8 @@ function DanhSachHosoTheoNgay({data}) {
                 <div className="font-bold  flex justify-center ">Xem đánh giá</div>
             </div>
             <div className="bg-white rounded-sm min-h-[300px] relative border-[1px] border-gray-300 ">
-                {data && data.length > 0 &&
-                    data
-                    .filter((profile) => profile?.maHoSo?.toLowerCase().includes(searchMaHS.toLowerCase()))
-                    .filter((profile) => profile?.HoTen?.toLowerCase().includes(searchHoten.toLowerCase()))
+                {filterData && filterData.length > 0 &&
+                    filterData
                     .slice((page - 1) * rowsPerPage, page * rowsPerPage)
                     .map((item, i) => (
                     <div key={i}>
@@ -70,7 +80,7 @@ function DanhSachHosoTheoNgay({data}) {
                 ))}
                 <div className="flex  pt-4 items-center justify-end absolute bottom-4 right-0">
                     <Pagination
-                        count={Math.ceil(data?.length / rowsPerPage)}
+                        count={Math.ceil(filterData?.length / rowsPerPage)||0}
                         page={page}
                         onChange={handleChangePage}
                         variant="outlined"

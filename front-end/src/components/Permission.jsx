@@ -60,7 +60,7 @@ function Permission({ listPermission, currentPermission, id }) {
 const deletePermission = async (e)=>{
     console.log(e)
     try {
-        await deletePermissionById(id,e,accessToken)
+        await deletePermissionById(id,e.idPermission,accessToken)
         eventEmitter.emit('updatePermission')
     }catch (e){
         console.log(e)

@@ -315,13 +315,14 @@ export const listDanhGia = async (accessToken) => {
 }
 export const updateTrangThai = async ( trangthaihoso ,id, accessToken) => {
     try {
-        await axios.put(`http://localhost:7012/hoso/${id}/updateTrangThai`,{
+      const res = await axios.put(`http://localhost:7012/hoso/${id}/updateTrangThai`,{
             trangthaihoso: trangthaihoso
         },{
             headers:{
                 Authorization: `Bearer ${accessToken}`
             }
         })
+        return res.data
     }
     catch (e){
         console.log(e)
@@ -377,7 +378,80 @@ export const updateListPermissionById = async (id,idPermissioArr,accessToken) =>
 }
 export const deletePermissionById = async (id,idPermission,accessToken) => {
     try {
-        const res = await axios.delete(`http://localhost:7012/users/${id}/deletePermission`, {idPermission: idPermission},{
+        const res = await axios.delete(`http://localhost:7012/users/${id}/deletePermission`,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {idPermission: idPermission}
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const getListVay = async (idClient,accessToken) => {
+    try {
+        const res = await axios.get(`http://localhost:7012/danhgiatindung/${idClient}/listVay`,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const getTBVay = async (idClient,accessToken) => {
+    try {
+        const res = await axios.get(`http://localhost:7012/danhgiatindung/${idClient}/TrungBinhVay`,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const getBieuDoPhanPhoi = async (idClient,accessToken) => {
+    try {
+        const res = await axios.get(`http://localhost:7012/danhgiatindung/${idClient}/PhanPhoiLoaiGD`,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const getBieuDoPhanPhoiPhuongThucGD = async (idClient,accessToken) => {
+    try {
+        const res = await axios.get(`http://localhost:7012/danhgiatindung/${idClient}/PhanPhoiPhuongThucGD`,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const getBieuDoThoiHan = async (idClient,accessToken) => {
+    try {
+        const res = await axios.get(`http://localhost:7012/danhgiatindung/${idClient}/ParetoThoiHan`,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const getBieuDoTron = async (idHoSo,accessToken) => {
+    try {
+        const res = await axios.get(`http://localhost:7012/danhgiatindung/${idHoSo}/tyleThuNo`,{
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }

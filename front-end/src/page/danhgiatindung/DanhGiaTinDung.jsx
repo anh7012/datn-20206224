@@ -15,12 +15,14 @@ import {doneDanhGia, getListHoso, listDanhGia, updateTrangThai} from "../../redu
 import {useSelector} from "react-redux";
 import {formattedDate} from "../../utils/formetBithday.js";
 import Dashboard from "./Dashboard.jsx";
-import {Link, Outlet} from "react-router-dom";
+import {Link, Outlet, useParams} from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import DanhSachHosoTheoNgay from "./DanhSachHosoTheoNgay.jsx";
 
 const DanhGiaTinDung = () => {
     const accessToken = useSelector(state => state.auth?.login?.currentUser?.data?.accessToken);
+    const {idDashBoard} = useParams()
+
 
     const [searchMaHS, setSearchMaHS] = useState('');
     const [searchMaHSRv, setSearchMaHSRv] = useState('');
@@ -30,7 +32,7 @@ const DanhGiaTinDung = () => {
     const [startDate, setStartDate] = useState('');
     const [endDateRv, setEndDateRv] = useState('');
     const [endDate, setEndDate] = useState('');
-    const [out, setOut] = useState(false);
+    const out = window.location.pathname
     const [main, setMain] = useState(true);
     const [thongQua, setThongQua] = useState(false);
     const [tuChoi, setTuChoi] = useState(false);
@@ -46,7 +48,6 @@ const DanhGiaTinDung = () => {
     const [huyData, setHuyData] = useState()
     const [tuChoiData, setTuChoiData] = useState()
 
-
     useEffect(() => {
         fetchPendingProfiles();
         fetchReviewedProfiles();
@@ -57,7 +58,7 @@ const DanhGiaTinDung = () => {
         try {
             const response = await getListHoso(accessToken);
             if (response && response.data) {
-                setPendingProfiles(response.data.filter(profile => profile.trangthaihoso === "Hoàn thiện") || []);
+                setPendingProfiles(response.data.filter(profile => profile.trangthaihoso === "Hoàn thiện").sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) || []);
                 setThongQuaData(() => {
                     return response.data.filter(profile => profile.trangthaihoso === "Thông qua").filter(profile => {
                         let today = new Date();
@@ -96,8 +97,7 @@ const DanhGiaTinDung = () => {
         try {
             const response = await listDanhGia(accessToken);
             if (response) {
-                console.log(response);
-                setReviewedProfiles(response.data);
+                setReviewedProfiles(response.data.sort((a, b) => new Date(b.populationDate) - new Date(a.populationDate)))
             }
         } catch (error) {
             console.error('Error fetching reviewed profiles:', error);
@@ -168,7 +168,7 @@ const DanhGiaTinDung = () => {
     }, [pendingProfiles]);
     useEffect(() => {
         filterPending()
-    }, [searchMaHS,searchHoten,startDate,endDate]);
+    }, [searchMaHS, searchHoten, startDate, endDate]);
     const [rvFilter, setRvFilter] = useState([])
     const filterRv = () => {
         const arr = reviewedProfiles
@@ -182,10 +182,14 @@ const DanhGiaTinDung = () => {
     }, [reviewedProfiles]);
     useEffect(() => {
         filterRv()
-    }, [searchMaHSRv,searchHotenRv,startDateRv,endDateRv]);
+    }, [searchMaHSRv, searchHotenRv, startDateRv, endDateRv]);
+    console.log(reviewedProfiles)
+
+    console.log('12',out)
+
     return (
         <div>
-            <div className={` ${out ? ' slide-out hidden' : ' '}`}>
+            <div className={` ${ out !== '/home/danhgiatindung' ? ' slide-out hidden' : ' '}`}>
                 <h1 className="text-2xl font-bold  uppercase -mt-6 text-center  p-4 ">Đánh giá tín dụng</h1>
 
                 <div
@@ -435,8 +439,7 @@ const DanhGiaTinDung = () => {
                                                     <p className={'text-center'}>{formattedDate(profile?.created_at)}</p>
 
                                                     <Link to={`/home/danhgiatindung/${profile?.idDGTD}`}
-                                                          className={'flex items-center justify-center p-2'}
-                                                          onClick={() => setOut(true)}>
+                                                          className={'flex items-center justify-center p-2'}>
                                                         <Button
                                                             variant="contained"
                                                             color="success"

@@ -401,6 +401,7 @@ const usersController = {
             }
         },
         deletePermission: async (req, res) => {
+            console.log('>>>>',req.body)
             try {
                 const deletePermission = await User_Permissions.deletePermission({
                     idUser: req.params.id,
