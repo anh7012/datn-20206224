@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "cloudinary": "^2.2.0",
-    "formidable": "^3.5.1"
-  }
-}
