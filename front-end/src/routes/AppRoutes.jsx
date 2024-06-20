@@ -12,6 +12,9 @@ import CreateClient from "../page/quankhachhang/CreateClient.jsx";
 import CreateNV from "../page/quanlynhanvien/CreateNV.jsx";
 import DetailKH from "../page/quankhachhang/DetailKH.jsx";
 import Dashboard from "../page/danhgiatindung/Dashboard.jsx";
+import QuanLyHopDong from "../page/quanlyhopdong/QuanLyHopDong.jsx";
+import TaoHopDongMoi from "../page/quanlyhopdong/TaoHopDongMoi.jsx";
+import DetailHD from "../page/quanlyhopdong/DetailHD.jsx";
 
 function AppRoutes() {
 
@@ -36,6 +39,10 @@ function AppRoutes() {
                     <Route path="quanlykhachhang" element={<QuanLyKhachHang />} >
                         <Route path="themkhachhangmoi" element={<CreateClient />} />
                         <Route path=":idKH" element={<DetailKH />} />
+                    </Route>
+                    <Route path="quanlyhopdong" element={<QuanLyHopDong />} >
+                        <Route path="themhopdongmoi" element={<TaoHopDongMoi />} />
+                        <Route path=":idHD" element={<DetailHD />} />
                     </Route>
                 </Route>
             </Routes>
