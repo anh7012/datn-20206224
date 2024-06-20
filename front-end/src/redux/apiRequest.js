@@ -461,3 +461,15 @@ export const getBieuDoTron = async (idHoSo,accessToken) => {
         console.log(e)
     }
 }
+export const getListHD = async (idHoSo,accessToken) => {
+    try {
+        const res = await axios.get(`http://localhost:7012/hopdong/listHopDong`,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}
