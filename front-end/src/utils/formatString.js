@@ -26,3 +26,32 @@
 export const format = (name) => {
     return name.replace(/([A-Z])/g, (match) => match.toLowerCase());
 };
+export const formatStringRevert = (e)=>{
+    switch (e) {
+        default:
+            return null;
+        case formatString("Vay mua ô tô"):
+            return "Vay mua ô tô";
+        case formatString("Vay nhu cầu nhà ở"):
+            return "Vay nhu cầu nhà ở";
+        case formatString("Vay tiêu dùng không tài sản đảm bảo"):
+            return "Vay tiêu dùng không tài sản đảm bảo";
+        case formatString("Vay du học"):
+            return "Vay du học";
+        case formatString("Vay tiêu dùng có tài sản đảm bảo"):
+            return "Vay tiêu dùng có tài sản đảm bảo";
+        case formatString("Vay sản xuất kinh doanh"):
+            return "Vay sản xuất kinh doanh";
+        case formatString("Vay cầm cố"):
+            return "Vay cầm cố";
+        case formatString("Vay đầu tư"):
+            return "Vay đầu tư";
+        case formatString("Vay thông thường"):
+            return "Vay thông thường";
+
+        case 'da thanh toan du':
+            return "Đã thanh toán đủ"
+        case 'dang hoat dong':
+            return "Đang hoạt động"
+    }
+}

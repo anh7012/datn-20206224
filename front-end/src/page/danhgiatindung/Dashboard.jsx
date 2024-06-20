@@ -12,12 +12,13 @@ import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import {FcBullish, FcCurrencyExchange, FcDataSheet} from "react-icons/fc";
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import {PieChart} from '@mui/x-charts/PieChart';
+import {pieArcLabelClasses, PieChart} from '@mui/x-charts/PieChart';
 import {formattedDate} from "../../utils/formetBithday.js";
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import {Button, FormControlLabel, Pagination, Stack} from "@mui/material";
 import {notify} from "../../utils/notify.js";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import {
     BarPlot,
     ChartsGrid, ChartsTooltip,
@@ -30,6 +31,7 @@ import {
 } from "@mui/x-charts";
 import Box from "@mui/material/Box";
 import TreemapChart from "../../components/TreemapChart.jsx";
+import {formatStringRevert} from "../../utils/formatString.js";
 
 function Dashboard() {
     const {idDashBoard} = useParams()
@@ -98,7 +100,20 @@ function Dashboard() {
                 });
             });
 
-            setDataBieuDoTron(res4.data)
+            setDataBieuDoTron(()=>{
+                return [
+                    {
+                        id: 0,
+                        value: res4.data[0].SoTienTraHangThang,
+                        label: 'Số tiền phải trả'
+                    },
+                    {
+                        id: 1,
+                        value:  res4.data[0].ThuNhapRong,
+                        label: 'Thu nhập ròng'
+                    },
+                ]
+            })
             setData(res.data.danhgia)
             setDataBieuDoDuong(res5.data)
             setClient(res2.data)
@@ -145,6 +160,23 @@ function Dashboard() {
         setIsChange(false);
         setCurrentValue(initialValue);
     }
+
+    const [totalBDT1, setTotalBDT1] = useState()
+    useEffect(() => {
+        setTotalBDT1(dataBieuDoTron.map((item) => parseInt(item.value)).reduce((a, b) => a + b, 0))
+    }, [dataBieuDoTron]);
+    const getArcLabelBDT1 = (params) => {
+        const percent = params.value / parseInt(totalBDT1);
+        return `${(percent * 100).toFixed(0)}%`;
+    };
+    const [totalBDT2, setTotalBDT2] = useState()
+    useEffect(() => {
+        setTotalBDT2(dataPhanPhoi.map((item) => parseInt(item.value)).reduce((a, b) => a + b, 0))
+    }, [dataPhanPhoi]);
+    const getArcLabelBDT2 = (params) => {
+        const percent = params.value / parseInt(totalBDT2);
+        return `${(percent * 100).toFixed(0)}%`;
+    };
 
     return (
         <div className={`${out !== '/home/danhgiatindung' ? ' slide-in' : ' slide-out'} `}>
@@ -264,22 +296,19 @@ function Dashboard() {
                                 colors={['#481E99', '#FEB72A']}
                                 series={[
                                     {
-                                        data: [
-                                            {
-                                                id: 0,
-                                                value: dataBieuDoTron ? dataBieuDoTron[0]?.SoTienTraHangThang : 0,
-                                                label: 'Số tiền phải trả'
-                                            },
-                                            {
-                                                id: 1,
-                                                value: dataBieuDoTron ? dataBieuDoTron[0]?.ThuNhapRong : 100,
-                                                label: 'Thu nhập ròng'
-                                            },
-                                        ],
+                                        data: dataBieuDoTron,
+                                        outerRadius: 80,
+                                        arcLabel: getArcLabelBDT1,
                                         highlightScope: {faded: 'global', highlighted: 'item'},
                                         faded: {innerRadius: 30, additionalRadius: -30, color: 'gray'},
                                     },
                                 ]}
+                                sx={{
+                                    [`& .${pieArcLabelClasses.root}`]: {
+                                        fill: 'white',
+                                        fontSize: 14,
+                                    },
+                                }}
                                 width={550}
                                 height={200}
                             />
@@ -291,10 +320,12 @@ function Dashboard() {
                 <div className={' mt-12 shadow-[0px_3px_16px] shadow-gray-300 pb-2 rounded-xl'}>
                     <p className={'text-center font-bold text-xl py-3'}>Lịch sử các khoản vay khách hàng</p>
                     <div className={'border-t-[1px] border-black '}>
-                        <div className={'grid grid-cols-[10%,20%,15%,20%,20%,auto] border-b-[1px] border-black py-2 '}>
+                        <div
+                            className={'grid grid-cols-[5%,20%,10%,20%,15%,15%,auto] border-b-[1px] border-black py-2 '}>
                             <p className={'text-center font-bold'}>STT</p>
                             <p className={'text-center font-bold'}>Số tiền vay</p>
                             <p className={'text-center font-bold'}>Lãi xuất vay</p>
+                            <p className={'text-center font-bold'}>Mục đích</p>
                             <div className={'grid grid-cols-[70%,auto]'}><p className={'text-end font-bold'}>Ngày đáo
                                 hạn</p><ArrowRightAltIcon
                                 className={`${!isUp ? ' rotate-90' : ' -rotate-90'} hover:bg-red-200 cursor-pointer`}
@@ -304,7 +335,13 @@ function Dashboard() {
                                     setListVay(revert)
                                 }}/></div>
                             <p className={'text-center font-bold'}>Ngày kết thúc</p>
-                            <p className={'text-center font-bold'}>Trạng thái</p>
+                            <div className={'grid grid-cols-[70%,auto]'}><p className={'text-end font-bold'}>Trạng thái</p><FilterAltIcon
+                                className={' hover:bg-red-200 cursor-pointer'}
+                                onClick={() => {
+                                    setIsUp(!isUp)
+                                    let revert = [...ListVay].reverse()
+                                    setListVay(revert)
+                                }}/></div>
                         </div>
                         <div className={''}>
                             {
@@ -312,15 +349,16 @@ function Dashboard() {
                                     .slice((page - 1) * row, page * row)
                                     .map((e, i) => (
                                         <div
-                                            className={'grid grid-cols-[10%,20%,15%,20%,20%,auto] py-4 border-b-[2px] border-gray-200 hover:bg-green-100'}
+                                            className={'grid grid-cols-[5%,20%,10%,20%,15%,15%,auto] py-4 border-b-[2px] border-gray-200 hover:bg-green-100'}
                                             key={i}>
-                                            <p className={'text-center'}>{i + 1}</p>
+                                        <p className={'text-center'}>{i + 1}</p>
                                             <p className={'text-center'}>{parseInt(e?.SoTienVay).toLocaleString('vi-VN')}
                                                 <span>{e?.typeTienTra}</span></p>
                                             <p className={'text-center'}>{e && parseInt(e?.LaiSuatVay).toFixed(2)}%</p>
+                                            <p className={'text-center'}>{formatStringRevert(e?.MucDich)}</p>
                                             <p className={'text-center'}>{formattedDate(e?.NgayDaoHan)}</p>
                                             <p className={'text-center'}>{formattedDate(e?.endDate)}</p>
-                                            <p className={'text-center'}>{e?.TrangThai}</p>
+                                            <p className={'text-center'}>{formatStringRevert(e?.TrangThai)}</p>
                                         </div>
                                     ))
                             }
@@ -366,6 +404,7 @@ function Dashboard() {
                                 series={[
                                     {
                                         data: dataPhanPhoi,
+                                        arcLabel: getArcLabelBDT2,
                                         innerRadius: 60,
                                         outerRadius: 120,
                                         highlightScope: {faded: 'global', highlighted: 'item'},
@@ -373,6 +412,12 @@ function Dashboard() {
                                     },
 
                                 ]}
+                                sx={{
+                                    [`& .${pieArcLabelClasses.root}`]: {
+                                        fill: 'white',
+                                        fontSize: 14,
+                                    },
+                                }}
                             />
                         }
                         <div className={'flex items-center justify-center font-bold text-[#FEB72A] uppercase'}>Biểu đồ
