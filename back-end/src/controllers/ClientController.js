@@ -1,6 +1,8 @@
 const Client = require('../models/client')
 const {mergeFields} = require("../utils/mergeField");
 const validator = require('validator');
+const Account = require("../models/account");
+
 
 
 const ClientController = {
@@ -167,6 +169,28 @@ const ClientController = {
                 message: "Không thể thay đổi thông tin khách hàng",
             });
         }
-    }
+    },
+    listAccount: async (req, res, next) => {
+        try {
+            const listAccount = await Account.getAccountByIdClient(req.params.id)
+            if (listAccount) {
+                return res.json({
+                    code: 1000,
+                    data: listAccount,
+                    message: "Tìm thấy danh sách tài khoản khách hàng thành công"
+                });
+            } else {
+                return res.json({
+                    code: 9992,
+                    message: "Không tìm thấy danh sách tài khoản khách hàng"
+                });
+            }
+        } catch (error) {
+            res.json({
+                code: 9992,
+                data: {message: "Không tìm thấy khách hàng"},
+            });
+        }
+    },
 }
 module.exports = ClientController;

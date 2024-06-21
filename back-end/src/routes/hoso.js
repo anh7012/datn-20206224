@@ -16,4 +16,5 @@ router.put('/:id/updateTrangThai',verifyToken, hosoController.updateTrangThai)
 router.get('/listHoSo',verifyToken, hosoController.listHoSo)
 
 
+
 module.exports = router

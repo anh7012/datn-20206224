@@ -71,4 +71,11 @@ module.exports = class Account {
         const newData = {id: result.insertId, ...account};
         return newData;
     }
+    static getAccountByIdClient = async (idClient) => {
+        const [rows, fields] = await promisePool.query(
+            "SELECT * FROM account WHERE idClient = ?;",
+            [idClient]
+        );
+        return rows;
+    }
 };
