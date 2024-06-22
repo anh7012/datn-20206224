@@ -68,7 +68,7 @@ module.exports = class Account {
 
             ]
         )
-        const newData = {id: result.insertId, ...account};
+        const newData = {id: idAccount, ...account};
         return newData;
     }
     static getAccountByIdClient = async (idClient) => {

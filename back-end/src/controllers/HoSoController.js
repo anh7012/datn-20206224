@@ -310,9 +310,10 @@ const hoSoController = {
         }
     },
 
-     uploadFiles : async (req, res) => {
+    uploadFiles: async (req, res) => {
         try {
-            const { files } = req;
+
+            const {files} = req;
             const myFiles = Array.isArray(files.HoSoFiles) ? files.HoSoFiles : [files.HoSoFiles];
 
             const filesUploadPromise = myFiles.map(file => {
@@ -330,10 +331,23 @@ const hoSoController = {
             const idClouds = await Promise.all(filesUploadPromise);
             const cloudIdsString = idClouds.map(cloudRes => cloudRes.public_id).join(',');
 
-            await HoSo.saveIdCloud({
-                urlHoSo: cloudIdsString,
-                idHoSo: req.params.idHoSo
-            });
+            const existUrl = await HoSo.getIdCloud(req.params.idHoSo)
+            if (existUrl) {
+                // Append new Cloud IDs to existing ones
+                const existingCloudIds = existUrl.split(',');
+                const updatedCloudIds = existingCloudIds.concat(cloudIdsString.split(',')).join(',');
+
+                // Update the record with new Cloud IDs
+                await HoSo.saveIdCloud({
+                    urlHoSo: updatedCloudIds,
+                    idHoSo: req.params.idHoSo
+                });
+            } else {
+                await HoSo.saveIdCloud({
+                    urlHoSo: cloudIdsString,
+                    idHoSo: req.params.idHoSo
+                });
+            }
 
             return res.json({
                 code: 1000,
@@ -370,7 +384,7 @@ const hoSoController = {
                 });
             }
             const urls = idPublics.map(public_id => {
-                return cloudinary.url(public_id + '.pdf', {
+                return cloudinary.url(public_id, {
                     secure: true, // Sử dụng HTTPS để đảm bảo an toàn
                     resource_type: 'image'
                 });

@@ -140,7 +140,7 @@ module.exports = class HoSo {
                 hoso.DiemTuoi
             ]
         )
-        const newData = {id: result.insertId, ...hoso};
+        const newData = {id: idHoSo, ...hoso};
         return newData;
     }
 

@@ -106,7 +106,7 @@ module.exports = class Client {
                 MaKH
             ]
         )
-        const newData = {id: result.insertId, ...client};
+        const newData = {id: idClient, ...client};
         return newData;
     }
 

@@ -90,7 +90,7 @@ module.exports = class Users {
             ]
         );
 
-        const newData = {id: result.insertId, ...user};
+        const newData = {id: idUser, ...user};
         return newData;
     };
 

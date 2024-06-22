@@ -54,7 +54,7 @@ module.exports = class DanhGiaTinDung {
                 danhgia.KetQuaDanhGiaBIDV,
             ]
         )
-        const newData = {id: result.insertId, ...danhgia};
+        const newData = {id: idDGTD, ...danhgia};
         return newData;
     }
 }

@@ -48,7 +48,7 @@ module.exports = class MoHinhEY {
                 ey.DiemTienKeHoachTrenNguonTraNo
             ]
         )
-        const newData = {id: result.insertId, ...ey};
+        const newData = {id: idEY, ...ey};
         return newData;
     }
     static getMHEY = async (maHoSo) => {

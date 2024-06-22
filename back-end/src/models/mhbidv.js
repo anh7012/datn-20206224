@@ -44,7 +44,7 @@ module.exports = class MoHinhBIDV {
                 bidv.DiemTinhHinhTraNo
             ]
         )
-        const newData = {id: result.insertId, ...bidv};
+        const newData = {id: idMHBIDV, ...bidv};
         return newData;
     }
 
