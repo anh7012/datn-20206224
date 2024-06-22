@@ -55,3 +55,10 @@ export const formatStringRevert = (e)=>{
             return "Đang hoạt động"
     }
 }
+export function getFileNameFromUrl(url) {
+     // Tách chuỗi URL bằng dấu /
+     const parts = url.split('/');
+     // Lấy phần tử cuối cùng trong mảng parts
+    // Trả về tên tập tin
+     return parts[parts.length - 1];
+ }

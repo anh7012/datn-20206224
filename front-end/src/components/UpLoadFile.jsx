@@ -5,7 +5,8 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { notify } from '../utils/notify.js'; // Đảm bảo đường dẫn đúng
 import { useSelector } from 'react-redux';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { upLoadFileFuntion } from "../redux/apiRequest.js"; // Đảm bảo đường dẫn đúng
+import { upLoadFileFuntion } from "../redux/apiRequest.js";
+import eventEmitter from "../utils/eventEmitter.js"; // Đảm bảo đường dẫn đúng
 
 const FileUpload = ({ id }) => {
     const [files, setFiles] = useState([]);
@@ -47,6 +48,7 @@ const FileUpload = ({ id }) => {
             const response = await upLoadFileFuntion(files, id, accessToken);
             console.log('response', response);
             notify('success', 'Files uploaded successfully.');
+            eventEmitter.emit('uploadFileSuccess')
             setFiles([]); // Clear files after successful upload
         } catch (error) {
             notify('error', 'Error uploading files.');
@@ -84,7 +86,7 @@ const FileUpload = ({ id }) => {
                     </div>
                 )}
             </div>
-            <div className="flex gap-x-4 w-full max-w-lg justify-center items-center">
+            <div className="flex gap-x-4 w-full max-w-lg justify-center items-center mt-2">
                 <Button
                     variant="contained"
                     color="success"
