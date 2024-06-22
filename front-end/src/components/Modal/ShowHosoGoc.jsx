@@ -75,7 +75,7 @@ function ShowHosoGoc({ idHoso }) {
 
     return (
         <div>
-            <Button onClick={handleOpen} variant={'contained'}>Xem hồ sơ gốc</Button>
+            <Button onClick={handleOpen} variant={'contained'} size={'small'}>Xem hồ sơ gốc</Button>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -93,10 +93,10 @@ function ShowHosoGoc({ idHoso }) {
                                     {hoso.map((e, i) => (
                                         <div key={i} className="flex w-full justify-between items-center hover:bg-green-200 cursor-pointer px-3 py-4">
                                             {/*<PDFShow pdf={e} onDocumentLoadSuccess={handleDocumentLoadSuccess} />*/}
-                                            <a href={e}  target="_blank"> {getFileNameFromUrl(a)}</a>
-                                            <Button onClick={() => removeFile(e)} color="error">
-                                                <DeleteIcon />
-                                            </Button>
+                                            <a href={e}  target="_blank"> {getFileNameFromUrl(e)}</a>
+                                            {/*<Button onClick={() => removeFile(e)} color="error">*/}
+                                            {/*    <DeleteIcon />*/}
+                                            {/*</Button>*/}
                                         </div>
                                     ))}
                                 </div>
