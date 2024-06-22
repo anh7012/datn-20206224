@@ -168,9 +168,9 @@ export const getListHoso = async (accessToken) => {
         console.log(e)
     }
 }
-export const getCatoryKH = async (MaKH,accessToken) => {
+export const getCatoryKH = async (MaKH, accessToken) => {
     try {
-        const res = await axios.post(`http://localhost:7012/client/loaiKH`, MaKH,{
+        const res = await axios.post(`http://localhost:7012/client/loaiKH`, MaKH, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -180,13 +180,13 @@ export const getCatoryKH = async (MaKH,accessToken) => {
         console.log(e)
     }
 }
-export const createHoso = async (data,accessToken) => {
+export const createHoso = async (data, accessToken) => {
     try {
-        const res = await axios.post(`http://localhost:7012/hoso/createHoSo`,{
+        const res = await axios.post(`http://localhost:7012/hoso/createHoSo`, {
             ...data,
             KyHan: +data.KyHan,
-            TongTienVay:+data.TongTienVay
-        },{
+            TongTienVay: +data.TongTienVay
+        }, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -196,15 +196,15 @@ export const createHoso = async (data,accessToken) => {
         console.log(e)
     }
 }
-export const createMHBIDVAndEY = async (data,accessToken) => {
+export const createMHBIDVAndEY = async (data, accessToken) => {
     try {
-        const res = await axios.post(`http://localhost:7012/hoso/createMHBIDVAndEY`,{
+        const res = await axios.post(`http://localhost:7012/hoso/createMHBIDVAndEY`, {
             ...data,
-            TaiSanRong:+data.TaiSanRong,
+            TaiSanRong: +data.TaiSanRong,
             LoiNhuan: +data.LoiNhuan,
-            DoanhThu:+data.DoanhThu,
-            NguonTraNo:+data.NguonTraNo
-        },{
+            DoanhThu: +data.DoanhThu,
+            NguonTraNo: +data.NguonTraNo
+        }, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -214,22 +214,21 @@ export const createMHBIDVAndEY = async (data,accessToken) => {
         console.log(e)
     }
 }
-export const getHoso = async (id,accessToken)=>{
+export const getHoso = async (id, accessToken) => {
     try {
-        const res = await  axios.get(`http://localhost:7012/hoso/${id}/inforHoSo`,{
+        const res = await axios.get(`http://localhost:7012/hoso/${id}/inforHoSo`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
         })
         return res.data
-    }
-    catch (e){
+    } catch (e) {
         console.log(e)
     }
 }
-export const getInforKH = async (id,accessToken) => {
+export const getInforKH = async (id, accessToken) => {
     try {
-        const res = await axios.get(`http://localhost:7012/client/${id}/inforClient`,{
+        const res = await axios.get(`http://localhost:7012/client/${id}/inforClient`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -241,7 +240,7 @@ export const getInforKH = async (id,accessToken) => {
 }
 export const getListInforKH = async (accessToken) => {
     try {
-        const res = await axios.get(`http://localhost:7012/client/listClient`,{
+        const res = await axios.get(`http://localhost:7012/client/listClient`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -251,9 +250,9 @@ export const getListInforKH = async (accessToken) => {
         console.log(e)
     }
 }
-export const createKH = async (data,accessToken) => {
+export const createKH = async (data, accessToken) => {
     try {
-        const res = await axios.post(`http://localhost:7012/client/createClient`,data,{
+        const res = await axios.post(`http://localhost:7012/client/createClient`, data, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -263,9 +262,9 @@ export const createKH = async (data,accessToken) => {
         console.log(e)
     }
 }
-export const getKH = async (id,accessToken) => {
+export const getKH = async (id, accessToken) => {
     try {
-        const res = await axios.get(`http://localhost:7012/client/${id}/inforClient`,{
+        const res = await axios.get(`http://localhost:7012/client/${id}/inforClient`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -275,9 +274,9 @@ export const getKH = async (id,accessToken) => {
         console.log(e)
     }
 }
-export const updateKH = async (id,data,accessToken) => {
+export const updateKH = async (id, data, accessToken) => {
     try {
-        const res = await axios.put(`http://localhost:7012/client/${id}/updateClient`,data,{
+        const res = await axios.put(`http://localhost:7012/client/${id}/updateClient`, data, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -287,11 +286,11 @@ export const updateKH = async (id,data,accessToken) => {
         console.log(e)
     }
 }
-export const doneDanhGia = async (maHoSo,accessToken) => {
+export const doneDanhGia = async (maHoSo, accessToken) => {
     try {
-        const res = await axios.post(`http://localhost:7012/danhgiatindung/createDanhGia`,{
-            maHoSo:maHoSo
-        },{
+        const res = await axios.post(`http://localhost:7012/danhgiatindung/createDanhGia`, {
+            maHoSo: maHoSo
+        }, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -303,7 +302,7 @@ export const doneDanhGia = async (maHoSo,accessToken) => {
 }
 export const listDanhGia = async (accessToken) => {
     try {
-        const res = await axios.get(`http://localhost:7012/danhgiatindung/listDanhGia`,{
+        const res = await axios.get(`http://localhost:7012/danhgiatindung/listDanhGia`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -313,24 +312,11 @@ export const listDanhGia = async (accessToken) => {
         console.log(e)
     }
 }
-export const updateTrangThai = async ( trangthaihoso ,id, accessToken) => {
+export const updateTrangThai = async (trangthaihoso, id, accessToken) => {
     try {
-      const res = await axios.put(`http://localhost:7012/hoso/${id}/updateTrangThai`,{
+        const res = await axios.put(`http://localhost:7012/hoso/${id}/updateTrangThai`, {
             trangthaihoso: trangthaihoso
-        },{
-            headers:{
-                Authorization: `Bearer ${accessToken}`
-            }
-        })
-        return res.data
-    }
-    catch (e){
-        console.log(e)
-    }
-}
-export const getDanhGia = async (idHoso,accessToken) => {
-    try {
-        const res = await axios.get(`http://localhost:7012/danhgiatindung/${idHoso}/findDanhGia`,{
+        }, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -340,9 +326,9 @@ export const getDanhGia = async (idHoso,accessToken) => {
         console.log(e)
     }
 }
-export const getListPermission = async (id,accessToken) => {
+export const getDanhGia = async (idHoso, accessToken) => {
     try {
-        const res = await axios.get(`http://localhost:7012/users/${id}/listPermission`,{
+        const res = await axios.get(`http://localhost:7012/danhgiatindung/${idHoso}/findDanhGia`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -352,9 +338,9 @@ export const getListPermission = async (id,accessToken) => {
         console.log(e)
     }
 }
-export const getListPermissionById = async (id,accessToken) => {
+export const getListPermission = async (id, accessToken) => {
     try {
-        const res = await axios.get(`http://localhost:7012/users/${id}/permissionsUser`,{
+        const res = await axios.get(`http://localhost:7012/users/${id}/listPermission`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -364,9 +350,9 @@ export const getListPermissionById = async (id,accessToken) => {
         console.log(e)
     }
 }
-export const updateListPermissionById = async (id,idPermissioArr,accessToken) => {
+export const getListPermissionById = async (id, accessToken) => {
     try {
-        const res = await axios.post(`http://localhost:7012/users/${id}/addPermission`, {listPermission: idPermissioArr},{
+        const res = await axios.get(`http://localhost:7012/users/${id}/permissionsUser`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -376,9 +362,21 @@ export const updateListPermissionById = async (id,idPermissioArr,accessToken) =>
         console.log(e)
     }
 }
-export const deletePermissionById = async (id,idPermission,accessToken) => {
+export const updateListPermissionById = async (id, idPermissioArr, accessToken) => {
     try {
-        const res = await axios.delete(`http://localhost:7012/users/${id}/deletePermission`,{
+        const res = await axios.post(`http://localhost:7012/users/${id}/addPermission`, {listPermission: idPermissioArr}, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const deletePermissionById = async (id, idPermission, accessToken) => {
+    try {
+        const res = await axios.delete(`http://localhost:7012/users/${id}/deletePermission`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             },
@@ -389,9 +387,9 @@ export const deletePermissionById = async (id,idPermission,accessToken) => {
         console.log(e)
     }
 }
-export const getListVay = async (idClient,accessToken) => {
+export const getListVay = async (idClient, accessToken) => {
     try {
-        const res = await axios.get(`http://localhost:7012/danhgiatindung/${idClient}/listVay`,{
+        const res = await axios.get(`http://localhost:7012/danhgiatindung/${idClient}/listVay`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -401,9 +399,9 @@ export const getListVay = async (idClient,accessToken) => {
         console.log(e)
     }
 }
-export const getTBVay = async (idClient,accessToken) => {
+export const getTBVay = async (idClient, accessToken) => {
     try {
-        const res = await axios.get(`http://localhost:7012/danhgiatindung/${idClient}/TrungBinhVay`,{
+        const res = await axios.get(`http://localhost:7012/danhgiatindung/${idClient}/TrungBinhVay`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -413,9 +411,9 @@ export const getTBVay = async (idClient,accessToken) => {
         console.log(e)
     }
 }
-export const getBieuDoPhanPhoi = async (idClient,accessToken) => {
+export const getBieuDoPhanPhoi = async (idClient, accessToken) => {
     try {
-        const res = await axios.get(`http://localhost:7012/danhgiatindung/${idClient}/PhanPhoiLoaiGD`,{
+        const res = await axios.get(`http://localhost:7012/danhgiatindung/${idClient}/PhanPhoiLoaiGD`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -425,9 +423,9 @@ export const getBieuDoPhanPhoi = async (idClient,accessToken) => {
         console.log(e)
     }
 }
-export const getBieuDoPhanPhoiPhuongThucGD = async (idClient,accessToken) => {
+export const getBieuDoPhanPhoiPhuongThucGD = async (idClient, accessToken) => {
     try {
-        const res = await axios.get(`http://localhost:7012/danhgiatindung/${idClient}/PhanPhoiPhuongThucGD`,{
+        const res = await axios.get(`http://localhost:7012/danhgiatindung/${idClient}/PhanPhoiPhuongThucGD`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -437,9 +435,9 @@ export const getBieuDoPhanPhoiPhuongThucGD = async (idClient,accessToken) => {
         console.log(e)
     }
 }
-export const getBieuDoThoiHan = async (idClient,accessToken) => {
+export const getBieuDoThoiHan = async (idClient, accessToken) => {
     try {
-        const res = await axios.get(`http://localhost:7012/danhgiatindung/${idClient}/ParetoThoiHan`,{
+        const res = await axios.get(`http://localhost:7012/danhgiatindung/${idClient}/ParetoThoiHan`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -449,9 +447,9 @@ export const getBieuDoThoiHan = async (idClient,accessToken) => {
         console.log(e)
     }
 }
-export const getBieuDoTron = async (idHoSo,accessToken) => {
+export const getBieuDoTron = async (idHoSo, accessToken) => {
     try {
-        const res = await axios.get(`http://localhost:7012/danhgiatindung/${idHoSo}/tyleThuNo`,{
+        const res = await axios.get(`http://localhost:7012/danhgiatindung/${idHoSo}/tyleThuNo`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -461,9 +459,41 @@ export const getBieuDoTron = async (idHoSo,accessToken) => {
         console.log(e)
     }
 }
-export const getListHD = async (idHoSo,accessToken) => {
+export const getListHD = async (idHoSo, accessToken) => {
     try {
-        const res = await axios.get(`http://localhost:7012/hopdong/listHopDong`,{
+        const res = await axios.get(`http://localhost:7012/hopdong/listHopDong`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const upLoadFileFuntion = async (files, idHoSo, accessToken) => {
+    const formData = new FormData();
+
+    files.forEach(file => {
+        formData.append('HoSoFiles', file);
+    });
+
+    try {
+        const res = await axios.post(`http://localhost:7012/hoso/${idHoSo}/uploadFiles`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+        return res.data;
+    } catch (e) {
+        console.error('Error uploading files', e);
+        throw e;
+    }
+};
+export const getFile = async (file, idHoSo, accessToken) => {
+    try {
+        const res = await axios.post(`http://localhost:7012/hoso/${idHoSo}/getFiles`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }

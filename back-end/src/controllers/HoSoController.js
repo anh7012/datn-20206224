@@ -9,6 +9,10 @@ const MoHinhBIDV = require('../models/mhbidv')
 const Loan = require('../models/loan')
 const MoHinhEY = require('../models/mhey')
 const cloudinary = require('../config/cloud');
+const {extname} = require("node:path");
+
+let index = 0;
+
 
 const hoSoController = {
     // [GET] /hoso/
@@ -305,55 +309,45 @@ const hoSoController = {
             })
         }
     },
-    uploadFiles: async (req, res) => {
-        try {
-            // Cloudinary
-            const {files} = req
-            const myFile = files.HoSoFiles
 
-            if (Array.isArray(myFile)) {
-                //     multiple file upload
-                const filesUploadPromise = myFile.map(async (file) => {
-                    const cloudRes = await cloudinary.uploader.upload(file.filepath, {
-                        resource_type: "auto"
-                    })
-                    return cloudRes.public_id;
-                })
-                // Đợi tất cả các Promise hoàn thành và lấy danh sách các public_id
-                const idClouds = await Promise.all(filesUploadPromise);
-                // Nối các public_id lại với nhau thành một chuỗi ngăn cách bằng dấu phẩy
-                const cloudIdsString = idClouds.join(',');
-                const id = await HoSo.saveIdCloud({
-                    urlHoSo: cloudIdsString,
-                    idHoSo: req.params.idHoSo
-                })
-                return res.json({
-                    code: 1000,
-                    data: {
-                        public_id: idClouds
-                    },
-                    message: "Tải lên tệp hồ sơ và cập nhật cloud_id thành công",
-                })
-            } else {
-                const cloudRes = await cloudinary.uploader.upload(myFile.filepath, {
-                    resource_type: "auto"
-                })
-                await HoSo.saveIdCloud({
-                    idHoSo: req.params.idHoSo,
-                    urlHoSo: cloudRes.public_id
-                })
-                return res.json({
-                    code: 1000,
-                    data: cloudRes.public_id,
-                    message: "Tải lên tệp hồ sơ thành công",
-                })
-            }
-        } catch (err) {
-            console.log(err)
+     uploadFiles : async (req, res) => {
+        try {
+            const { files } = req;
+            const myFiles = Array.isArray(files.HoSoFiles) ? files.HoSoFiles : [files.HoSoFiles];
+
+            const filesUploadPromise = myFiles.map(file => {
+                const ext = extname(file.originalFilename); // Lấy phần mở rộng tệp
+                const fileName = file.originalFilename.replace(/\.[^/.]+$/, ""); // Loại bỏ phần mở rộng tệp
+                const timestamp = Date.now();
+                const newFileName = `${fileName}_${timestamp}_${index++}${ext}`; // Tạo tên tệp mới với dấu thời gian và chỉ số
+
+                return cloudinary.uploader.upload(file.filepath, {
+                    resource_type: "auto",
+                    public_id: `${newFileName}` // Đặt tên tệp trong Cloudinary
+                });
+            });
+
+            const idClouds = await Promise.all(filesUploadPromise);
+            const cloudIdsString = idClouds.map(cloudRes => cloudRes.public_id).join(',');
+
+            await HoSo.saveIdCloud({
+                urlHoSo: cloudIdsString,
+                idHoSo: req.params.idHoSo
+            });
+
             return res.json({
+                code: 1000,
+                data: {
+                    public_id: idClouds.map(cloudRes => cloudRes.public_id)
+                },
+                message: "Tải lên tệp hồ sơ và cập nhật cloud_id thành công",
+            });
+        } catch (err) {
+            console.error('Error uploading files', err);
+            return res.status(500).json({
                 code: 9999,
                 message: "Không thể tải lên tệp hồ sơ và cập nhật cloud_id",
-            })
+            });
         }
     },
     getFiles: async (req, res) => {

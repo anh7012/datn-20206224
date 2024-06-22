@@ -15,6 +15,7 @@ import {createHoso, createMHBIDVAndEY, getCatoryKH} from "../../redux/apiRequest
 import {useSelector} from "react-redux";
 import {notify} from "../../utils/notify.js";
 import eventEmitter from "../../utils/eventEmitter.js";
+import Form6 from "../../components/FormCreateHoso/form6.jsx";
 
 function FormCreateHoso() {
     const theme = useTheme();
@@ -30,6 +31,7 @@ function FormCreateHoso() {
         LaiSuatVay: '',
         KyHan: ''
     });
+    const [id,setId] = useState()
     const nav = useNavigate()
     const [formValues2, setFormValues2] = useState({});
     const [typeClient, setTypeClient] = useState();
@@ -42,11 +44,9 @@ function FormCreateHoso() {
     const handleSave = async () => {
         try {
             const response = await createMHBIDVAndEY(formValues2, accessToken);
-            console.log(response)
-            notify('success', 'Thêm hồ sơ mới thành công');
-           nav('/home/quanlyhoso')
+            setId(response.data.idHoSo)
+            notify('success', 'Thêm hồ sơ mới thành công, Vui lòng bổ xung thêm thông tin sau');
             eventEmitter.emit('createHosoSuccess')
-
         } catch (error) {
             console.error('Error calling API:', error);
         }
@@ -108,10 +108,15 @@ function FormCreateHoso() {
                 console.log(e)
             }
         }
-        if (activeStep === 3) {
-            console.log(formValues2)
-
+        if (activeStep === 4) {
+           try {
+            await handleSave()
+           }
+           catch (e) {
+               console.log(e)
+           }
         }
+
 
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
@@ -181,7 +186,8 @@ function FormCreateHoso() {
                errors={errors}/>,
         <Form3 key={3} updateFormValues={updateFormValues1} formValues={formValues1} errors={errors}/>,
         <Form4 key={4} updateFormValues={updateFormValues2} formValues={formValues2}/>,
-        <Form5 key={5} updateFormValues={updateFormValues2} formValues={formValues2}/>
+        <Form5 key={5} updateFormValues={updateFormValues2} formValues={formValues2}/>,
+        <Form6 key={6} id={id}  />
     ];
 
     return (
@@ -202,7 +208,7 @@ function FormCreateHoso() {
                         activeStep={activeStep}
                         nextButton={
                             activeStep === steps.length - 1 ? (
-                                <Button size="small" onClick={handleSave}>
+                                <Button size="small">
                                     Lưu
                                     {theme.direction === 'rtl' ? (
                                         <KeyboardArrowLeft/>
