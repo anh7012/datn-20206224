@@ -317,10 +317,9 @@ const hoSoController = {
             const myFiles = Array.isArray(files.HoSoFiles) ? files.HoSoFiles : [files.HoSoFiles];
 
             const filesUploadPromise = myFiles.map(file => {
-                const ext = extname(file.originalFilename); // Lấy phần mở rộng tệp
                 const fileName = file.originalFilename.replace(/\.[^/.]+$/, ""); // Loại bỏ phần mở rộng tệp
                 const timestamp = Date.now();
-                const newFileName = `${fileName}_${timestamp}_${index++}${ext}`; // Tạo tên tệp mới với dấu thời gian và chỉ số
+                const newFileName = `${fileName}_${timestamp}_${index++}`; // Tạo tên tệp mới với dấu thời gian và chỉ số
 
                 return cloudinary.uploader.upload(file.filepath, {
                     resource_type: "auto",
@@ -384,7 +383,7 @@ const hoSoController = {
                 });
             }
             const urls = idPublics.map(public_id => {
-                return cloudinary.url(public_id, {
+                return cloudinary.url(public_id + '.pdf', {
                     secure: true, // Sử dụng HTTPS để đảm bảo an toàn
                     resource_type: 'image'
                 });
