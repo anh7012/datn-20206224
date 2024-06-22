@@ -491,9 +491,21 @@ export const upLoadFileFuntion = async (files, idHoSo, accessToken) => {
         throw e;
     }
 };
-export const getFile = async (file, idHoSo, accessToken) => {
+export const getFile = async ( idHoSo, accessToken) => {
     try {
-        const res = await axios.post(`http://localhost:7012/hoso/${idHoSo}/getFiles`, {
+        const res = await axios.get(`http://localhost:7012/hoso/${idHoSo}/getFiles`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const getAccountClient = async (id, accessToken) => {
+    try {
+        const res = await axios.get(`http://localhost:7012/client/${id}/listAccount`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }

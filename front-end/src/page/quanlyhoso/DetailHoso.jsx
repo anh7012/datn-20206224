@@ -5,6 +5,7 @@ import {useSelector} from "react-redux";
 import {formatString} from "../../utils/formatString.js";
 import {scoringData} from "../../redux/data/scoringData.js";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ShowHosoGoc from "../../components/Modal/ShowHosoGoc.jsx";
 
 function DetailHoso() {
     const {idHoso} = useParams()
@@ -95,9 +96,12 @@ function DetailHoso() {
             <div className={'bg-white'}>
                 <div className="w-full h-full flex items-center flex-col">
                     <div className="w-full p-8">
-                        <h2 className="text-2xl font-semibold mb-2 text-green-800">I. THÔNG TIN KHOẢN VAY</h2>
+                        <div className={'flex items-center justify-between'}>
+                            <h2 className="text-2xl font-semibold mb-2 text-green-800">I. THÔNG TIN KHOẢN VAY</h2>
+                            <ShowHosoGoc idHoso={idHoso}/>
+                        </div>
                         <div className="mb-12  pt-8 border-t-[1px] border-black">
-                            <label className="block text-gray-700 mb-4">
+                        <label className="block text-gray-700 mb-4">
                                 1. Mục đích vay:
                                 <span className="text-red-500">*</span>
                             </label>

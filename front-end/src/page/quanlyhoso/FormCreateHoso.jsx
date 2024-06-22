@@ -100,7 +100,8 @@ function FormCreateHoso() {
                 setFormValues2((e)=>{
                    return {
                        ...e,
-                       MaHoSo: response.data.maHoSo
+                       MaHoSo: response.data.maHoSo,
+                       idClient: response.data.idClient,
                    }
                 })
                 console.log(response)

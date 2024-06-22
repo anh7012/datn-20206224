@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { calculateScore } from "../../utils/calculateScore.js";
 import { scoringData } from "../../redux/data/scoringData.js";
+import {getAccountClient} from "../../redux/apiRequest.js";
+import {useSelector} from "react-redux";
+import {formattedDate} from "../../utils/formetBithday.js";
 
 function Form4({ updateFormValues, formValues, errors }) {
+    const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
+    const [infoAccount,setInfoAccount] = useState([])
     const handleChange = (event) => {
         const { name, value } = event.target;
         const scoredValue = calculateScore(name, value);
@@ -12,6 +17,17 @@ function Form4({ updateFormValues, formValues, errors }) {
         const { name, value } = event.target;
         updateFormValues({ [name]: value });
     };
+    const fetchAccountClient = async ()=>{
+        try {
+            const res =  await getAccountClient(formValues.idClient,accessToken)
+            setInfoAccount(res.data)
+        }catch (e){
+            console.log(e)
+        }
+    }
+    useEffect(() => {
+        fetchAccountClient()
+    }, []);
     return (
         <div className="w-full h-full flex items-center flex-col">
             <div className={'p-8 w-full'}>
@@ -122,35 +138,38 @@ function Form4({ updateFormValues, formValues, errors }) {
                     </div>
                     <div>
                         <label className="block mb-2">7. Danh sách tài khoản tín dụng của khách hàng <span className="text-red-500">*</span></label>
-                        <div className="overflow-x-auto">
-                            <table className="min-w-full bg-white border rounded">
+                        <div className="overflow-x-auto ">
+                            <table className="bg-white border rounded w-[1500px]">
                                 <thead>
                                 <tr>
-                                    <th className="border px-4 py-2">Mã khách hàng</th>
                                     <th className="border px-4 py-2">Số tài khoản</th>
                                     <th className="border px-4 py-2">Loại tài khoản</th>
                                     <th className="border px-4 py-2">Số dư</th>
                                     <th className="border px-4 py-2">Trạng thái tài khoản</th>
                                     <th className="border px-4 py-2">Lãi suất</th>
                                     <th className="border px-4 py-2">Ngày đáo hạn</th>
-                                    <th className="border px-4 py-2">Kỳ hạn</th>
+                                    <th className="border px-4 py-2">Kỳ hạn (Tháng)</th>
                                     <th className="border px-4 py-2">Ngày hiệu lực</th>
                                     <th className="border px-4 py-2">Ngày kết thúc</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td className="border px-4 py-2">Val1</td>
-                                    <td className="border px-4 py-2">Val2</td>
-                                    <td className="border px-4 py-2">Val3</td>
-                                    <td className="border px-4 py-2">Val4</td>
-                                    <td className="border px-4 py-2">Val5</td>
-                                    <td className="border px-4 py-2">Val6</td>
-                                    <td className="border px-4 py-2">Val7</td>
-                                    <td className="border px-4 py-2">Val8</td>
-                                    <td className="border px-4 py-2">Val9</td>
-                                    <td className="border px-4 py-2">Val10</td>
-                                </tr>
+                                {
+                                    infoAccount.length>0&&infoAccount.map((e,i)=> (
+                                        <tr key={i}>
+                                            <td className="border px-4 py-2">{e?.accountNumber}</td>
+                                            <td className="border px-4 py-2">{e?.typeAccount}</td>
+                                            <td className="border px-4 py-2">{e?.currentBalance}</td>
+                                            <td className="border px-4 py-2">{e?.accountStatus}</td>
+                                            <td className="border px-4 py-2">{e?.interestRate}</td>
+                                            <td className="border px-4 py-2">{formattedDate(e?.maturityDate)}</td>
+                                            <td className="border px-4 py-2">{e?.term}</td>
+                                            <td className="border px-4 py-2">{formattedDate(e?.effDate)}</td>
+                                            <td className="border px-4 py-2">{formattedDate(e?.endDate)}</td>
+
+                                        </tr>
+                                    ))
+                                }
                                 {/* Add more rows as needed */}
                                 </tbody>
                             </table>
@@ -158,7 +177,8 @@ function Form4({ updateFormValues, formValues, errors }) {
                         {/*{errors.DanhSachTaiKhoan && <p className="text-red-500 text-sm mt-2">{errors.DanhSachTaiKhoan}</p>}*/}
                     </div>
                     <div>
-                        <label className="block mb-2">8. Lợi nhuận hàng tháng (Nếu có) <span className="text-red-500">*</span></label>
+                        <label className="block mb-2">8. Lợi nhuận hàng tháng (Nếu có) <span
+                            className="text-red-500">*</span></label>
                         <input
                             type="number"
                             className="w-full p-2 border rounded"

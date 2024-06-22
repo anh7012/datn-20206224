@@ -130,7 +130,7 @@ function App() {
                         >
 
                             <MenuItem>
-                                <ModalInfoUser/>
+                                <div><ModalInfoUser/>   </div>
                             </MenuItem>
 
                             <MenuItem>
@@ -138,7 +138,7 @@ function App() {
                                     const axiosInstance = createAxios(userData, dispatch);
                                     await logout(accessToken, dispatch, navigator, axiosInstance);
                                 }}>
-                                    <Typography textAlign="center" className={'!px-4'}>Đăng xuất</Typography>
+                                    <Typography textAlign="start" className={''}>Đăng xuất</Typography>
                                 </div>
                             </MenuItem>
                         </Menu>
