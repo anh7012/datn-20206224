@@ -23,117 +23,117 @@ function QuanLyHopDong() {
     ////
     const nav = useNavigate();
     // const [listHoso, setListHoso] = useState([]);
-    // const [filterMaHoSo, setFilterMaHoSo] = useState('');
+    const [filterMaHopDong, setFilterMaHopDong] = useState('');
     // const [filterHoTen, setFilterHoTen] = useState('');
     // const [filterKyHan, setFilterKyHan] = useState('');
     // const [currentPage, setCurrentPage] = useState(1);
     // const [rowsPerPage] = useState(6);
-    // const [page, setPage] = useState(6);
+    const [page, setPage] = useState('');
     // const [isSave, setIsSave] = useState([]);
 
-    useEffect(() => {
-        setPage(window.location.pathname);
-    }, [window.location.pathname]);
+    // useEffect(() => {
+    //     setPage(window.location.pathname);
+    // }, [window.location.pathname]);
+    //
+    // useEffect(() => {
+    //     setIsSave(listHoso.map((e) => ({ idHoSo: e.idHoSo, save: false, originalStatus: e.trangthaihoso })));
+    // }, [listHoso.length]);
 
-    useEffect(() => {
-        setIsSave(listHoso.map((e) => ({ idHoSo: e.idHoSo, save: false, originalStatus: e.trangthaihoso })));
-    }, [listHoso.length]);
+    // const fetch = async () => {
+    //     try {
+    //         const res = await getListHoso(accessToken);
+    //         if (Array.isArray(res.data)) {
+    //             setListHoso(res.data);
+    //         } else {
+    //             console.error("Response data is not an array", res.data);
+    //         }
+    //     } catch (e) {
+    //         console.log(e);
+    //     }
+    // };
 
-    const fetch = async () => {
-        try {
-            const res = await getListHoso(accessToken);
-            if (Array.isArray(res.data)) {
-                setListHoso(res.data);
-            } else {
-                console.error("Response data is not an array", res.data);
-            }
-        } catch (e) {
-            console.log(e);
-        }
-    };
+    // useEffect(() => {
+    //     fetch();
+    // }, []);
+    //
+    // const handleResetFilters = () => {
+    //     setFilterMaHopDong('');
+    //     setFilterHoTen('');
+    //     setFilterKyHan('');
+    // };
+    //
+    // const handleMaHopDongChange = (event) => {
+    //     setFilterMaHopDong(event.target.value);
+    // };
+    //
+    // const handleHoTenChange = (event) => {
+    //     setFilterHoTen(event.target.value);
+    // };
+    //
+    // const handleKyHanChange = (event) => {
+    //     setFilterKyHan(event.target.value);
+    // };
+    //
+    // const handlePageChange = (event, value) => {
+    //     setCurrentPage(value);
+    // };
+    //
+    // const filteredHoso = listHoso?.filter(item => {
+    //     return (
+    //         (filterMaHopDong ? item?.MaHopDong.includes(filterMaHopDong) : true) &&
+    //         (filterHoTen ? item?.HoTen.toLowerCase().includes(filterHoTen.toLowerCase()) : true) &&
+    //         (filterKyHan ? item?.KyHan === parseInt(filterKyHan) : true)
+    //     );
+    // }) || [];
 
-    useEffect(() => {
-        fetch();
-    }, []);
-
-    const handleResetFilters = () => {
-        setFilterMaHoSo('');
-        setFilterHoTen('');
-        setFilterKyHan('');
-    };
-
-    const handleMaHoSoChange = (event) => {
-        setFilterMaHoSo(event.target.value);
-    };
-
-    const handleHoTenChange = (event) => {
-        setFilterHoTen(event.target.value);
-    };
-
-    const handleKyHanChange = (event) => {
-        setFilterKyHan(event.target.value);
-    };
-
-    const handlePageChange = (event, value) => {
-        setCurrentPage(value);
-    };
-
-    const filteredHoso = listHoso?.filter(item => {
-        return (
-            (filterMaHoSo ? item?.maHoSo.includes(filterMaHoSo) : true) &&
-            (filterHoTen ? item?.HoTen.toLowerCase().includes(filterHoTen.toLowerCase()) : true) &&
-            (filterKyHan ? item?.KyHan === parseInt(filterKyHan) : true)
-        );
-    }) || [];
-
-    const indexOfLastItem = currentPage * rowsPerPage;
-    const indexOfFirstItem = indexOfLastItem - rowsPerPage;
-    const currentItems = filteredHoso.slice(indexOfFirstItem, indexOfLastItem);
-
-    const handleChangeStatus = (hoso, status) => {
-        setListHoso(prevList =>
-            prevList.map(item => {
-                    if(item.idHoSo === hoso.idHoSo ){
-                        return  {...item, trangthaihoso: status}
-                    } else return  item
-                }
-            )
-        );
-        setIsSave(prevIsSave =>
-            prevIsSave.map(item =>
-                item.idHoSo === hoso.idHoSo ? { ...item, save: true, originalStatus: item.originalStatus } : item
-            )
-        );
-    };
-
-    const handleSaveStatus = async (hoso) => {
-        try {
-            await updateTrangThai(hoso.trangthaihoso, hoso.idHoSo, accessToken);
-            setIsSave(prevIsSave =>
-                prevIsSave.map(item =>
-                    item.idHoSo === hoso.idHoSo ? { ...item, save: false, originalStatus: hoso.trangthaihoso } : item
-                )
-            );
-            await fetch();
-        } catch (error) {
-            console.error("Error updating user role:", error);
-        }
-    };
-
-    const handleCancelStatus = (hoso) => {
-        const originalStatus = isSave.find(item => item.idHoSo === hoso.idHoSo)?.originalStatus
-        console.log( 'prev status', originalStatus)
-        setListHoso(prevList =>
-            prevList.map(item =>
-                item.idHoSo === hoso.idHoSo ? { ...item, trangthaihoso: originalStatus } : item
-            )
-        );
-        setIsSave(prevIsSave =>
-            prevIsSave.map(item =>
-                item.idHoSo === hoso.idHoSo ? { ...item, save: false } : item
-            )
-        );
-    };
+    // const indexOfLastItem = currentPage * rowsPerPage;
+    // const indexOfFirstItem = indexOfLastItem - rowsPerPage;
+    // const currentItems = filteredHoso.slice(indexOfFirstItem, indexOfLastItem);
+    //
+    // const handleChangeStatus = (hoso, status) => {
+    //     setListHoso(prevList =>
+    //         prevList.map(item => {
+    //                 if(item.idHoSo === hoso.idHoSo ){
+    //                     return  {...item, trangthaihoso: status}
+    //                 } else return  item
+    //             }
+    //         )
+    //     );
+    //     setIsSave(prevIsSave =>
+    //         prevIsSave.map(item =>
+    //             item.idHoSo === hoso.idHoSo ? { ...item, save: true, originalStatus: item.originalStatus } : item
+    //         )
+    //     );
+    // };
+    //
+    // const handleSaveStatus = async (hoso) => {
+    //     try {
+    //         await updateTrangThai(hoso.trangthaihoso, hoso.idHoSo, accessToken);
+    //         setIsSave(prevIsSave =>
+    //             prevIsSave.map(item =>
+    //                 item.idHoSo === hoso.idHoSo ? { ...item, save: false, originalStatus: hoso.trangthaihoso } : item
+    //             )
+    //         );
+    //         await fetch();
+    //     } catch (error) {
+    //         console.error("Error updating user role:", error);
+    //     }
+    // };
+    //
+    // const handleCancelStatus = (hoso) => {
+    //     const originalStatus = isSave.find(item => item.idHoSo === hoso.idHoSo)?.originalStatus
+    //     console.log( 'prev status', originalStatus)
+    //     setListHoso(prevList =>
+    //         prevList.map(item =>
+    //             item.idHoSo === hoso.idHoSo ? { ...item, trangthaihoso: originalStatus } : item
+    //         )
+    //     );
+    //     setIsSave(prevIsSave =>
+    //         prevIsSave.map(item =>
+    //             item.idHoSo === hoso.idHoSo ? { ...item, save: false } : item
+    //         )
+    //     );
+    // };
 
     return (
         <div>
@@ -145,9 +145,9 @@ function QuanLyHopDong() {
                             <div className="grid grid-cols-[80%,auto] gap-x-8">
                                 <div className="grid grid-cols-[33%,33%,33%] gap-x-4">
                                     <div className="input-container">
-                                        <label className={'label'}>Nhập mã hồ sơ</label>
-                                        <input type="text" className={'input'} placeholder="Mã hồ sơ"
-                                               value={filterMaHoSo} onChange={handleMaHoSoChange} autoComplete="off"/>
+                                        <label className={'label'}>Nhập mã hợp đồng</label>
+                                        <input type="text" className={'input'} placeholder="Mã hợp đồng"
+                                               value={filterMaHopDong} onChange={handleMaHopDongChange} autoComplete="off"/>
                                     </div>
                                     <div className="input-container">
                                         <label className={'label'}>Nhập họ tên</label>
@@ -193,7 +193,7 @@ function QuanLyHopDong() {
                             <div
                                 className="grid grid-cols-[5%,10%,15%,10%,10%,8%,10%,12%,auto] gap-2 py-3 hover:cursor-pointer hover:bg-gray-100">
                                 <div className="flex justify-center ">{indexOfFirstItem + i + 1}</div>
-                                <div className={''}>{item?.maHoSo}</div>
+                                <div className={''}>{item?.MaHopDong}</div>
                                 <div className={''}>{item?.HoTen}</div>
                                 <div className={''}>{item?.TongTienVay.toLocaleString('vi-VN', {
                                     style: 'currency',

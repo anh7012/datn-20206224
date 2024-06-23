@@ -31,7 +31,7 @@ function FormCreateHoso() {
         LaiSuatVay: '',
         KyHan: ''
     });
-    const [id,setId] = useState()
+    const [id, setId] = useState()
     const nav = useNavigate()
     const [formValues2, setFormValues2] = useState({});
     const [typeClient, setTypeClient] = useState();
@@ -58,7 +58,7 @@ function FormCreateHoso() {
                 notify('error', "Mã khách hàng là bắt buộc.");
                 return;
             }
-            setFormValues1((e)=>{
+            setFormValues1((e) => {
                 return {
                     ...e,
                     typeTienTra: "VND"
@@ -97,12 +97,12 @@ function FormCreateHoso() {
             }
             try {
                 const response = await createHoso(formValues1, accessToken);
-                setFormValues2((e)=>{
-                   return {
-                       ...e,
-                       MaHoSo: response.data.maHoSo,
-                       idClient: response.data.idClient,
-                   }
+                setFormValues2((e) => {
+                    return {
+                        ...e,
+                        MaHoSo: response.data.maHoSo,
+                        idClient: response.data.idClient,
+                    }
                 })
                 console.log(response)
             } catch (e) {
@@ -110,12 +110,11 @@ function FormCreateHoso() {
             }
         }
         if (activeStep === 4) {
-           try {
-            await handleSave()
-           }
-           catch (e) {
-               console.log(e)
-           }
+            try {
+                await handleSave()
+            } catch (e) {
+                console.log(e)
+            }
         }
 
 
@@ -188,8 +187,12 @@ function FormCreateHoso() {
         <Form3 key={3} updateFormValues={updateFormValues1} formValues={formValues1} errors={errors}/>,
         <Form4 key={4} updateFormValues={updateFormValues2} formValues={formValues2}/>,
         <Form5 key={5} updateFormValues={updateFormValues2} formValues={formValues2}/>,
-        <Form6 key={6} id={id}  />
+        <Form6 key={6} id={id}/>
     ];
+
+    function handleSubmit() {
+        eventEmitter.emit('saveData',)
+    }
 
     return (
         <div className={'min-h-[calc(100vh-112px)]'}>
@@ -209,7 +212,7 @@ function FormCreateHoso() {
                         activeStep={activeStep}
                         nextButton={
                             activeStep === steps.length - 1 ? (
-                                <Button size="small">
+                                <Button size="small" onClick={handleSubmit}>
                                     Lưu
                                     {theme.direction === 'rtl' ? (
                                         <KeyboardArrowLeft/>
