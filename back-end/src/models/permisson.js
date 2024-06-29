@@ -33,4 +33,5 @@ module.exports = class Permission {
         );
         return rows;
     };
+
 }

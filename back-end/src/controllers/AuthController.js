@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Permission  = require("../models/permisson");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const {
@@ -51,11 +52,16 @@ const authController = {
         });
 
         const { password, refreshTokens, ...other } = user;
+        const listPermission = await Permission.getPermissonByIdUser(user.idUser)
+        const parentPermission = [...new Set(listPermission.map(permission => permission.parentPermission))]
+        const permissions = listPermission.map(permission => permission.maPermission)
         return res.json({
           code: 1000,
           data: {
             user: other,
             accessToken,
+            parentPermission: parentPermission,
+            permissions: permissions,
             message: "Đăng nhập thành công",
           },
         });

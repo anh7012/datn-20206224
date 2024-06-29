@@ -2,7 +2,7 @@ import { Button, Modal } from "@mui/material";
 import Box from "@mui/material/Box";
 import { getFileNameFromUrl } from "../../utils/formatString.js";
 import { Document, Page } from "react-pdf";
-import "@react-pdf-viewer/core/lib/styles/index.css";
+// import "@react-pdf-viewer/core/lib/styles/index.css";
 import { useState } from "react";
 
 import { pdfjs } from "react-pdf";

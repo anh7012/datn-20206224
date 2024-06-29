@@ -63,7 +63,16 @@ const usersController = {
         // [POST] /users/create
         create: async (req, res, next) => {
             try {
-                const data = req.body;
+                const data = {
+                    roleName: req.body.roleName,
+                    username: req.body.username,
+                    password: req.body.password,
+                    email: req.body.email,
+                    HoTen: req.body.HoTen,
+                    NgaySinh: req.body.NgaySinh,
+                    GioiTinh: req.body.GioiTinh,
+                    DiaChi: req.body.DiaChi
+                };
                 const existEmail = await User.getByEmail(data.email);
                 const existUsername = await User.getByUsername(data.username);
                 if (
@@ -86,9 +95,11 @@ const usersController = {
                     });
                 } else {
                     const saltRounds = 10; // Number of salt round for bcrypt
+
                     data.password = await bcrypt.hash(data.password, saltRounds);
                     // Create new User
                     const idUser = uuidv4({format: "hex"}).substring(0, 32);
+
                     const newUser = await User.createUser({
                             user: data,
                             idUser: idUser
