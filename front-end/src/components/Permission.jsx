@@ -16,12 +16,17 @@ import { useSelector } from "react-redux";
 import eventEmitter from "../utils/eventEmitter.js";
 import {notify} from "../utils/notify.js";
 
-function Permission({ listPermission, currentPermission, id }) {
+function Permission({ listPermission , currentPermission, id }) {
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
     const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
-
+    const [numberPermissionShow, setNumberPermissionShow] = useState(5)
+    const [show, setShow] = useState(5)
     const [open, setOpen] = useState(false);
-    const [checked, setChecked] = useState(listPermission?.map(() => false) || []);
+    const [checked, setChecked] = useState(()=>{
+        if (listPermission) return listPermission?.map(() => false)
+    else return []
+    }
+    );
     const [isLoading, setIsLoading] = useState(false);
 
     const handleClickOpen = () => {
@@ -34,9 +39,9 @@ function Permission({ listPermission, currentPermission, id }) {
 
     async function handleAdd() {
         setIsLoading(true);
-        const selectedIds = listPermission
+        const selectedIds = listPermission&&listPermission
             .filter((b, index) => checked[index])
-            .map(e => e.idPermission);
+            .map(e => e.idPermission)||[];
         try {
             await updateListPermissionById(id, selectedIds, accessToken);
             eventEmitter.emit('updatePermission')
@@ -76,7 +81,7 @@ const deletePermission = async (e)=>{
 }
     const children = (
         <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
-            {listPermission?.map((e, i) => (
+            {listPermission && listPermission.length>0 && listPermission?.map((e, i) => (
                 <FormControlLabel
                     key={i}
                     label={e.permissonName}
@@ -95,21 +100,33 @@ const deletePermission = async (e)=>{
         <div className={'grid grid-rows-[auto,20%] w-full border-l-[1px] border-gray-200 p-4 gap-4'}>
             <div className={''}>
                 <p className={'mb-4 font-bold'}>Quyền hiện đang có ({currentPermission&&currentPermission.length}):</p>
-               <div className={'flex items-end gap-2 flex-wrap p-4 border border-black'}>
-                   {currentPermission?.length > 0 ? (
-                       currentPermission.map((e, i) => (
-                           <div key={i} className={'flex items-end'}>
-                               <Ticket  content={e.maPermission} deletePermission={deletePermission} idPermission={e}/>
-                           </div>
-                       ))
-                   ) : (
-                       <div>Chưa có quyền nào cả!</div>
-                   )}
-               </div>
+                <div className={'flex items-center gap-2 flex-wrap p-4 border border-black'}>
+                    {currentPermission?.length > 0 ? (
+                        currentPermission.map((e, i) => (
+                            <div key={i} className={`flex items-end ${i <= numberPermissionShow ? ' ' : ' hidden'}`}>
+                                <Ticket content={e.maPermission} deletePermission={deletePermission} idPermission={e}/>
+                            </div>
+                        ))
+                    ) : (
+                        <div>Chưa có quyền nào cả! Hoặc bạn không thể xem quyền người khác</div>
+                    )}
+                    <span
+                        className={`underline text-blue-200 italic cursor-pointer hover:text-blue-500 ${numberPermissionShow === currentPermission?.length||currentPermission ? '  hidden' : ' '}`}
+                        onClick={() => {
+                            setNumberPermissionShow(currentPermission?.length || 0)
+                        }}>Xem thêm</span>
+                    <span
+                        className={`underline text-blue-200 italic cursor-pointer hover:text-blue-500 ${numberPermissionShow === currentPermission?.length ? '  ' : '  hidden'}`}
+                        onClick={() => {
+                            setNumberPermissionShow(show || 0)
+                        }}>Thu gọn</span>
+                </div>
             </div>
-           <div className={`flex items-center justify-center ${roleUser.includes('listMissPermission')?'  ': '  hidden'}`}>
-               <Button variant="outlined" size={'small'} onClick={handleClickOpen} color={'success'}><AddCircle />Thêm quyền
-               </Button>
+            <div
+                className={`flex items-center justify-center ${roleUser.includes('listMissPermission')&&roleUser.includes('addPermission') ? '  ' : '  hidden'} mb-4`}>
+                <Button variant="outlined" size={'small'} onClick={handleClickOpen} color={'success'}><AddCircle/>Thêm
+                    quyền
+                </Button>
            </div>
             <Dialog
                 open={open}
@@ -121,7 +138,7 @@ const deletePermission = async (e)=>{
                     {"Thêm quyền"}
                 </DialogTitle>
                 <DialogContent>
-                    <p>Danh sách các quyền ({listPermission&&listPermission.length})</p>
+                    <p>Danh sách các quyền chưa có({listPermission&&listPermission.length})</p>
                     <div>
                         <FormControlLabel
                             label="Tất cả"

@@ -281,7 +281,7 @@ function DetailUserUnfo() {
                                 </select>
                             </div>
                             <div className=" w-full flex items-center justify-center">
-                                <Permission listPermission={listPermission} currentPermission={currentPermission} id={id}/>
+                                <Permission listPermission={listPermission||[]} currentPermission={currentPermission} id={id}/>
                             </div>
                         </div>
                     </div>
