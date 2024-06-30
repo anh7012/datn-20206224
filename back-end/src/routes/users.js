@@ -22,7 +22,7 @@ router.get("/:id/getUser",verifyToken, usersController.getUser);
 // lấy all thong tin 1 nhan vien
 router.get("/:id/getUserAll",verifyToken, checkPermisson, usersController.getUserAll);
 router.get("/:id/listMissPermission",verifyToken, checkPermisson, usersController.listMissPermission);
-router.get("/:id/listPermission",verifyToken, checkPermisson, usersController.listPermission);
+router.get("/listPermission",verifyToken, checkPermisson, usersController.listPermission);
 router.get("/:id/permissionsUser",verifyToken, checkPermisson, usersController.permissionsUser);
 router.post("/:id/addPermission",verifyToken, checkPermisson, usersController.addPermission);
 router.delete("/:id/deletePermission",verifyToken, checkPermisson, usersController.deletePermission);
