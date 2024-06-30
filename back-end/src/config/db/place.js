@@ -6,9 +6,9 @@ const db_place = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE_NAME,
+    database: process.env.DB_PLACE_NAME,
 });
 
 
-const DB_Place = db_place.promise();
-module.exports = DB_Place;
+const DBPlace = db_place.promise();
+module.exports = DBPlace;
