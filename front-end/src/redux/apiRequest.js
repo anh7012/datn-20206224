@@ -340,7 +340,19 @@ export const getDanhGia = async (idHoso, accessToken) => {
 }
 export const getListPermission = async (id, accessToken) => {
     try {
-        const res = await axios.get(`http://localhost:7012/users/${id}/listPermission`, {
+        const res = await axios.get(`http://localhost:7012/users/${id}/listMissPermission`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const ListPermission = async ( accessToken) => {
+    try {
+        const res = await axios.get(`http://localhost:7012/users/listPermission`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }

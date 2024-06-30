@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import  {useState, useEffect} from 'react';
 import {
     ListItem,
     ListItemText,
@@ -7,23 +7,19 @@ import {
     Button,
     Pagination,
 } from '@mui/material';
-import UndoIcon from '@mui/icons-material/Undo';
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import {doneDanhGia, getListHoso, listDanhGia, updateTrangThai} from "../../redux/apiRequest.js";
 import {useSelector} from "react-redux";
 import {formattedDate} from "../../utils/formetBithday.js";
-import Dashboard from "./Dashboard.jsx";
-import {Link, Outlet, useParams} from "react-router-dom";
+import {Link, Outlet} from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import DanhSachHosoTheoNgay from "./DanhSachHosoTheoNgay.jsx";
 
 const DanhGiaTinDung = () => {
+    const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
     const accessToken = useSelector(state => state.auth?.login?.currentUser?.data?.accessToken);
-    const {idDashBoard} = useParams()
-
-
     const [searchMaHS, setSearchMaHS] = useState('');
     const [searchMaHSRv, setSearchMaHSRv] = useState('');
     const [searchHoten, setSearchHoten] = useState('');
@@ -317,14 +313,14 @@ const DanhGiaTinDung = () => {
                                             .map((profile, i) => (
                                                 <div
                                                     key={i}
-                                                    className="bg-yellow-50 hover:bg-red-300 mb-2 rounded grid grid-cols-[10%,20%,25%,20%,auto] items-center"
+                                                    className="bg-yellow-50 hover:bg-red-300 mb-2 rounded grid grid-cols-[10%,20%,25%,20%,auto] items-center  min-h-[50px]"
                                                 >
                                                     <p className={'text-center'}>{(pagePending - 1) * rowsPerPagePending + i + 1}</p>
                                                     <p className={'text-center'}>{profile?.maHoSo}</p>
                                                     <p className={'text-center'}>{profile?.HoTen}</p>
                                                     <p className={'text-center'}>{formattedDate(profile?.created_at)}</p>
 
-                                                    <div className={'flex items-center justify-center p-2'}>
+                                                    <div className={`flex items-center justify-center p-2 ${roleUser.includes('createDanhGia')?' ':' hidden'}`}>
                                                         <Button
                                                             variant="contained"
                                                             color="error"
@@ -431,7 +427,7 @@ const DanhGiaTinDung = () => {
                                             .map((profile, i) => (
                                                 <div
                                                     key={i}
-                                                    className="bg-green-100 hover:bg-green-300 mb-2 rounded grid grid-cols-[10%,20%,25%,20%,auto] items-center"
+                                                    className="bg-green-100 hover:bg-green-300 mb-2 rounded grid grid-cols-[10%,20%,25%,20%,auto] items-center min-h-[50px]"
                                                 >
                                                     <p className={'text-center'}>{(pageReviewed - 1) * rowsPerPageReviewed + i + 1}</p>
                                                     <p className={'text-center'}>{profile?.maHoSo}</p>
@@ -439,7 +435,7 @@ const DanhGiaTinDung = () => {
                                                     <p className={'text-center'}>{formattedDate(profile?.created_at)}</p>
 
                                                     <Link to={`/home/danhgiatindung/${profile?.idDGTD}`}
-                                                          className={'flex items-center justify-center p-2'}>
+                                                          className={`flex items-center justify-center p-2 ${roleUser.includes("TrungBinhVay")&&roleUser.includes("tyleThuNo")&&roleUser.includes("PhanPhoiLoaiGD")&&roleUser.includes("listVay")&&roleUser.includes("ParetoThoiHan")?'  ' :' hidden'}`}>
                                                         <Button
                                                             variant="contained"
                                                             color="success"

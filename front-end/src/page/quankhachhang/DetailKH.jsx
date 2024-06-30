@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate, useParams} from "react-router-dom";
-import {createKH, getKH, getListInforKH, updateKH} from "../../redux/apiRequest.js";
+import { getKH,  updateKH} from "../../redux/apiRequest.js";
 import {useSelector} from "react-redux";
 import {
     Button,
@@ -11,7 +11,6 @@ import {
     Radio,
     RadioGroup, Select,
     TextField,
-    Typography
 } from "@mui/material";
 import {notify} from "../../utils/notify.js";
 import eventEmitter from "../../utils/eventEmitter.js";

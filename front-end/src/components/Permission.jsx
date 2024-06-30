@@ -14,9 +14,12 @@ import Ticket from "./Ticket.jsx";
 import {deletePermissionById, updateListPermissionById} from "../redux/apiRequest.js";
 import { useSelector } from "react-redux";
 import eventEmitter from "../utils/eventEmitter.js";
+import {notify} from "../utils/notify.js";
 
 function Permission({ listPermission, currentPermission, id }) {
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
+    const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
+
     const [open, setOpen] = useState(false);
     const [checked, setChecked] = useState(listPermission?.map(() => false) || []);
     const [isLoading, setIsLoading] = useState(false);
@@ -58,13 +61,18 @@ function Permission({ listPermission, currentPermission, id }) {
         return checked.length > 0 && !checked.includes(false);
     };
 const deletePermission = async (e)=>{
-    console.log(e)
-    try {
-        await deletePermissionById(id,e.idPermission,accessToken)
-        eventEmitter.emit('updatePermission')
-    }catch (e){
-        console.log(e)
-    }
+   if (roleUser.includes('deletePermission')){
+       try {
+           await deletePermissionById(id,e.idPermission,accessToken)
+           eventEmitter.emit('updatePermission')
+       }catch (e){
+           console.log(e)
+       }
+   }
+   else {
+       notify('error','Bạn không có quyền này')
+   }
+
 }
     const children = (
         <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
@@ -99,7 +107,7 @@ const deletePermission = async (e)=>{
                    )}
                </div>
             </div>
-           <div className={'flex items-center justify-center'}>
+           <div className={`flex items-center justify-center ${roleUser.includes('listMissPermission')?'  ': '  hidden'}`}>
                <Button variant="outlined" size={'small'} onClick={handleClickOpen} color={'success'}><AddCircle />Thêm quyền
                </Button>
            </div>

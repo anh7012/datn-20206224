@@ -7,6 +7,8 @@ import {formattedDate} from "../../utils/formetBithday.js";
 
 function Form4({ updateFormValues, formValues, errors }) {
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
+    const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
+
     const [infoAccount,setInfoAccount] = useState([])
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -136,7 +138,7 @@ function Form4({ updateFormValues, formValues, errors }) {
                         />
                         {errors?.TaiSanRong && <p className="text-red-500 text-sm mt-2">{errors?.TaiSanRong}</p>}
                     </div>
-                    <div>
+                    <div className={`${roleUser.includes('listAccount')?'  ':' hidden'}`}>
                         <label className="block mb-2">7. Danh sách tài khoản tín dụng của khách hàng <span className="text-red-500">*</span></label>
                         <div className="overflow-x-auto ">
                             <table className="bg-white border rounded w-[1500px]">

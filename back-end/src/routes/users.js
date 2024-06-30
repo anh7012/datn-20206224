@@ -11,7 +11,7 @@ router.post("/:id/changeUsername",verifyToken, checkPermisson,usersController.ch
 router.post("/:id/changePassword",verifyToken, checkPermisson,usersController.changePassword);
 router.post("/:id/changeStatus",verifyToken, checkPermisson,usersController.changeStatus);
 // router.post("/reset_password", usersController.resetPassword);
-router.put("/:id/updateUser",verifyToken, checkPermisson, usersController.updateUser);
+router.put("/:id/updateUser",verifyToken, usersController.updateUser);
 
 router.delete("/:id/deleteUser",verifyToken, checkPermisson, usersController.deleteUser);
 router.post("/:id/changeRole",verifyToken, checkPermisson, usersController.changeRole);
@@ -22,7 +22,7 @@ router.get("/:id/getUser",verifyToken, usersController.getUser);
 // lấy all thong tin 1 nhan vien
 router.get("/:id/getUserAll",verifyToken, checkPermisson, usersController.getUserAll);
 router.get("/:id/listMissPermission",verifyToken, checkPermisson, usersController.listMissPermission);
-router.get("/listPermission",verifyToken, checkPermisson, usersController.listPermission);
+router.get("/listPermission",verifyToken, usersController.listPermission);
 router.get("/:id/permissionsUser",verifyToken, checkPermisson, usersController.permissionsUser);
 router.post("/:id/addPermission",verifyToken, checkPermisson, usersController.addPermission);
 router.delete("/:id/deletePermission",verifyToken, checkPermisson, usersController.deletePermission);
