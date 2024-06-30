@@ -4,16 +4,17 @@ const router = express.Router();
 const hosoController = require('../controllers/HoSoController')
 const {verifyToken} = require("../middlewares/authenToken");
 const fileParse = require("../middlewares/uploadFiles");
+const {checkPermisson} = require("../middlewares/Authorization");
 
 
-router.post('/createHoSo',verifyToken, hosoController.createHoSo)
-router.post('/:idHoSo/uploadFiles',verifyToken, fileParse, hosoController.uploadFiles)
-router.get('/:idHoSo/getFiles',verifyToken,fileParse, hosoController.getFiles)
-router.post('/createMHBIDVAndEY',verifyToken, hosoController.createMHBIDVAndEY)
-router.get('/:id/inforHoSo',verifyToken, hosoController.getInforHoSo)
-router.put('/:id/updateHoSo',verifyToken, hosoController.updateHoSo)
-router.put('/:id/updateTrangThai',verifyToken, hosoController.updateTrangThai)
-router.get('/listHoSo',verifyToken, hosoController.listHoSo)
+router.post('/createHoSo',verifyToken,checkPermisson, hosoController.createHoSo)
+router.post('/:idHoSo/uploadFiles',verifyToken,checkPermisson, hosoController.uploadFiles)
+router.get('/:idHoSo/getFiles',verifyToken,checkPermisson,fileParse, hosoController.getFiles)
+router.post('/createMHBIDVAndEY',verifyToken,checkPermisson, hosoController.createMHBIDVAndEY)
+router.get('/:id/inforHoSo',verifyToken,checkPermisson, hosoController.getInforHoSo)
+router.put('/:id/updateHoSo',verifyToken,checkPermisson, hosoController.updateHoSo)
+router.put('/:id/updateTrangThai',verifyToken,checkPermisson, hosoController.updateTrangThai)
+router.get('/listHoSo',verifyToken,checkPermisson, hosoController.listHoSo)
 
 
 

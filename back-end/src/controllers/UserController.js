@@ -310,7 +310,7 @@ const usersController = {
                 res.json({code: 9999, error: error.message});
             }
         },
-        listPermission: async (req, res) => {
+        listMissPermission: async (req, res) => {
             try {
                 const allPermissions = await Permission.getAllPermission()
                 const userPermission = await User_Permissions.getPermissionByIdUser(req.params.id)
@@ -331,6 +331,29 @@ const usersController = {
                         code: 1000,
                         data: missingPermissions,
                         message: "Danh sách các quyền người dùng còn thiếu",
+                    });
+                }
+
+            } catch (err) {
+                return res.json({
+                    code: 9999,
+                    message: "Không thể lấy danh sách quyền",
+                });
+            }
+        },
+        listPermission: async (req, res) => {
+            try {
+                const allPermissions = await Permission.getAllPermission()
+                if (allPermissions.length === 0) {
+                    return res.json({
+                        code: 1000,
+                        data: allPermissions,
+                        message: "Hiển thị Danh sách các quyền thành công",
+                    });
+                } else {
+                    return res.json({
+                        code: 9992,
+                        message: "Hiển thị Danh sách các quyền thất bại",
                     });
                 }
 

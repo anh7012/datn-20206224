@@ -10,7 +10,7 @@ router.post("/login", authController.login);
 router.post("/refresh", authController.reqRefreshToken);
 
 // Log out
-router.post("/logout", verifyToken,authController.logout);
+router.post("/logout",verifyToken,authController.logout);
 
 
 module.exports = router;
