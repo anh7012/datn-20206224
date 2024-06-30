@@ -80,16 +80,40 @@ const ClientController = {
     // [post] client/themkhachhang
     createClient: async (req, res, next) => {
         try {
+            const diaChi = {
+                DiaChi: req.body.DiaChi,
+                xa: req.body.xa,
+                huyen: req.body.huyen,
+                tinh: req.body.tinh,
+            }
+            const hoKhau = {
+                DiaChi: req.body.HoKhauDiaChi,
+                xa: req.body.HoKhauXa,
+                huyen: req.body.HoKhauHuyen,
+                tinh: req.body.HoKhauTinh,
+            }
+            let concatenatedDiaChi = '';
+            let concatenatedHoKhau = '';
+            if (typeof diaChi === 'object' && diaChi !== null) {
+                const diaChiValues = Object.values(diaChi);
+                concatenatedDiaChi = diaChiValues.join(','); // Nối các giá trị với dấu phẩy
+            }
+
+            if (typeof hoKhau === 'object' && hoKhau !== null) {
+                const hoKhauValues = Object.values(hoKhau);
+                concatenatedHoKhau = hoKhauValues.join(','); // Nối các giá trị với dấu phẩy
+            }
+
             const client = {
                 HoTen: req.body.HoTen,
                 NgaySinh: req.body.NgaySinh,
                 GioiTinh: req.body.GioiTinh,
-                DiaChi: req.body.DiaChi,
+                DiaChi: concatenatedDiaChi,
                 sdt: req.body.sdt,
                 email: req.body.email,
                 CCCD: req.body.CCCD,
                 typeClient: req.body.typeClient,
-                HoKhau: req.body.HoKhau,
+                HoKhau: concatenatedHoKhau,
                 NoiCapCCCD: req.body.NoiCapCCCD,
                 NgayCapCCCD: req.body.NgayCapCCCD
 
@@ -131,21 +155,54 @@ const ClientController = {
     // [put] client/:id/suakhachhang
     updateClient: async (req, res) => {
         try {
+            const diaChi = {
+                DiaChi: req.body.DiaChi,
+                xa: req.body.xa,
+                huyen: req.body.huyen,
+                tinh: req.body.tinh,
+            }
+            const hoKhau = {
+                DiaChi: req.body.HoKhauDiaChi,
+                xa: req.body.HoKhauXa,
+                huyen: req.body.HoKhauHuyen,
+                tinh: req.body.HoKhauTinh,
+            }
+            let concatenatedDiaChi = '';
+            let concatenatedHoKhau = '';
+            if (typeof diaChi === 'object' && diaChi !== null) {
+                const diaChiValues = Object.values(diaChi);
+                concatenatedDiaChi = diaChiValues.join(','); // Nối các giá trị với dấu phẩy
+            }
+
+            if (typeof hoKhau === 'object' && hoKhau !== null) {
+                const hoKhauValues = Object.values(hoKhau);
+                concatenatedHoKhau = hoKhauValues.join(','); // Nối các giá trị với dấu phẩy
+            }
+            const new_data = {
+                HoTen: req.body.HoTen,
+                NgaySinh: req.body.NgaySinh,
+                GioiTinh: concatenatedDiaChi,
+                DiaChi: req.body.DiaChi,
+                sdt: req.body.sdt,
+                email: req.body.email,
+                HoKhau:concatenatedHoKhau
+            }
             const old_data = await Client.getInforClientById(req.params.id)
-            const new_data = await mergeFields(req.body, old_data)
-            if(!validator.isEmail(new_data.email)) {
+            const final_data = await mergeFields(new_data, old_data)
+            if(!validator.isEmail(final_data.email)) {
                 res.json({
                     code: 1006, error: "Invalid email address"
                 });
             } else {
                 const data = await Client.updateClient({
-                    HoTen: new_data.HoTen,
-                    NgaySinh: new_data.NgaySinh,
-                    GioiTinh: new_data.GioiTinh,
-                    DiaChi: new_data.DiaChi,
-                    sdt: new_data.sdt,
-                    email: new_data.email,
-                    id: req.params.id
+                    HoTen: final_data.HoTen,
+                    NgaySinh: final_data.NgaySinh,
+                    GioiTinh: final_data.GioiTinh,
+                    DiaChi: final_data.DiaChi,
+                    sdt: final_data.sdt,
+                    email: final_data.email,
+                    id: req.params.id,
+                    HoKhau: final_data.HoKhau
                 });
                 if (data.affectedRows == 1) {
                     res.json({

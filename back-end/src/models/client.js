@@ -110,7 +110,7 @@ module.exports = class Client {
         return newData;
     }
 
-    static updateClient = async ({HoTen, NgaySinh, GioiTinh, DiaChi, sdt, email, id}) => {
+    static updateClient = async ({HoTen, NgaySinh, GioiTinh, DiaChi, sdt, email, id,HoKhau}) => {
         const Tuoi = (dateOfBirth) => {
             // Tạo một đối tượng Moment từ ngày sinh
             const birthDateMoment = moment(dateOfBirth, 'YYYY-MM-DD');
@@ -120,7 +120,7 @@ module.exports = class Client {
             return age;
         };
         const [result] = await promisePool.query(
-            "UPDATE client SET  HoTen =?, NgaySinh =?,Tuoi =?, GioiTinh =?, DiaChi =?, sdt =?, email =?, updateDate = CURRENT_TIMESTAMP  WHERE idClient = ?;",
+            "UPDATE client SET  HoTen =?, NgaySinh =?,Tuoi =?, GioiTinh =?, DiaChi =?, sdt =?, email =?, updateDate = CURRENT_TIMESTAMP,HoKhau  WHERE idClient = ?;",
             [
                 HoTen,
                 NgaySinh,
@@ -129,6 +129,7 @@ module.exports = class Client {
                 DiaChi,
                 sdt,
                 email,
+                HoKhau,
                 id
             ]
         );

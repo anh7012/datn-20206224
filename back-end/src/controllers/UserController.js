@@ -63,6 +63,17 @@ const usersController = {
         // [POST] /users/create
         create: async (req, res, next) => {
             try {
+                const diaChi = {
+                    DiaChi: req.body.DiaChi,
+                    xa: req.body.xa,
+                    huyen: req.body.huyen,
+                    tinh: req.body.tinh,
+                }
+                let concatenatedString = ''
+                if (typeof diaChi === 'object' && diaChi !== null) {
+                    const values = Object.values(diaChi);
+                    concatenatedString = values.join(','); // Nối các giá trị với dấu phẩy
+                }
                 const data = {
                     roleName: req.body.roleName,
                     username: req.body.username,
@@ -71,7 +82,7 @@ const usersController = {
                     HoTen: req.body.HoTen,
                     NgaySinh: req.body.NgaySinh,
                     GioiTinh: req.body.GioiTinh,
-                    DiaChi: req.body.DiaChi
+                    DiaChi: concatenatedString
                 };
                 const existEmail = await User.getByEmail(data.email);
                 const existUsername = await User.getByUsername(data.username);
@@ -128,14 +139,32 @@ const usersController = {
         // [PUT] /users/:id/updateUser
         updateUser: async (req, res) => {
             try {
+                const diaChi = {
+                    DiaChi: req.body.DiaChi,
+                    xa: req.body.xa,
+                    huyen: req.body.huyen,
+                    tinh: req.body.tinh,
+                }
+                let concatenatedString = ''
+                if (typeof diaChi === 'object' && diaChi !== null) {
+                    const values = Object.values(diaChi);
+                    concatenatedString = values.join(','); // Nối các giá trị với dấu phẩy
+                }
+                const new_data = {
+                    email: req.body.email,
+                    HoTen: req.body.HoTen,
+                    NgaySinh: req.body.NgaySinh,
+                    GioiTinh: req.body.GioiTinh,
+                    DiaChi: concatenatedString
+                }
                 const old_data = await User.getInforByIdUser(req.params.id)
-                const new_data = await mergeFields(req.body, old_data)
+                const final_data = await mergeFields(new_data, old_data)
                 const data = await User.updateUser({
-                    email: new_data.email,
-                    HoTen: new_data.HoTen,
-                    NgaySinh: new_data.NgaySinh,
-                    GioiTinh: new_data.GioiTinh,
-                    DiaChi: new_data.DiaChi,
+                    email: final_data.email,
+                    HoTen: final_data.HoTen,
+                    NgaySinh: final_data.NgaySinh,
+                    GioiTinh: final_data.GioiTinh,
+                    DiaChi: final_data.DiaChi,
                     id: req.params.id
                 });
                 if (data.affectedRows == 1) {
