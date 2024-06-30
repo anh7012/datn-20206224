@@ -131,7 +131,7 @@ function QuanLyHoSo() {
                 <p className="pb-2 font-bold">Danh sách hồ sơ</p>
                 <form autoComplete="off">
                     <div className="grid grid-cols-[70%,30%] gap-2 px-4 py-4 bg-white mb-2 rounded-sm">
-                        <div className="">
+                        <div  className={`${roleUser.includes('listHoSo')?' ':' hidden'}`}>
                             <div className="grid grid-cols-[80%,auto] gap-x-8">
                                 <div className="grid grid-cols-[33%,33%,33%] gap-x-4">
                                     <div className="input-container">
@@ -166,7 +166,7 @@ function QuanLyHoSo() {
                             startIcon={<AddIcon/>} variant={'contained'}>Thêm hồ sơ mới</Button></Link>
                     </div>
                 </form>
-                <div className="grid grid-cols-[5%,10%,15%,10%,10%,8%,10%,12%,auto] gap-2 py-2">
+                <div className={`grid grid-cols-[5%,10%,15%,10%,10%,8%,10%,12%,auto] gap-2 py-2 ${roleUser.includes('listHoSo')?' ':' hidden'}`}>
                     <div className="font-bold  flex justify-center">STT</div>
                     <div className="font-bold ">Mã hồ sơ</div>
                     <div className="font-bold ">Khách hàng</div>
@@ -177,7 +177,7 @@ function QuanLyHoSo() {
                     <div className="font-bold  flex items-center justify-center">Trạng thái</div>
                     <div className="font-bold "></div>
                 </div>
-                <div className="bg-white rounded-sm min-h-[calc(100vh-285px)] relative">
+                <div className={`bg-white rounded-sm min-h-[calc(100vh-285px)] relative ${roleUser.includes('listHoSo')?' ':' hidden'}`}>
                     {currentItems?.map((item, i) => (
                         <div key={i}>
                             <div
@@ -204,12 +204,12 @@ function QuanLyHoSo() {
                                     </Select>
                                 </div>
                                 <div className={'flex items-center justify-center gap-2'}>
-                                    {!isSave.find(saveItem => saveItem.idHoSo === item.idHoSo)?.save&&<Button variant={'contained'} color={'success'} size={'small'} onClick={() => {
+                                    {!isSave.find(saveItem => saveItem.idHoSo === item.idHoSo)?.save&&<Button variant={'contained'} color={'success'} size={'small'}  className={`${roleUser.includes('inforHoSo')?' ':' hidden'}`} onClick={() => {
                                         nav(`/home/quanlyhoso/${item?.idHoSo}`)
                                     }}>Chi tiết</Button>}
                                     {isSave.find(saveItem => saveItem.idHoSo === item.idHoSo)?.save && (
                                         <>
-                                            <Button variant="contained" size={'small'} color="primary" onClick={() => handleSaveStatus(item)}>Lưu</Button>
+                                            <Button variant="contained" size={'small'} color="primary" onClick={() => handleSaveStatus(item)} className={`${roleUser.includes('updateTrangThai')?' ':' hidden'}`}>Lưu</Button>
                                             <Button variant="contained" size={'small'} color="secondary" onClick={() => handleCancelStatus(item)}>Huỷ</Button>
                                         </>
                                     )}
