@@ -16,6 +16,7 @@ import {formattedDate} from "../../utils/formetBithday.js";
 import {Link, Outlet} from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import DanhSachHosoTheoNgay from "./DanhSachHosoTheoNgay.jsx";
+import eventEmitter from "../../utils/eventEmitter.js";
 
 const DanhGiaTinDung = () => {
     const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
@@ -28,7 +29,7 @@ const DanhGiaTinDung = () => {
     const [startDate, setStartDate] = useState('');
     const [endDateRv, setEndDateRv] = useState('');
     const [endDate, setEndDate] = useState('');
-    const out = window.location.pathname
+    const [out, setOut] = useState(false)
     const [main, setMain] = useState(true);
     const [thongQua, setThongQua] = useState(false);
     const [tuChoi, setTuChoi] = useState(false);
@@ -179,13 +180,19 @@ const DanhGiaTinDung = () => {
     useEffect(() => {
         filterRv()
     }, [searchMaHSRv, searchHotenRv, startDateRv, endDateRv]);
-    console.log(reviewedProfiles)
-
-    console.log('12',out)
-
+    useEffect(() => {
+        eventEmitter.on('backQLTD',()=>{
+            setOut(false)
+        })
+        return ()=>{
+            eventEmitter.removeListener('backQLTD',()=>{
+                setOut(false)
+            })
+        }
+    }, []);
     return (
         <div>
-            <div className={` ${ out !== '/home/danhgiatindung' ? ' slide-out hidden' : ' '}`}>
+            <div className={` ${ out  ? '  !hidden' : ' '}`}>
                 <h1 className="text-2xl font-bold  uppercase -mt-6 text-center  p-4 ">Đánh giá tín dụng</h1>
 
                 <div
@@ -434,7 +441,7 @@ const DanhGiaTinDung = () => {
                                                     <p className={'text-center'}>{profile?.HoTen}</p>
                                                     <p className={'text-center'}>{formattedDate(profile?.created_at)}</p>
 
-                                                    <Link to={`/home/danhgiatindung/${profile?.idDGTD}`}
+                                                    <Link to={`/home/danhgiatindung/${profile?.idDGTD}`} onClick={()=>setOut(true)}
                                                           className={`flex items-center justify-center p-2 ${roleUser.includes("TrungBinhVay")&&roleUser.includes("tyleThuNo")&&roleUser.includes("PhanPhoiLoaiGD")&&roleUser.includes("listVay")&&roleUser.includes("ParetoThoiHan")&&roleUser.includes("findDanhGia")&&roleUser.includes("PhanPhoiPhuongThucGD")?'  ' :' hidden'}`}>
                                                         <Button
                                                             variant="contained"
