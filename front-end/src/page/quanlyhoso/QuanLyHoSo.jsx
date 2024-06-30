@@ -185,7 +185,7 @@ function QuanLyHoSo() {
                                 <div className="flex justify-center ">{indexOfFirstItem + i + 1}</div>
                                 <div className={''}>{item?.maHoSo}</div>
                                 <div className={''}>{item?.HoTen}</div>
-                                <div className={''}>{item?.TongTienVay.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}</div>
+                                <div className={''}>{parseInt(item?.TongTienVay).toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}</div>
                                 <div className={''}>{item?.LaiSuatVay}%</div>
                                 <div className={''}>{item?.KyHan} tháng</div>
                                 <div className={''}>{formattedNgaySinh(item?.created_at)}</div>

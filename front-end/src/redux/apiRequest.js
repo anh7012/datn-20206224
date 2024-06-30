@@ -471,7 +471,7 @@ export const getBieuDoTron = async (idHoSo, accessToken) => {
         console.log(e)
     }
 }
-export const getListHD = async (idHoSo, accessToken) => {
+export const getListHD = async (accessToken) => {
     try {
         const res = await axios.get(`http://localhost:7012/hopdong/listHopDong`, {
             headers: {
@@ -518,6 +518,18 @@ export const getFile = async ( idHoSo, accessToken) => {
 export const getAccountClient = async (id, accessToken) => {
     try {
         const res = await axios.get(`http://localhost:7012/client/${id}/listAccount`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return res.data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const getHDByID = async (id, accessToken) => {
+    try {
+        const res = await axios.get(`http://localhost:7012/hopdong/${id}/inforHopDong`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }

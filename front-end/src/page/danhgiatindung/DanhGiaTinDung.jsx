@@ -359,7 +359,7 @@ const DanhGiaTinDung = () => {
 
                             </Paper>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={6} className={` ${roleUser.includes('listDanhGia')?' ':' hidden'}`}>
                             <Paper className="p-2 border-[1px] border-gray-300 !shadow-none">
                                 <h2 className="text-xl font-semibold text-green-600 uppercase text-center mb-4">Danh
                                     sách đã
