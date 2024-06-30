@@ -18,6 +18,8 @@ import Permission from "../../components/Permission.jsx";
 function DetailUserUnfo() {
     const dispatch = useDispatch();
     const idUserInfoManager = useSelector(state => state.auth?.login?.currentUser?.data?.user?.idUser);
+    const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
+
     const [userInfo, setUserInfo] = useState({});
     const { id } = useParams();
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
@@ -192,7 +194,7 @@ function DetailUserUnfo() {
                                 <input
                                     type="text"
                                     value={userData?.username}
-                                    readOnly
+                                    disabled={!roleUser.includes('changeUsername')}
                                     className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
                                 />
                             </div>
@@ -205,6 +207,7 @@ function DetailUserUnfo() {
                                         onChange={handleChange}
                                         value={userData?.password}
                                         autoComplete="new-password"
+                                        disabled={!roleUser.includes('changePassword')}
                                         className="w-full p-2 border border-gray-300 rounded-md"
                                     />
                                     <button
@@ -224,6 +227,7 @@ function DetailUserUnfo() {
                                 value={userData?.status}
                                 onChange={handleChange}
                                 name="status"
+                                disabled={!roleUser.includes('changeStatus')}
                                 className="w-full p-2 border border-gray-300 rounded-md"
                             >
                                 <option value="active">Active</option>
@@ -272,6 +276,7 @@ function DetailUserUnfo() {
                                 <select
                                     name="roleName"
                                     onChange={handleChange}
+                                    disabled={!roleUser.includes('changeRole')}
                                     value={userData?.roleName}
                                     className="w-full p-2 border border-gray-300 rounded-md"
                                 >

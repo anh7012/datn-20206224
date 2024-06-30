@@ -20,6 +20,8 @@ function QuanLyNhanVien() {
     const [filterUsername, setFilterUsername] = useState('');
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
+    const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
+
     const nav = useNavigate()
     const [page,setPage] = useState(6); // Number of items per page
     useEffect(() => {
@@ -120,14 +122,13 @@ function QuanLyNhanVien() {
         nav(`/home/quanlynhanvien/${
             idUser}`)
     }
-const {id} = useParams()
     return (
         <div>
             <div className={` ${ page !== '/home/quanlynhanvien'? ' hidden' :'   '}`}>
                 <p className={'pb-2 font-bold'}>Danh sách nhân viên</p>
                 <form autoComplete="off">
                     <div className={'grid grid-cols-[70%,30%] gap-2 px-4 py-4 bg-white mb-2 rounded-sm'}>
-                        <div className={''}>
+                        <div className={` ${roleUser.includes('listUser')?' ':' hidden'}`}>
                             <div className={'grid grid-cols-[80%,auto] gap-x-8 '}>
                                 <div className={'grid grid-cols-[25%,25%,25%,25%] gap-x-4'}>
                                     <div className="input-container">
@@ -171,7 +172,7 @@ const {id} = useParams()
                                 </div>
                             </div>
                         </div>
-                        <div className={'flex justify-end items-end'}>
+                        <div className={`flex justify-end items-end ${roleUser.includes('createUser')?' ':' hidden'}}`}>
                             <Button variant="contained" startIcon={<AddIcon />} color="success" onClick={()=>{
                                 nav(`/home/quanlynhanvien/themnhanvienmoi`)
                             }}>Tạo mới</Button>
@@ -179,7 +180,7 @@ const {id} = useParams()
                         </div>
                     </div>
                 </form>
-                <div className={'grid grid-cols-[10%,15%,20%,15%,10%,auto] gap-2 py-2'}>
+                <div className={`grid grid-cols-[10%,15%,20%,15%,10%,auto] gap-2 py-2 ${roleUser.includes('listUser')?' ':' hidden'}`}>
                     <div className={'font-bold flex justify-center'}>STT</div>
                     <div className={'font-bold'}>Tài Khoản</div>
                     <div className={'font-bold'}>Họ tên</div>
@@ -209,11 +210,11 @@ const {id} = useParams()
                                 </div>
                                 <div className={'flex justify-center items-center gap-2'}>
                                     <Button variant={'contained'} color={'primary'} size={'small'}
-                                            onClick={() => handleViewUser(item.idUser)}><p
-                                        className={' text-[12px]'}>Xem</p></Button>
+                                            onClick={() => handleViewUser(item.idUser)} ><p
+                                        className={` text-[12px] ${roleUser.includes('getUserAll')?' ':' hidden'} `}>Xem</p></Button>
                                     <Button variant={'contained'} color={'error'} size={'small'}
                                             onClick={() => handleDeleteClick(item)}
-                                            startIcon={<DeleteIcon/>}><p className={' text-[12px]'}>Xoá</p></Button>
+                                            startIcon={<DeleteIcon/>}><p className={` text-[12px] ${roleUser.includes('deleteUser')?' ':' hidden'}`}>Xoá</p></Button>
                                 </div>
                             </div>
                         ))

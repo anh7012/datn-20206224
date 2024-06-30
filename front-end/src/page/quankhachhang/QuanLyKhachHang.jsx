@@ -10,6 +10,8 @@ import eventEmitter from "../../utils/eventEmitter.js";
 
 function QuanLyKhachHang() {
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
+    const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
+
     const nav = useNavigate()
     const [listKhachHang, setlistKhachHang] = useState([]);
     const [filterCCCD, setfilterCCCD] = useState('');
@@ -82,7 +84,7 @@ function QuanLyKhachHang() {
                 <p className="pb-2 font-bold">Danh sách khách hàng</p>
                 <form autoComplete="off">
                     <div className="grid grid-cols-[70%,30%] gap-2 px-4 py-4 bg-white mb-2 rounded-sm">
-                        <div className="">
+                        <div className={`${roleUser.includes('listClient')?' ':' hidden'}`}>
                             <div className="grid grid-cols-[80%,auto] gap-x-8">
                                 <div className="grid grid-cols-[33%,33%,33%] gap-x-4">
                                     <div className="input-container">
@@ -113,11 +115,11 @@ function QuanLyKhachHang() {
                                 </div>
                             </div>
                         </div>
-                        <Link to={'/home/quanlykhachhang/themkhachhangmoi'} className={'flex justify-end items-end'}><Button
+                        <Link to={'/home/quanlykhachhang/themkhachhangmoi'} className={`flex justify-end items-end  ${roleUser.includes('createClient')?' ':' hidden'}`}><Button
                             startIcon={<AddIcon/>} variant={'contained'}>Thêm mới</Button></Link>
                     </div>
                 </form>
-                <div className="grid grid-cols-[5%,15%,15%,15%,15%,15%,auto] gap-2 py-2">
+                <div className={`grid grid-cols-[5%,15%,15%,15%,15%,15%,auto] gap-2 py-2 ${roleUser.includes('listClient')?' ':' hidden'}`}>
                     <div className="font-bold flex justify-center">STT</div>
                     <div className="font-bold">Mã khách hàng</div>
                     <div className="font-bold">Họ tên khách hàng</div>
@@ -126,7 +128,7 @@ function QuanLyKhachHang() {
                     <div className="font-bold flex items-center justify-center">Loại Khách hàng</div>
                     <div className="font-bold"></div>
                 </div>
-                <div className="bg-white rounded-sm min-h-[calc(100vh-285px)] relative">
+                <div className={` bg-white rounded-sm min-h-[calc(100vh-285px)] relative ${roleUser.includes('listClient')?' ':' hidden'}`}>
                     {currentItems?.map((item, i) => (
                         <div key={i}
                              className="grid grid-cols-[5%,15%,15%,15%,15%,15%,auto] gap-2 py-3 hover:cursor-pointer hover:bg-gray-100">
@@ -136,7 +138,7 @@ function QuanLyKhachHang() {
                             <div className={'flex items-center justify-center'}>{formattedNgaySinh(item?.NgaySinh)}</div>
                             <div className={'flex items-center justify-center'}>{item?.CCCD}</div>
                             <div className={'flex items-center justify-center'}>{item?.typeClient}</div>
-                            <div><Button variant={'outlined'} color={'success'} onClick={() => {
+                            <div><Button variant={'outlined'} color={'success'} className={`${roleUser.includes('inforClient')?' ':' hidden'}`} onClick={() => {
                                 nav(`/home/quanlykhachhang/${item?.idClient}`)
                             }}>Xem chi tiết</Button></div>
                         </div>

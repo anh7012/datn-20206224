@@ -435,7 +435,7 @@ const DanhGiaTinDung = () => {
                                                     <p className={'text-center'}>{formattedDate(profile?.created_at)}</p>
 
                                                     <Link to={`/home/danhgiatindung/${profile?.idDGTD}`}
-                                                          className={`flex items-center justify-center p-2 ${roleUser.includes("TrungBinhVay")&&roleUser.includes("tyleThuNo")&&roleUser.includes("PhanPhoiLoaiGD")&&roleUser.includes("listVay")&&roleUser.includes("ParetoThoiHan")?'  ' :' hidden'}`}>
+                                                          className={`flex items-center justify-center p-2 ${roleUser.includes("TrungBinhVay")&&roleUser.includes("tyleThuNo")&&roleUser.includes("PhanPhoiLoaiGD")&&roleUser.includes("listVay")&&roleUser.includes("ParetoThoiHan")&&roleUser.includes("findDanhGia")&&roleUser.includes("PhanPhoiPhuongThucGD")?'  ' :' hidden'}`}>
                                                         <Button
                                                             variant="contained"
                                                             color="success"

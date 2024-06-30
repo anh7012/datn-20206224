@@ -20,6 +20,8 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack.js";
 function DetailKh() {
     const {idKH} = useParams()
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
+    const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
+
     const [data, setData] = useState()
     const nav = useNavigate()
     const [isUpdate,setIsUpdate] = useState(false)
@@ -232,7 +234,7 @@ function DetailKh() {
 
                     <div className={'w-full flex justify-end item-center !mt-10'}
                          style={{width: '100%'}}>
-                        <Button variant="contained" className={`w-[120px] h-12 !mx-4 ${isUpdate ? ' ' : ' hidden'}`}
+                        <Button variant="contained" className={`w-[120px] h-12 !mx-4 ${isUpdate ? ' ' : ' hidden'}  ${roleUser.includes('updateClient')?' ':' hidden'}`}
                                 type="submit">Cập nhật</Button>
                     </div>
                 </div>

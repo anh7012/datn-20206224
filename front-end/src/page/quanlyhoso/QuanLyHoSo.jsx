@@ -162,7 +162,7 @@ function QuanLyHoSo() {
                                 </div>
                             </div>
                         </div>
-                        <Link to={'/home/quanlyhoso/taohosomoi'} className={'flex justify-end items-end '}><Button
+                        <Link to={'/home/quanlyhoso/taohosomoi'} className={`flex justify-end items-end ${ roleUser.includes('createHoSo')&&roleUser.includes('createMHBIDVAndEY')&&roleUser.includes('createHopDong')? ' ': ' hidden'} `}><Button
                             startIcon={<AddIcon/>} variant={'contained'}>Thêm hồ sơ mới</Button></Link>
                     </div>
                 </form>
