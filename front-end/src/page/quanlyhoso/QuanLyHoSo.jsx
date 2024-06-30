@@ -9,6 +9,8 @@ import { formattedNgaySinh } from "../../utils/formetBithday.js";
 
 function QuanLyHoSo() {
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
+    const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
+
     const nav = useNavigate();
     const [listHoso, setListHoso] = useState([]);
     const [filterMaHoSo, setFilterMaHoSo] = useState('');
@@ -160,7 +162,7 @@ function QuanLyHoSo() {
                                 </div>
                             </div>
                         </div>
-                        <Link to={'/home/quanlyhoso/taohosomoi'} className={'flex justify-end items-end'}><Button
+                        <Link to={'/home/quanlyhoso/taohosomoi'} className={'flex justify-end items-end '}><Button
                             startIcon={<AddIcon/>} variant={'contained'}>Thêm hồ sơ mới</Button></Link>
                     </div>
                 </form>

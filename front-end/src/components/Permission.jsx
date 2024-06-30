@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Button, Checkbox,
     Dialog,
@@ -18,10 +18,13 @@ import {notify} from "../utils/notify.js";
 
 function Permission({ listPermission , currentPermission, id }) {
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
+    const idUser = useSelector((state) => state.auth?.login?.currentUser?.data?.user?.idUser);
     const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
     const [numberPermissionShow, setNumberPermissionShow] = useState(5)
     const [show, setShow] = useState(5)
     const [open, setOpen] = useState(false);
+    const [sleep, setSleep] = useState()
+
     const [checked, setChecked] = useState(()=>{
         if (listPermission) return listPermission?.map(() => false)
     else return []
@@ -95,6 +98,21 @@ const deletePermission = async (e)=>{
             ))}
         </Box>
     );
+    const [isDelayed, setIsDelayed] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsDelayed(true);
+        }, 3000);
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    useEffect(() => {
+        if (isDelayed && id === idUser) {
+            notify('info', 'Khi thay đổi quyền phải đăng nhập lại để có hiệu lực');
+        }
+    }, [ currentPermission]);
 
     return (
         <div className={'grid grid-rows-[auto,20%] w-full border-l-[1px] border-gray-200 p-4 gap-4'}>
