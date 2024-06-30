@@ -32,6 +32,7 @@ import {
 import Box from "@mui/material/Box";
 import TreemapChart from "../../components/TreemapChart.jsx";
 import {formatStringRevert} from "../../utils/formatString.js";
+import eventEmitter from "../../utils/eventEmitter.js";
 
 function Dashboard() {
     const {idDashBoard} = useParams()
@@ -74,7 +75,6 @@ function Dashboard() {
             const res8 = await getBieuDoPhanPhoiPhuongThucGD(res.data.idClient, accessToken)
             const res4 = await getBieuDoTron(res.data.danhgia.idHoSo, accessToken)
             setDataBieuDoPhanPhoiPhuongThucGD(res8.data)
-            console.log(res8.data)
             setDataPhanPhoiKyHan(() => {
                 return res7.data.map(e => {
                     return {
@@ -181,7 +181,9 @@ function Dashboard() {
     return (
         <div className={`${out !== '/home/danhgiatindung' ? ' slide-in' : ' slide-out'} `}>
             <div className='flex items-center justify-start '>
-                <Link to={'/home/danhgiatindung'} className='text-gray-500 hover:text-black'>
+                <Link to={'/home/danhgiatindung'} className='text-gray-500 hover:text-black' onClick={()=>{
+                    eventEmitter.emit('backQLTD')
+                }}>
                     <ArrowBackIcon className='mr-2'/>
                 </Link>
             </div>

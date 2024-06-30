@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import  {useState, useEffect} from 'react';
 import {
     ListItem,
     ListItemText,
@@ -7,23 +7,20 @@ import {
     Button,
     Pagination,
 } from '@mui/material';
-import UndoIcon from '@mui/icons-material/Undo';
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import {doneDanhGia, getListHoso, listDanhGia, updateTrangThai} from "../../redux/apiRequest.js";
 import {useSelector} from "react-redux";
 import {formattedDate} from "../../utils/formetBithday.js";
-import Dashboard from "./Dashboard.jsx";
-import {Link, Outlet, useParams} from "react-router-dom";
+import {Link, Outlet} from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import DanhSachHosoTheoNgay from "./DanhSachHosoTheoNgay.jsx";
+import eventEmitter from "../../utils/eventEmitter.js";
 
 const DanhGiaTinDung = () => {
+    const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
     const accessToken = useSelector(state => state.auth?.login?.currentUser?.data?.accessToken);
-    const {idDashBoard} = useParams()
-
-
     const [searchMaHS, setSearchMaHS] = useState('');
     const [searchMaHSRv, setSearchMaHSRv] = useState('');
     const [searchHoten, setSearchHoten] = useState('');
@@ -32,7 +29,7 @@ const DanhGiaTinDung = () => {
     const [startDate, setStartDate] = useState('');
     const [endDateRv, setEndDateRv] = useState('');
     const [endDate, setEndDate] = useState('');
-    const out = window.location.pathname
+    const [out, setOut] = useState(false)
     const [main, setMain] = useState(true);
     const [thongQua, setThongQua] = useState(false);
     const [tuChoi, setTuChoi] = useState(false);
@@ -183,13 +180,19 @@ const DanhGiaTinDung = () => {
     useEffect(() => {
         filterRv()
     }, [searchMaHSRv, searchHotenRv, startDateRv, endDateRv]);
-    console.log(reviewedProfiles)
-
-    console.log('12',out)
-
+    useEffect(() => {
+        eventEmitter.on('backQLTD',()=>{
+            setOut(false)
+        })
+        return ()=>{
+            eventEmitter.removeListener('backQLTD',()=>{
+                setOut(false)
+            })
+        }
+    }, []);
     return (
         <div>
-            <div className={` ${ out !== '/home/danhgiatindung' ? ' slide-out hidden' : ' '}`}>
+            <div className={` ${ out  ? '  !hidden' : ' '}`}>
                 <h1 className="text-2xl font-bold  uppercase -mt-6 text-center  p-4 ">Đánh giá tín dụng</h1>
 
                 <div
@@ -317,14 +320,14 @@ const DanhGiaTinDung = () => {
                                             .map((profile, i) => (
                                                 <div
                                                     key={i}
-                                                    className="bg-yellow-50 hover:bg-red-300 mb-2 rounded grid grid-cols-[10%,20%,25%,20%,auto] items-center"
+                                                    className="bg-yellow-50 hover:bg-red-300 mb-2 rounded grid grid-cols-[10%,20%,25%,20%,auto] items-center  min-h-[50px]"
                                                 >
                                                     <p className={'text-center'}>{(pagePending - 1) * rowsPerPagePending + i + 1}</p>
                                                     <p className={'text-center'}>{profile?.maHoSo}</p>
                                                     <p className={'text-center'}>{profile?.HoTen}</p>
                                                     <p className={'text-center'}>{formattedDate(profile?.created_at)}</p>
 
-                                                    <div className={'flex items-center justify-center p-2'}>
+                                                    <div className={`flex items-center justify-center p-2 ${roleUser.includes('createDanhGia')?' ':' hidden'}`}>
                                                         <Button
                                                             variant="contained"
                                                             color="error"
@@ -356,7 +359,7 @@ const DanhGiaTinDung = () => {
 
                             </Paper>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={6} className={` ${roleUser.includes('listDanhGia')?' ':' hidden'}`}>
                             <Paper className="p-2 border-[1px] border-gray-300 !shadow-none">
                                 <h2 className="text-xl font-semibold text-green-600 uppercase text-center mb-4">Danh
                                     sách đã
@@ -431,15 +434,15 @@ const DanhGiaTinDung = () => {
                                             .map((profile, i) => (
                                                 <div
                                                     key={i}
-                                                    className="bg-green-100 hover:bg-green-300 mb-2 rounded grid grid-cols-[10%,20%,25%,20%,auto] items-center"
+                                                    className="bg-green-100 hover:bg-green-300 mb-2 rounded grid grid-cols-[10%,20%,25%,20%,auto] items-center min-h-[50px]"
                                                 >
                                                     <p className={'text-center'}>{(pageReviewed - 1) * rowsPerPageReviewed + i + 1}</p>
                                                     <p className={'text-center'}>{profile?.maHoSo}</p>
                                                     <p className={'text-center'}>{profile?.HoTen}</p>
                                                     <p className={'text-center'}>{formattedDate(profile?.created_at)}</p>
 
-                                                    <Link to={`/home/danhgiatindung/${profile?.idDGTD}`}
-                                                          className={'flex items-center justify-center p-2'}>
+                                                    <Link to={`/home/danhgiatindung/${profile?.idDGTD}`} onClick={()=>setOut(true)}
+                                                          className={`flex items-center justify-center p-2 ${roleUser.includes("TrungBinhVay")&&roleUser.includes("tyleThuNo")&&roleUser.includes("PhanPhoiLoaiGD")&&roleUser.includes("listVay")&&roleUser.includes("ParetoThoiHan")&&roleUser.includes("findDanhGia")&&roleUser.includes("PhanPhoiPhuongThucGD")?'  ' :' hidden'}`}>
                                                         <Button
                                                             variant="contained"
                                                             color="success"

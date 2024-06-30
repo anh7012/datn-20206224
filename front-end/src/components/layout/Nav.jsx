@@ -1,47 +1,66 @@
 import List from "@mui/material/List";
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import AnalyticsIcon from '@mui/icons-material/Analytics';
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useState, useEffect } from "react";
+import {Link} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {useState, useEffect} from "react";
+import {navRouter} from "../../routes/Permission.jsx";
 
 function Nav() {
-    const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.user?.roleName);
+    const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.parentPermission);
     const [arr, setArr] = useState([]);
 
     useEffect(() => {
-        let navItems = [
-            { title: 'Đánh giá tín dụng', icon: <AnalyticsIcon />, path: '/home/danhgiatindung' },
-            { title: 'Quản lý hồ sơ', icon: <ManageAccountsIcon />, path: '/home/quanlyhoso' },
-            { title: 'Quản lý hợp đồng', icon: <ManageAccountsIcon />, path: '/home/quanlyhopdong' },
-            { title: 'Danh sách khách hàng', icon: <ManageAccountsIcon />, path: '/home/quanlykhachhang' },
-        ];
-
-        if (roleUser === 'Quản trị viên') {
-            navItems = [
-                ...navItems,
-                { title: 'Quản lý nhân viên', icon: <ManageAccountsIcon />, path: '/home/quanlynhanvien' },
-            ];
-        }
-
-        setArr(navItems);
-    }, [roleUser]);
+        if (roleUser.includes('danhgiatindung'))
+            setArr((e) => {
+                return e.includes(navRouter.danhgiatindung) ? e : [
+                    ...e,
+                    navRouter.danhgiatindung
+                ]
+            })
+        if (roleUser.includes('quanlykhachhang'))
+            setArr((e) => {
+                return e.includes(navRouter.quanlykhachhang) ? e : [
+                    ...e,
+                    navRouter.quanlykhachhang
+                ]
+            })
+        if (roleUser.includes('quanlyhopdong'))
+            setArr((e) => {
+                return e.includes(navRouter.quanlyhopdong) ? e : [
+                    ...e,
+                    navRouter.quanlyhopdong
+                ]
+            })
+        if (roleUser.includes('quanlynhanvien'))
+            setArr((e) => {
+                return e.includes(navRouter.quanlynhanvien) ? e : [
+                    ...e,
+                    navRouter.quanlynhanvien
+                ]
+            })
+        if (roleUser.includes('quanlyhoso'))
+            setArr((e) => {
+                return e.includes(navRouter.quanlyhoso) ? e : [
+                    ...e,
+                    navRouter.quanlyhoso
+                ]
+            })
+    }, []);
 
     return (
         <div>
             <List>
                 {arr.map((e, i) => (
-                    <Link to={e.path} key={i} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <Link to={e.path} key={i} style={{textDecoration: 'none', color: 'inherit'}}>
                         <ListItem disablePadding>
                             <ListItemButton>
                                 <ListItemIcon>
                                     {e.icon}
                                 </ListItemIcon>
-                                <ListItemText primary={e.title} />
+                                <ListItemText primary={e.title}/>
                             </ListItemButton>
                         </ListItem>
                     </Link>

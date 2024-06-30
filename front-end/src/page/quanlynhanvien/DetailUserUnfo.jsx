@@ -1,7 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import {
-    createUser,
     getListPermission,
     getListPermissionById,
     getUser,
@@ -10,7 +9,6 @@ import {
 } from "../../redux/apiRequest.js";
 import { useDispatch, useSelector } from "react-redux";
 import { notify } from "../../utils/notify.js";
-import moment from "moment";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import eventEmitter from "../../utils/eventEmitter.js";
@@ -20,6 +18,8 @@ import Permission from "../../components/Permission.jsx";
 function DetailUserUnfo() {
     const dispatch = useDispatch();
     const idUserInfoManager = useSelector(state => state.auth?.login?.currentUser?.data?.user?.idUser);
+    const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
+
     const [userInfo, setUserInfo] = useState({});
     const { id } = useParams();
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
@@ -93,7 +93,7 @@ function DetailUserUnfo() {
     }, [id]);
 
     useEffect(() => {
-       let gender = userInfo.GioiTinh + ''
+       let gender = userInfo?.GioiTinh + ''
         setUserData((prevState) => ({
             ...prevState,
             idUser: id,
@@ -162,7 +162,7 @@ function DetailUserUnfo() {
                                         type="radio"
                                         name="GioiTinh"
                                         value={'1'}
-                                        checked={userData.GioiTinh === '1'}
+                                        checked={userData?.GioiTinh === '1'}
                                         onChange={handleChange}
                                         className="mr-2"
                                     />
@@ -173,7 +173,7 @@ function DetailUserUnfo() {
                                         type="radio"
                                         name="GioiTinh"
                                         value={'0'}
-                                        checked={userData.GioiTinh === '0'}
+                                        checked={userData?.GioiTinh === '0'}
                                         onChange={handleChange}
                                         className="mr-2"
                                     />
@@ -193,8 +193,8 @@ function DetailUserUnfo() {
                                 <label className="block text-gray-700">1. Tên đăng nhập:</label>
                                 <input
                                     type="text"
-                                    value={userData.username}
-                                    readOnly
+                                    value={userData?.username}
+                                    disabled={!roleUser.includes('changeUsername')}
                                     className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
                                 />
                             </div>
@@ -205,8 +205,9 @@ function DetailUserUnfo() {
                                         type={showPassword ? 'text' : 'password'}
                                         name="password"
                                         onChange={handleChange}
-                                        value={userData.password}
+                                        value={userData?.password}
                                         autoComplete="new-password"
+                                        disabled={!roleUser.includes('changePassword')}
                                         className="w-full p-2 border border-gray-300 rounded-md"
                                     />
                                     <button
@@ -223,9 +224,10 @@ function DetailUserUnfo() {
                         <div className="w-full mt-2">
                             <label className="block text-gray-700">3. Trạng thái</label>
                             <select
-                                value={userData.status}
+                                value={userData?.status}
                                 onChange={handleChange}
                                 name="status"
+                                disabled={!roleUser.includes('changeStatus')}
                                 className="w-full p-2 border border-gray-300 rounded-md"
                             >
                                 <option value="active">Active</option>
@@ -245,7 +247,7 @@ function DetailUserUnfo() {
                                     type="text"
                                     name="DiaChi"
                                     onChange={handleChange}
-                                    value={userData.DiaChi}
+                                    value={userData?.DiaChi}
                                     autoComplete="off"
                                     className="w-full p-2 border border-gray-300 rounded-md"
                                 />
@@ -256,7 +258,7 @@ function DetailUserUnfo() {
                                     type="email"
                                     name="email"
                                     onChange={handleChange}
-                                    value={userData.email}
+                                    value={userData?.email}
                                     autoComplete="off"
                                     className="w-full p-2 border border-gray-300 rounded-md"
                                 />
@@ -274,7 +276,8 @@ function DetailUserUnfo() {
                                 <select
                                     name="roleName"
                                     onChange={handleChange}
-                                    value={userData.roleName}
+                                    disabled={!roleUser.includes('changeRole')}
+                                    value={userData?.roleName}
                                     className="w-full p-2 border border-gray-300 rounded-md"
                                 >
                                     {names.map((name) => (
@@ -283,7 +286,7 @@ function DetailUserUnfo() {
                                 </select>
                             </div>
                             <div className=" w-full flex items-center justify-center">
-                                <Permission listPermission={listPermission} currentPermission={currentPermission} id={id}/>
+                                <Permission listPermission={listPermission||[]} currentPermission={currentPermission} id={id}/>
                             </div>
                         </div>
                     </div>

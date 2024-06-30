@@ -103,15 +103,3 @@
     animation: slideOut 0.5s forwards;
 }
 
-.hidden {
-    animation: hide 3.5s  forwards;
-}
-
-@keyframes hide {
-    from {
-        visibility: visible;
-    }
-    to {
-        visibility: hidden;
-    }
-}

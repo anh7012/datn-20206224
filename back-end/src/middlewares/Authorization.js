@@ -92,7 +92,7 @@ module.exports = {
                     res.json({code: 9999, data: {message: "Role cannot found"}});
                     return;
                 }
-                const permissions = await Permission.getPermissonByIdRole(user.idRole)
+                const permissions = await Permission.getPermissonByIdUser(user.idUser)
                 if (!permissions){
                     res.json({code: 9999, data: {message: "List Permission cannot found"}});
                     return;
@@ -101,7 +101,7 @@ module.exports = {
                     maPermission: permission.maPermission,
                     permissonName: permission.permissonName
                 }));
-                if (listPermission.some(e => e.maPermission === req.url.replace('/', ''))) {
+                if (listPermission.some(e => e.maPermission === req.url.split('/').pop())) {
                     await next()
                 } else {
                     return res.json({

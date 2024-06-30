@@ -93,7 +93,7 @@ function ShowHosoGoc({ idHoso }) {
                                     {hoso.map((e, i) => (
                                         <div key={i} className="flex w-full justify-between items-center hover:bg-green-200 cursor-pointer px-3 py-4">
                                             {/*<PDFShow pdf={e} onDocumentLoadSuccess={handleDocumentLoadSuccess} />*/}
-                                            <a href={e}  target="_blank"> {getFileNameFromUrl(e)}</a>
+                                            <a href={e}  target="_blank" className={'line-clamp-2'}> {getFileNameFromUrl(e)}</a>
                                             {/*<Button onClick={() => removeFile(e)} color="error">*/}
                                             {/*    <DeleteIcon />*/}
                                             {/*</Button>*/}

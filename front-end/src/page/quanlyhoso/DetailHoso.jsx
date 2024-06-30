@@ -10,6 +10,8 @@ import ShowHosoGoc from "../../components/Modal/ShowHosoGoc.jsx";
 function DetailHoso() {
     const {idHoso} = useParams()
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
+    const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
+
     const [formValues, setFormValues] = useState()
     const [userInfo,setUserzinfo] = useState()
 
@@ -98,7 +100,7 @@ function DetailHoso() {
                     <div className="w-full p-8">
                         <div className={'flex items-center justify-between'}>
                             <h2 className="text-2xl font-semibold mb-2 text-green-800">I. THÔNG TIN KHOẢN VAY</h2>
-                           <div> <ShowHosoGoc idHoso={idHoso}/></div>
+                           <div className={` ${roleUser.includes('roleUser')?' ':' hidden'}`}> <ShowHosoGoc idHoso={idHoso}/></div>
                         </div>
                         <div className="mb-12  pt-8 border-t-[1px] border-black">
                         <label className="block text-gray-700 mb-4">
