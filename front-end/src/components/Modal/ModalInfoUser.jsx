@@ -58,7 +58,7 @@ function ModalInfoUser() {
     const handleUpdate = async () => {
         console.log('Updating with:', userData);
         try {
-            await updateUser(userData, userInfo.idUser, accessToken)
+            await updateUser(userData, userInfo.idUser)
             await getUserInfo(userInfo.idUser, accessToken, dispatch)
             notify('success', 'Cập nhật dữ liệu thành công!')
         } catch (e) {

@@ -54,10 +54,10 @@ const DanhGiaTinDung = () => {
     const fetchPendingProfiles = async () => {
         try {
             const response = await getListHoso(accessToken);
-            if (response && response.data) {
-                setPendingProfiles(response.data.filter(profile => profile.trangthaihoso === "Hoàn thiện").sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) || []);
+            if (response && response.data && !response.data.message) {
+                setPendingProfiles(response?.data.filter(profile => profile.trangthaihoso === "Hoàn thiện").sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) || []);
                 setThongQuaData(() => {
-                    return response.data.filter(profile => profile.trangthaihoso === "Thông qua").filter(profile => {
+                    return response?.data.filter(profile => profile.trangthaihoso === "Thông qua").filter(profile => {
                         let today = new Date();
                         let todayDateOnly = today.toDateString();
                         let updatedAt = new Date(profile.updated_at);
@@ -66,7 +66,7 @@ const DanhGiaTinDung = () => {
                     })
                 })
                 setHuyData(() => {
-                    return response.data.filter(profile => profile.trangthaihoso === "Huỷ bỏ").filter(profile => {
+                    return response?.data.filter(profile => profile.trangthaihoso === "Huỷ bỏ").filter(profile => {
                         let today = new Date();
                         let todayDateOnly = today.toDateString();
                         let updatedAt = new Date(profile.updated_at);
@@ -93,7 +93,7 @@ const DanhGiaTinDung = () => {
     const fetchReviewedProfiles = async () => {
         try {
             const response = await listDanhGia(accessToken);
-            if (response) {
+            if (response  && !response.data.message) {
                 setReviewedProfiles(response.data.sort((a, b) => new Date(b.populationDate) - new Date(a.populationDate)))
             }
         } catch (error) {

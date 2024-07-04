@@ -16,7 +16,6 @@ import PersonIcon from '@mui/icons-material/Person';
 import {useDispatch, useSelector} from "react-redux";
 import {logout} from "../../redux/apiRequest.js";
 import ModalInfoUser from "../Modal/ModalInfoUser.jsx";
-import {createAxios} from "../../utils/axiosInterceptor.js";
 
 
 const drawerWidth = 240;
@@ -135,7 +134,7 @@ function App() {
 
                             <MenuItem>
                                 <div  onClick={async () => {
-                                    await logout(accessToken, dispatch, navigator);
+                                    await logout( dispatch, navigator);
                                 }}>
                                     <Typography textAlign="start" className={''}>Đăng xuất</Typography>
                                 </div>

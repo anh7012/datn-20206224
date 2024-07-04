@@ -24,12 +24,12 @@ function DangNhap() {
     const [showPassword, setShowPassword] = useState(false);
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
-    const isLogin = !!useSelector(state => state.auth?.login?.currentUser)
+    // const isLogin = !!useSelector(state => state.auth?.login?.currentUser)
 
     useEffect(() => {
-        if (isLogin) {
-            navigate("/home");
-        }
+        // if (isLogin) {
+        //     navigate("/home");
+        // }
         setLoading(false)
     }, []);
 

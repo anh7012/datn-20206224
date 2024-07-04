@@ -1,11 +1,40 @@
 import axios from "axios";
 import {loginFailed, loginSuccess, logoutUser} from "./slice/authSlice.js";
+import {jwtDecode} from "jwt-decode";
 import eventEmitter from "../utils/eventEmitter.js";
+
+const api = axios.create({
+    baseURL: 'http://localhost:7012',
+});
+api.interceptors.request.use(
+    (config) => {
+        // Thực hiện các hành động trước khi request được gửi đi
+        const token = localStorage.getItem('token');
+        console.log(token)
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        const decodedToken = jwtDecode(token);
+        if (decodedToken.exp < Date.now() / 1000) {
+            alert('Phiên đăng nhập đã hết vui lòng đăng nhập lại')
+            localStorage.clear()
+            window.location.href = '/dangnhap';
+        }
+
+        return config;
+
+    },
+    (error) => {
+        // Xử lý lỗi khi request không thành công
+        return Promise.reject(error);
+    }
+);
 
 export const loginUser = async (user, dispatch, navigate) => {
     try {
         const res = await axios.post('http://localhost:7012/login', user);
         if (res.data.code === 1000) {
+            localStorage.setItem('token', res.data.data.accessToken)
             dispatch(loginSuccess(res.data));
             eventEmitter.emit('success')
             navigate("/home");
@@ -18,26 +47,18 @@ export const loginUser = async (user, dispatch, navigate) => {
         eventEmitter.emit('error', error)
     }
 };
-export const logout = async (accessToken, dispatch, navigator) => {
+export const logout = async (dispatch, navigator) => {
     try {
-        await axios.post('http://localhost:7012/logout', {}, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
+        await api.post('http://localhost:7012/logout');
         dispatch(logoutUser());
         navigator('/dangnhap');
     } catch (e) {
         console.log('>>', e);
     }
 }
-export const updateUser = async (data, id, accessToken) => {
+export const updateUser = async (data, id) => {
     try {
-        await axios.put(`http://localhost:7012/users/${id}/updateUser`, data, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        })
+        await api.put(`http://localhost:7012/users/${id}/updateUser`, data)
 
     } catch (e) {
         console.log(e)
@@ -350,7 +371,7 @@ export const getListPermission = async (id, accessToken) => {
         console.log(e)
     }
 }
-export const ListPermission = async ( accessToken) => {
+export const ListPermission = async (accessToken) => {
     try {
         const res = await axios.get(`http://localhost:7012/users/listPermission`, {
             headers: {
@@ -503,7 +524,7 @@ export const upLoadFileFuntion = async (files, idHoSo, accessToken) => {
         throw e;
     }
 };
-export const getFile = async ( idHoSo, accessToken) => {
+export const getFile = async (idHoSo, accessToken) => {
     try {
         const res = await axios.get(`http://localhost:7012/hoso/${idHoSo}/getFiles`, {
             headers: {

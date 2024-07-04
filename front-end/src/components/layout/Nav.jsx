@@ -9,7 +9,7 @@ import {useState, useEffect} from "react";
 import {navRouter} from "../../routes/Permission.jsx";
 
 function Nav() {
-    const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.parentPermission);
+    const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.parentPermission)||[];
     const [arr, setArr] = useState([]);
 
     useEffect(() => {
