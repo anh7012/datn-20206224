@@ -36,7 +36,6 @@ function ModalCreateUser() {
     const names = [
         'Quản trị viên', 'Nhân viên', 'Giám đốc'
     ];
-    const accessToken = useSelector(state => state.auth?.login?.currentUser?.data?.accessToken);
     const [open, setOpen] = React.useState(false);
     const [userData, setUserData] = React.useState({
         HoTen: '',
@@ -60,7 +59,7 @@ function ModalCreateUser() {
     const handleUpdate = async (event) => {
         event.preventDefault(); // Prevent the form from submitting
         try {
-            await createUser(userData, accessToken);
+            await createUser(userData);
             notify('success', 'Tạo tài khoản thành công');
             eventEmitter.emit('updateListUser');
         } catch (e) {

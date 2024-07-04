@@ -32,7 +32,6 @@ const style = {
 
 function ModalInfoUser() {
     const userInfo = useSelector(state => state.auth?.login?.currentUser?.data?.user);
-    const accessToken = useSelector(state => state.auth?.login?.currentUser?.data?.accessToken);
     const dispatch = useDispatch()
     const [open, setOpen] = React.useState(false);
     const [userData, setUserData] = React.useState({
@@ -59,7 +58,7 @@ function ModalInfoUser() {
         console.log('Updating with:', userData);
         try {
             await updateUser(userData, userInfo.idUser)
-            await getUserInfo(userInfo.idUser, accessToken, dispatch)
+            await getUserInfo(userInfo.idUser, dispatch)
             notify('success', 'Cập nhật dữ liệu thành công!')
         } catch (e) {
             notify('error', e)

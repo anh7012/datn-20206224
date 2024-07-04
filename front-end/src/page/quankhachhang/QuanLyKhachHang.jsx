@@ -26,7 +26,7 @@ function QuanLyKhachHang() {
 
     const fetch = async () => {
         try {
-            const res = await getListInforKH(accessToken);
+            const res = await getListInforKH();
                 setlistKhachHang(res.data);
         } catch (e) {
             console.log(e);

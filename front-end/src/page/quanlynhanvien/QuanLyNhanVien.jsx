@@ -30,14 +30,14 @@ function QuanLyNhanVien() {
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
 
     useEffect(() => {
-        listUser(accessToken).then((res) => {
+        listUser().then((res) => {
             setListUserData(res);
         });
     }, [accessToken]);
 
     useEffect(() => {
         const fetch = async () => {
-            const res = await listUser(accessToken);
+            const res = await listUser();
             setListUserData(res);
         };
         eventEmitter.on('updateListUser', fetch);
@@ -84,7 +84,7 @@ function QuanLyNhanVien() {
     };
 
     const handleConfirmDelete = async () => {
-        await deleteUser(accessToken, selectedUser.idUser);
+        await deleteUser( selectedUser.idUser);
         setOpenDialog(false);
         setSelectedUser(null);
         eventEmitter.emit('updateListUser');

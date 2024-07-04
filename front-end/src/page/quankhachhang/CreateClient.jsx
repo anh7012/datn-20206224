@@ -21,7 +21,6 @@ function CreateClient() {
     const names = [
         'KHCN', 'KHDN', 'TCTD'
     ];
-    const accessToken = useSelector(state => state.auth?.login?.currentUser?.data?.accessToken);
     const [userData, setUserData] = useState({});
     const handleChange = (event) => {
         const {name, value} = event.target;
@@ -34,7 +33,7 @@ function CreateClient() {
         event.preventDefault();
         try {
             console.log(userData)
-            await createKH(userData, accessToken);
+            await createKH(userData);
             notify('success', 'Thêm khách hàng thành công');
             eventEmitter.emit('updateListKH');
         } catch (e) {

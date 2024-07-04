@@ -6,7 +6,6 @@ import {useSelector} from "react-redux";
 import {formattedDate} from "../../utils/formetBithday.js";
 
 function Form4({ updateFormValues, formValues, errors }) {
-    const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
     const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
 
     const [infoAccount,setInfoAccount] = useState([])
@@ -21,7 +20,7 @@ function Form4({ updateFormValues, formValues, errors }) {
     };
     const fetchAccountClient = async ()=>{
         try {
-            const res =  await getAccountClient(formValues.idClient,accessToken)
+            const res =  await getAccountClient(formValues.idClient)
             setInfoAccount(res.data)
         }catch (e){
             console.log(e)

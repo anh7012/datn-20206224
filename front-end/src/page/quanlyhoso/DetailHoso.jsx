@@ -9,7 +9,6 @@ import ShowHosoGoc from "../../components/Modal/ShowHosoGoc.jsx";
 
 function DetailHoso() {
     const {idHoso} = useParams()
-    const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
     const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
 
     const [formValues, setFormValues] = useState()
@@ -17,8 +16,8 @@ function DetailHoso() {
 
     const fetch = async (id) => {
         try {
-            const res = await getHoso(id, accessToken)
-            const res2 = await getInforKH(res.data.idClient, accessToken)
+            const res = await getHoso(id)
+            const res2 = await getInforKH(res.data.idClient)
             setUserzinfo(res2.data)
             setFormValues(res.data)
             console.log(res.data)

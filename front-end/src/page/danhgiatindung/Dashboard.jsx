@@ -44,7 +44,6 @@ function Dashboard() {
     const out = window.location.pathname
     const [row, setRow] = useState(5)
     const [page, setPage] = useState(1)
-    const accessToken = useSelector(state => state.auth?.login?.currentUser?.data?.accessToken);
     const [isUp, setIsUp] = useState(false)
     const [status, setStatus] = useState('')
     const [dataBieuDoTron, setDataBieuDoTron] = useState([])
@@ -66,14 +65,14 @@ function Dashboard() {
     }, [dataBieuDoDuong]);
     const fetchData = async (id) => {
         try {
-            const res = await getDanhGia(id, accessToken)
-            const res2 = await getKH(res.data.idClient, accessToken)
-            const res3 = await getListVay(res.data.idClient, accessToken)
-            const res5 = await getTBVay(res.data.idClient, accessToken)
-            const res6 = await getBieuDoPhanPhoi(res.data.idClient, accessToken)
-            const res7 = await getBieuDoThoiHan(res.data.idClient, accessToken)
-            const res8 = await getBieuDoPhanPhoiPhuongThucGD(res.data.idClient, accessToken)
-            const res4 = await getBieuDoTron(res.data.danhgia.idHoSo, accessToken)
+            const res = await getDanhGia(id)
+            const res2 = await getKH(res.data.idClient)
+            const res3 = await getListVay(res.data.idClient)
+            const res5 = await getTBVay(res.data.idClient)
+            const res6 = await getBieuDoPhanPhoi(res.data.idClient)
+            const res7 = await getBieuDoThoiHan(res.data.idClient)
+            const res8 = await getBieuDoPhanPhoiPhuongThucGD(res.data.idClient)
+            const res4 = await getBieuDoTron(res.data.danhgia.idHoSo)
             setDataBieuDoPhanPhoiPhuongThucGD(res8.data)
             setDataPhanPhoiKyHan(() => {
                 return res7.data.map(e => {
@@ -142,7 +141,7 @@ function Dashboard() {
 
     const save = async () => {
         try {
-            const res = await updateTrangThai(status, data.idHoSo, accessToken)
+            const res = await updateTrangThai(status, data.idHoSo)
             notify('info', res.message)
         } catch (e) {
             console.log(e)

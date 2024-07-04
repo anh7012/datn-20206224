@@ -20,7 +20,6 @@ import eventEmitter from "../../utils/eventEmitter.js";
 
 const DanhGiaTinDung = () => {
     const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
-    const accessToken = useSelector(state => state.auth?.login?.currentUser?.data?.accessToken);
     const [searchMaHS, setSearchMaHS] = useState('');
     const [searchMaHSRv, setSearchMaHSRv] = useState('');
     const [searchHoten, setSearchHoten] = useState('');
@@ -53,7 +52,7 @@ const DanhGiaTinDung = () => {
 
     const fetchPendingProfiles = async () => {
         try {
-            const response = await getListHoso(accessToken);
+            const response = await getListHoso();
             if (response && response.data && !response.data.message) {
                 setPendingProfiles(response?.data.filter(profile => profile.trangthaihoso === "Hoàn thiện").sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) || []);
                 setThongQuaData(() => {
@@ -92,7 +91,7 @@ const DanhGiaTinDung = () => {
 
     const fetchReviewedProfiles = async () => {
         try {
-            const response = await listDanhGia(accessToken);
+            const response = await listDanhGia();
             if (response  && !response.data.message) {
                 setReviewedProfiles(response.data.sort((a, b) => new Date(b.populationDate) - new Date(a.populationDate)))
             }
@@ -104,9 +103,9 @@ const DanhGiaTinDung = () => {
 
     const handlePendingProfileClick = async (profile) => {
         try {
-            const res = await doneDanhGia(profile.maHoSo, accessToken);
+            const res = await doneDanhGia(profile.maHoSo);
             if (res.code === 1000) {
-                await updateTrangThai('Đã đánh giá', profile.idHoSo, accessToken);
+                await updateTrangThai('Đã đánh giá', profile.idHoSo);
                 // setPendingProfiles(pendingProfiles.filter((p) => p.maHoSo !== profile.maHoSo));
                 // setReviewedProfiles([...reviewedProfiles, profile]);
                 fetchPendingProfiles();

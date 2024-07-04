@@ -23,7 +23,6 @@ const style = {
 
 function ShowHosoGoc({ idHoso }) {
     const [open, setOpen] = React.useState(false);
-    const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
     const [upload, setUpload] = useState(false);
     const [hoso, setHoso] = useState([]);
     const handleOpen = () => setOpen(true);
@@ -31,7 +30,7 @@ function ShowHosoGoc({ idHoso }) {
 
     const fetch = async () => {
         try {
-            const res = await getFile(idHoso, accessToken);
+            const res = await getFile(idHoso);
             console.log(res);
             setHoso(res.data || []);
         } catch (e) {

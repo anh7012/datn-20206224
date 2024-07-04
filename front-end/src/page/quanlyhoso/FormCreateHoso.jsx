@@ -19,7 +19,6 @@ import Form6 from "../../components/FormCreateHoso/form6.jsx";
 
 function FormCreateHoso() {
     const theme = useTheme();
-    const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
     const [activeStep, setActiveStep] = useState(0);
     const [formValues1, setFormValues1] = useState({
         TenLoaiVay: '',
@@ -43,7 +42,7 @@ function FormCreateHoso() {
 
     const handleSave = async () => {
         try {
-            const response = await createMHBIDVAndEY(formValues2, accessToken);
+            const response = await createMHBIDVAndEY(formValues2);
             setId(response.data.idHoSo)
             notify('success', 'Thêm hồ sơ mới thành công, Vui lòng bổ xung thêm thông tin sau');
             eventEmitter.emit('createHosoSuccess')
@@ -66,7 +65,7 @@ function FormCreateHoso() {
             })
             // Gọi API khi ở bước đầu tiên
             try {
-                const response = await getCatoryKH({maKH: formValues1.MaKH}, accessToken);
+                const response = await getCatoryKH({maKH: formValues1.MaKH});
                 if (response.data) {
                     setTypeClient(response.data.typeClient);
                 } else {
@@ -96,7 +95,7 @@ function FormCreateHoso() {
                 setErrors({});
             }
             try {
-                const response = await createHoso(formValues1, accessToken);
+                const response = await createHoso(formValues1);
                 setFormValues2((e) => {
                     return {
                         ...e,

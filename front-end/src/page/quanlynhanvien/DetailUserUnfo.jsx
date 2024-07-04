@@ -22,7 +22,6 @@ function DetailUserUnfo() {
 
     const [userInfo, setUserInfo] = useState({});
     const { id } = useParams();
-    const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
     const names = ['Quản trị viên', 'Nhân viên', 'Giám đốc'];
     const [listPermission,setListPermission] = useState()
     const [currentPermission,setCurrentPermission] = useState()
@@ -52,12 +51,12 @@ function DetailUserUnfo() {
         event.preventDefault();
 
         try {
-            await updateUserInfoToManeger(userData, accessToken);
+            await updateUserInfoToManeger(userData);
             notify('success', 'Cập nhật thông tin thành công');
             await fetchData();
             eventEmitter.emit('updateListUser')
             if (idUserInfoManager === id) {
-                await getUserInfo(idUserInfoManager, accessToken, dispatch);
+                await getUserInfo(idUserInfoManager, dispatch);
             }
         } catch (e) {
             notify('error', e.message);
@@ -73,14 +72,14 @@ function DetailUserUnfo() {
     };
 
     const fetchPermission = async ()=>{
-        const res2 = await getListPermission(id,accessToken)
-        const res3 = await getListPermissionById(id,accessToken)
+        const res2 = await getListPermission(id)
+        const res3 = await getListPermissionById(id)
         setCurrentPermission(res3.data)
         setListPermission(res2.data)
     }
     const fetchData = async () => {
         try {
-            const res = await getUser(id, accessToken);
+            const res = await getUser(id);
             fetchPermission()
             setUserInfo(res);
         } catch (e) {

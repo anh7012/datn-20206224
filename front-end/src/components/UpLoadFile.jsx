@@ -13,7 +13,6 @@ const FileUpload = ({id, hiddent}) => {
     const [files, setFiles] = useState([]);
         const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
 
-        const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
     const [uploading, setUploading] = useState(false);
     const nav = useNavigate()
 
@@ -52,7 +51,7 @@ const FileUpload = ({id, hiddent}) => {
         try {
             notify('info', 'Files uploading');
 
-            const response = await upLoadFileFuntion(files, id, accessToken);
+            const response = await upLoadFileFuntion(files, id);
             console.log('response', response);
             notify('success', 'Files uploaded successfully.');
             eventEmitter.emit('uploadFileSuccess')

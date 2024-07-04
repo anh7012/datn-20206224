@@ -11,10 +11,9 @@ import {formattedDate} from "../../utils/formetBithday.js";
 function QuanLyHopDong() {
     const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
     const [listHD, setListHD] = useState([])
-    const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
 
     const fecth = async ()=>{
-      const  res = await getListHD(accessToken)
+      const  res = await getListHD()
         setListHD(res.data)
     }
     useEffect(() => {

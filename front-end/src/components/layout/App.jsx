@@ -70,7 +70,6 @@ function App() {
     const [open, setOpen] = React.useState(true);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const user = useSelector((state) => state.auth.login?.currentUser?.data?.user);
-    const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
     const userData = useSelector((state) => state.auth?.login?.currentUser?.data);
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
@@ -158,7 +157,7 @@ function App() {
                 className={'!outline-0 !border-0 !bg-red-400'}
             >
                 <DrawerHeader>
-                    <a href={'/'} className={'flex items-center justify-center hover:cursor-pointer'}>
+                    <a href={'/home'} className={'flex items-center justify-center hover:cursor-pointer'}>
                         <img src={logo} alt="" className={'h-[50px] ml-[-50px]'}/>
                         <div className={''}>
                             <div className={' text-[#018957]  text-[12px]  uppercase font-bold'}>Hỗ trợ </div>

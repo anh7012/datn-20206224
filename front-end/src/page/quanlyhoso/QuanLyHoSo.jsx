@@ -8,7 +8,6 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import { formattedNgaySinh } from "../../utils/formetBithday.js";
 
 function QuanLyHoSo() {
-    const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
     const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
 
     const nav = useNavigate();
@@ -31,7 +30,7 @@ function QuanLyHoSo() {
 
     const fetch = async () => {
         try {
-            const res = await getListHoso(accessToken);
+            const res = await getListHoso();
             if (Array.isArray(res.data)) {
                 setListHoso(res.data);
             } else {
@@ -98,7 +97,7 @@ function QuanLyHoSo() {
 
     const handleSaveStatus = async (hoso) => {
         try {
-            await updateTrangThai(hoso.trangthaihoso, hoso.idHoSo, accessToken);
+            await updateTrangThai(hoso.trangthaihoso, hoso.idHoSo);
             setIsSave(prevIsSave =>
                 prevIsSave.map(item =>
                     item.idHoSo === hoso.idHoSo ? { ...item, save: false, originalStatus: hoso.trangthaihoso } : item

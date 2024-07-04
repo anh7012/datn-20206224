@@ -86,12 +86,11 @@ const ChiTietHopDong = ({ data }) => {
 }
 function DetailHd() {
     const [dataHD, setDataHD] = useState()
-    const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
 
     const {idHD} = useParams()
     const fetch = async () => {
         try {
-            const res = await getHDByID(idHD,accessToken)
+            const res = await getHDByID(idHD)
             setDataHD(...res.data)
         }catch (e) {
             console.log(e)

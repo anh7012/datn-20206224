@@ -19,7 +19,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack.js";
 
 function DetailKh() {
     const {idKH} = useParams()
-    const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
     const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
 
     const [data, setData] = useState()
@@ -48,7 +47,7 @@ function DetailKh() {
         event.preventDefault();
         try {
             console.log(data)
-            await updateKH(idKH,data, accessToken);
+            await updateKH(idKH,data);
             notify('success', 'Cập nhật thông tin khách hàng thành công');
             eventEmitter.emit('updateListKH');
         } catch (e) {
@@ -59,7 +58,7 @@ function DetailKh() {
 
     const fetch = async () => {
         try {
-            const res = await getKH(idKH, accessToken);
+            const res = await getKH(idKH);
             setData(()=>{
                 return {
                     ...res.data,

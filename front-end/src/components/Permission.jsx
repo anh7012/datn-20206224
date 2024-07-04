@@ -17,7 +17,6 @@ import eventEmitter from "../utils/eventEmitter.js";
 import {notify} from "../utils/notify.js";
 
 function Permission({ listPermission , currentPermission, id }) {
-    const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
     const idUser = useSelector((state) => state.auth?.login?.currentUser?.data?.user?.idUser);
     const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
     const [numberPermissionShow, setNumberPermissionShow] = useState(5)
@@ -46,7 +45,7 @@ function Permission({ listPermission , currentPermission, id }) {
             .filter((b, index) => checked[index])
             .map(e => e.idPermission)||[];
         try {
-            await updateListPermissionById(id, selectedIds, accessToken);
+            await updateListPermissionById(id, selectedIds);
             eventEmitter.emit('updatePermission')
             setIsLoading(false);
             handleClose();
@@ -71,7 +70,7 @@ function Permission({ listPermission , currentPermission, id }) {
 const deletePermission = async (e)=>{
    if (roleUser.includes('deletePermission')){
        try {
-           await deletePermissionById(id,e.idPermission,accessToken)
+           await deletePermissionById(id,e.idPermission)
            eventEmitter.emit('updatePermission')
        }catch (e){
            console.log(e)
