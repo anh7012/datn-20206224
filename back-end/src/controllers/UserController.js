@@ -26,11 +26,16 @@ const usersController = {
                 const authorizationHeader = req.headers["authorization"];
                 const accessToken = authorizationHeader.split(" ")[1];
                 const user = await User.getUserById(req.params.id);
+                const listPermission = await Permission.getPermissonByIdUser(user.idUser)
+                const parentPermission = [...new Set(listPermission.map(permission => permission.parentPermission))]
+                const permissions = listPermission.map(permission => permission.maPermission)
                 const {password, refreshTokens, ...other} = user;
                 return res.json({
                     code: 1000,
                     data: {
                         user: other,
+                        parentPermission: parentPermission,
+                        permissions: permissions,
                         accessToken: accessToken,
                         message: "Lấy thông tin thành công",
                     },
