@@ -135,8 +135,7 @@ function App() {
 
                             <MenuItem>
                                 <div  onClick={async () => {
-                                    const axiosInstance = createAxios(userData, dispatch);
-                                    await logout(accessToken, dispatch, navigator, axiosInstance);
+                                    await logout(accessToken, dispatch, navigator);
                                 }}>
                                     <Typography textAlign="start" className={''}>Đăng xuất</Typography>
                                 </div>

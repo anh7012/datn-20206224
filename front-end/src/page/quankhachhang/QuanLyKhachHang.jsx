@@ -60,13 +60,13 @@ function QuanLyKhachHang() {
         setCurrentPage(value);
     };
 
-    const filteredHoso = listKhachHang?.filter(item => {
+    const filteredHoso =listKhachHang&&listKhachHang.length>0? listKhachHang?.filter(item => {
         return (
             (filterCCCD ? item?.CCCD.toLowerCase().includes(filterCCCD.toLowerCase()) : true) &&
             (filterHoTen ? item?.HoTen.toLowerCase().includes(filterHoTen.toLowerCase()) : true) &&
             (filterLoaiKH ? item?.typeClient === filterLoaiKH : true)
         );
-    }) || [];
+    }) : [];
 
 
     const indexOfLastItem = currentPage * rowsPerPage;

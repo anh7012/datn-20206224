@@ -10,7 +10,7 @@ import {formattedDate} from "../../utils/formetBithday.js";
 
 function QuanLyHopDong() {
     const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
-    const [listHD, setListHD] = useState()
+    const [listHD, setListHD] = useState([])
     const accessToken = useSelector((state) => state.auth?.login?.currentUser?.data?.accessToken);
 
     const fecth = async ()=>{
@@ -37,10 +37,10 @@ function QuanLyHopDong() {
     const handlePageChange = (event, value) => {
         setCurrentPage(value);
     };
-    const filteredHoso = listHD?.filter(item => {
+    const filteredHoso = listHD && listHD.length ? listHD?.filter(item => {
         return (
             (filterMaHopDong ? item?.so_hopdong.includes(filterMaHopDong) : true))
-    }) || [];
+    }) : [];
 
     const indexOfLastItem = currentPage * rowsPerPage;
     const indexOfFirstItem = indexOfLastItem - rowsPerPage;

@@ -90,17 +90,17 @@ function QuanLyNhanVien() {
         eventEmitter.emit('updateListUser');
     };
 
-    const uniqueRoleNames = [...new Set(listUserData?.map(item => item?.roleName))];
-    const uniqueStatuses = [...new Set(listUserData?.map(item => item?.status))];
+    const uniqueRoleNames = listUserData&&listUserData.length>0? [...new Set(listUserData?.map(item => item?.roleName))]:[];
+    const uniqueStatuses =  listUserData&&listUserData.length>0? [...new Set(listUserData?.map(item => item?.status))]:[];
 
-    const filteredUsers = listUserData?.filter(user => {
+    const filteredUsers =listUserData&&listUserData.length>0? listUserData?.filter(user => {
         return (
             (filterRole ? user?.roleName === filterRole : true) &&
             (filterStatus ? user?.status === filterStatus : true) &&
             (filterFullName ? user?.HoTen.toLowerCase().includes(filterFullName.toLowerCase()) : true) &&
             (filterUsername ? user?.username.toLowerCase().includes(filterUsername.toLowerCase()) : true)
         );
-    });
+    }):[];
 
     const indexOfLastItem = currentPage * rowsPerPage;
     const indexOfFirstItem = indexOfLastItem - rowsPerPage;

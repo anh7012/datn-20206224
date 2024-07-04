@@ -108,7 +108,6 @@ function DetailUserUnfo() {
             status: userInfo.status || '',
         }));
     }, [userInfo, formattedNS]);
-    console.log(currentPermission,listPermission)
     useEffect(() => {
 
         eventEmitter.on('updatePermission',fetchPermission)

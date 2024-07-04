@@ -113,7 +113,6 @@ const deletePermission = async (e)=>{
             notify('info', 'Khi thay đổi quyền phải đăng nhập lại để có hiệu lực');
         }
     }, [ currentPermission]);
-    console.log('ccc',currentPermission)
     return (
         <div className={'grid grid-rows-[auto,20%] w-full border-l-[1px] border-gray-200 p-4 gap-4'}>
             <div className={''}>

@@ -18,9 +18,9 @@ export const loginUser = async (user, dispatch, navigate) => {
         eventEmitter.emit('error', error)
     }
 };
-export const logout = async (accessToken, dispatch, navigator, axiosInstance) => {
+export const logout = async (accessToken, dispatch, navigator) => {
     try {
-        await axiosInstance.post('http://localhost:7012/logout', {}, {
+        await axios.post('http://localhost:7012/logout', {}, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
