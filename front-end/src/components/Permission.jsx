@@ -113,7 +113,7 @@ const deletePermission = async (e)=>{
             notify('info', 'Khi thay đổi quyền phải đăng nhập lại để có hiệu lực');
         }
     }, [ currentPermission]);
-
+    console.log('ccc',currentPermission)
     return (
         <div className={'grid grid-rows-[auto,20%] w-full border-l-[1px] border-gray-200 p-4 gap-4'}>
             <div className={''}>
@@ -129,7 +129,7 @@ const deletePermission = async (e)=>{
                         <div>Chưa có quyền nào cả! Hoặc bạn không thể xem quyền người khác</div>
                     )}
                     <span
-                        className={`underline text-blue-200 italic cursor-pointer hover:text-blue-500 ${numberPermissionShow === currentPermission?.length||currentPermission ? '  hidden' : ' '}`}
+                        className={`underline text-blue-200 italic cursor-pointer hover:text-blue-500 ${numberPermissionShow === currentPermission?.length ? '  hidden' : ' '} ${currentPermission?.message? '  hidden':'  '} `}
                         onClick={() => {
                             setNumberPermissionShow(currentPermission?.length || 0)
                         }}>Xem thêm</span>

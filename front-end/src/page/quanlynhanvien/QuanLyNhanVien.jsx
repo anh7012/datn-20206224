@@ -210,11 +210,13 @@ function QuanLyNhanVien() {
                                 </div>
                                 <div className={'flex justify-center items-center gap-2'}>
                                     <Button variant={'contained'} color={'primary'} size={'small'}
+                                            className={` text-[12px] ${roleUser.includes('getUserAll')?' ':' !hidden'} `}
                                             onClick={() => handleViewUser(item.idUser)} ><p
-                                        className={` text-[12px] ${roleUser.includes('getUserAll')?' ':' hidden'} `}>Xem</p></Button>
+                                        >Xem</p></Button>
                                     <Button variant={'contained'} color={'error'} size={'small'}
                                             onClick={() => handleDeleteClick(item)}
-                                            startIcon={<DeleteIcon/>}><p className={` text-[12px] ${roleUser.includes('deleteUser')?' ':' hidden'}`}>Xoá</p></Button>
+                                            className={` text-[12px] ${roleUser.includes('deleteUser')?' ':' !hidden'}`}
+                                            startIcon={<DeleteIcon/>}><p >Xoá</p></Button>
                                 </div>
                             </div>
                         ))
