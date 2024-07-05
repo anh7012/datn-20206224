@@ -15,13 +15,13 @@ module.exports = class Province {
             "SELECT * FROM province WHERE province_id = ?;",
             [province_id]
         );
-        return rows;
+        return rows.length > 0 ? rows[0].province_id : null;
     }
     static getProvinceByName = async (name) => {
         const [rows, fields] = await DBPlace.query(
             "SELECT * FROM province WHERE name = ?;",
             [name]
         );
-        return rows;
+        return rows.length > 0 ? rows[0].name : null;
     }
 }
