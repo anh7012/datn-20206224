@@ -72,7 +72,6 @@ function DetailKh() {
     useEffect(() => {
         fetch()
     }, []);
-    console.log(data)
     return (
         <div>
             <div className='flex items-center justify-start mb-6'>

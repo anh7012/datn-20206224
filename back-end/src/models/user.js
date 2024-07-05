@@ -94,17 +94,17 @@ module.exports = class Users {
         return newData;
     };
 
-    static updateUser = async ({email, HoTen, NgaySinh, GioiTinh, DiaChi, id}) => {
+    static updateUser = async ({user, id}) => {
         // Định dạng lại NgaySinh thành chuỗi theo định dạng YYYY-MM-DD
-        const formatNgaySinh = moment(NgaySinh).format('YYYY-MM-DD');
+        const formatNgaySinh = moment(user.NgaySinh).format('YYYY-MM-DD');
         const [result] = await promisePool.query(
             "UPDATE users SET email =?, HoTen =?, NgaySinh =?, GioiTinh =?, DiaChi =?, updated_at = CURRENT_TIMESTAMP WHERE idUser = ?;",
             [
-                email,
-                HoTen,
+                user.email,
+                user.HoTen,
                 formatNgaySinh,
-                GioiTinh,
-                DiaChi,
+                user.GioiTinh,
+                user.DiaChi,
                 id
             ]
         );
