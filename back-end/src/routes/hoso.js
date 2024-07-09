@@ -8,7 +8,7 @@ const {checkPermisson} = require("../middlewares/Authorization");
 
 
 router.post('/createHoSo',verifyToken,checkPermisson, hosoController.createHoSo)
-router.post('/:idHoSo/uploadFiles',verifyToken,checkPermisson, hosoController.uploadFiles)
+router.post('/:idHoSo/uploadFiles',verifyToken,checkPermisson,fileParse, hosoController.uploadFiles)
 router.get('/:idHoSo/getFiles',verifyToken,checkPermisson,fileParse, hosoController.getFiles)
 router.post('/createMHBIDVAndEY',verifyToken,checkPermisson, hosoController.createMHBIDVAndEY)
 router.get('/:id/inforHoSo',verifyToken,checkPermisson, hosoController.getInforHoSo)
