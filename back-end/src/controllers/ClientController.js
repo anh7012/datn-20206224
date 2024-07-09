@@ -2,7 +2,9 @@ const Client = require('../models/client')
 const {mergeFields} = require("../utils/mergeField");
 const validator = require('validator');
 const Account = require("../models/account");
-
+const Wards = require("../models/ward");
+const District = require("../models/district");
+const Province = require("../models/province");
 
 
 const ClientController = {
@@ -10,7 +12,7 @@ const ClientController = {
     getLoaiKH: async (req, res) => {
         try {
             const khachhang = await Client.getloaiClientByMaKH(req.body.maKH)
-            if (khachhang){
+            if (khachhang) {
                 return res.json({
                     code: 1000,
                     data: khachhang,
@@ -35,10 +37,44 @@ const ClientController = {
     inforClient: async (req, res, next) => {
         try {
             const khachhang = await Client.getClientById(req.params.id)
-            if (khachhang){
+            // Tách chuỗi DiaChi bằng dấu , và loại bỏ khoảng trắng thừa
+            const diaChiParts = khachhang.DiaChi ? khachhang.DiaChi.split(',').map(part => part.trim()) : [];
+            const diaChi = diaChiParts[0] || '';
+            const xa = diaChiParts[1] || '';
+            const huyen = diaChiParts[2] || '';
+            const tinh = diaChiParts[3] || '';
+            const idXa = await Wards.getWardsBy(xa)
+            const idHuyen = await District.getDistrictById(huyen)
+            const idTinh = await Province.getProvinceById(tinh)
+            // Tách chuỗi DiaChi bằng dấu , và loại bỏ khoảng trắng thừa
+            const hoKhauParts = khachhang.HoKhau ? khachhang.HoKhau.split(',').map(part => part.trim()) : [];
+            const diaChiHK = hoKhauParts[0] || '';
+            const xaHK = hoKhauParts[1] || '';
+            const huyenHK = hoKhauParts[2] || '';
+            const tinhHK = hoKhauParts[3] || '';
+            const idXaHK = await Wards.getWardsBy(xaHK)
+            const idHuyenHK = await District.getDistrictById(huyenHK)
+            const idTinhHk = await Province.getProvinceById(tinhHK)
+            if (khachhang) {
                 return res.json({
                     code: 1000,
-                    data: khachhang,
+                    data: {
+                        khachhang: khachhang,
+                        diaChi: diaChi,
+                        xa: xa,
+                        huyen: huyen,
+                        tinh: tinh,
+                        idXa: idXa,
+                        idHuyen: idHuyen,
+                        idTinh: idTinh,
+                        idXaHK: idXaHK,
+                        idHuyenHK: idHuyenHK,
+                        idTinhHk: idTinhHk,
+                        diaChiHK: diaChiHK,
+                        xaHK: xaHK,
+                        huyenHK: huyenHK,
+                        tinhHK: tinhHK
+                    },
                     message: "Tìm thấy khách hàng thành công"
                 });
             } else {
@@ -58,7 +94,7 @@ const ClientController = {
     listClient: async (req, res) => {
         try {
             const listClient = await Client.getAllClient();
-            if (listClient){
+            if (listClient) {
                 return res.json({
                     code: 1000,
                     data: listClient,
@@ -80,17 +116,23 @@ const ClientController = {
     // [post] client/themkhachhang
     createClient: async (req, res, next) => {
         try {
+            const xa = await Wards.getWardsById(req.body.xa)
+            const huyen = await District.getDistrictById(req.body.huyen)
+            const tinh = await Province.getProvinceById(req.body.tinh)
             const diaChi = {
                 DiaChi: req.body.DiaChi,
-                xa: req.body.xa,
-                huyen: req.body.huyen,
-                tinh: req.body.tinh,
+                xa: xa,
+                huyen: huyen,
+                tinh: tinh,
             }
+            const xaHK = await Wards.getWardsById(req.body.HoKhauXa)
+            const huyenHK = await District.getDistrictById(req.body.HoKhauHuyen)
+            const tinhHK = await Province.getProvinceById(req.body.HoKhauTinh)
             const hoKhau = {
                 DiaChi: req.body.HoKhauDiaChi,
-                xa: req.body.HoKhauXa,
-                huyen: req.body.HoKhauHuyen,
-                tinh: req.body.HoKhauTinh,
+                xa: xaHK,
+                huyen: huyenHK,
+                tinh: tinhHK,
             }
             let concatenatedDiaChi = '';
             let concatenatedHoKhau = '';
@@ -155,17 +197,23 @@ const ClientController = {
     // [put] client/:id/suakhachhang
     updateClient: async (req, res) => {
         try {
+            const xa = await Wards.getWardsById(req.body.xa)
+            const huyen = await District.getDistrictById(req.body.huyen)
+            const tinh = await Province.getProvinceById(req.body.tinh)
             const diaChi = {
                 DiaChi: req.body.DiaChi,
-                xa: req.body.xa,
-                huyen: req.body.huyen,
-                tinh: req.body.tinh,
+                xa: xa,
+                huyen: huyen,
+                tinh: tinh,
             }
+            const xaHK = await Wards.getWardsById(req.body.HoKhauXa)
+            const huyenHK = await District.getDistrictById(req.body.HoKhauHuyen)
+            const tinhHK = await Province.getProvinceById(req.body.HoKhauTinh)
             const hoKhau = {
                 DiaChi: req.body.HoKhauDiaChi,
-                xa: req.body.HoKhauXa,
-                huyen: req.body.HoKhauHuyen,
-                tinh: req.body.HoKhauTinh,
+                xa: xaHK,
+                huyen: huyenHK,
+                tinh: tinhHK,
             }
             let concatenatedDiaChi = '';
             let concatenatedHoKhau = '';
@@ -185,11 +233,11 @@ const ClientController = {
                 DiaChi: req.body.DiaChi,
                 sdt: req.body.sdt,
                 email: req.body.email,
-                HoKhau:concatenatedHoKhau
+                HoKhau: concatenatedHoKhau
             }
             const old_data = await Client.getInforClientById(req.params.id)
             const final_data = await mergeFields(new_data, old_data)
-            if(!validator.isEmail(final_data.email)) {
+            if (!validator.isEmail(final_data.email)) {
                 res.json({
                     code: 1006, error: "Invalid email address"
                 });

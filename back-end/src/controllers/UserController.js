@@ -2,6 +2,9 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const {mergeFields} = require("../utils/mergeField");
 const Permission = require("../models/permisson");
+const Province = require("../models/province");
+const District = require("../models/district");
+const Wards = require("../models/ward");
 const User_Permissions = require("../models/user_permissions");
 const Role_Permissions = require("../models/role_permissions");
 const {v4: uuidv4} = require("uuid");
@@ -30,6 +33,7 @@ const usersController = {
                 const parentPermission = [...new Set(listPermission.map(permission => permission.parentPermission))]
                 const permissions = listPermission.map(permission => permission.maPermission)
                 const {password, refreshTokens, ...other} = user;
+
                 return res.json({
                     code: 1000,
                     data: {
@@ -68,11 +72,12 @@ const usersController = {
         // [POST] /users/create
         create: async (req, res, next) => {
             try {
+
                 const diaChi = {
                     DiaChi: req.body.DiaChi,
-                    xa: req.body.xa,
-                    huyen: req.body.huyen,
-                    tinh: req.body.tinh,
+                    xa: xa,
+                    huyen: huyen,
+                    tinh: tinh,
                 }
                 let concatenatedString = ''
                 if (typeof diaChi === 'object' && diaChi !== null) {
@@ -87,7 +92,7 @@ const usersController = {
                     HoTen: req.body.HoTen,
                     NgaySinh: req.body.NgaySinh,
                     GioiTinh: req.body.GioiTinh,
-                    DiaChi: concatenatedString
+                    DiaChi: req.body.DiaChi
                 };
                 const existEmail = await User.getByEmail(data.email);
                 const existUsername = await User.getByUsername(data.username);
@@ -165,11 +170,7 @@ const usersController = {
                 const old_data = await User.getInforByIdUser(req.params.id)
                 const final_data = await mergeFields(new_data, old_data)
                 const data = await User.updateUser({
-                    email: final_data.email,
-                    HoTen: final_data.HoTen,
-                    NgaySinh: final_data.NgaySinh,
-                    GioiTinh: final_data.GioiTinh,
-                    DiaChi: final_data.DiaChi,
+                    user: final_data,
                     id: req.params.id
                 });
                 if (data.affectedRows == 1) {
@@ -469,7 +470,7 @@ const usersController = {
             }
         },
         deletePermission: async (req, res) => {
-            console.log('>>>>',req.body)
+            console.log('>>>>', req.body)
             try {
                 const deletePermission = await User_Permissions.deletePermission({
                     idUser: req.params.id,

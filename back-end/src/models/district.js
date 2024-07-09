@@ -11,7 +11,20 @@ module.exports = class District {
         const [rows, fields] = await DBPlace.query("SELECT * FROM district;");
         return rows;
     }
-
+    static getDistrictById = async (district_id ) => {
+        const [rows, fields] = await DBPlace.query(
+            "SELECT * FROM db_place.district WHERE district_id  = ?;",
+            [district_id ]
+        );
+        return rows.length > 0 ? rows[0].district_id : null;
+    }
+    static getDistrictByName= async (name ) => {
+        const [rows, fields] = await DBPlace.query(
+            "SELECT * FROM db_place.district WHERE name  = ?;",
+            [name]
+        );
+        return rows.length > 0 ? rows[0].name : null;
+    }
     static getDistrictByProvince = async (province_id) => {
         const [rows, fields] = await DBPlace.query(
             "SELECT * FROM db_place.district WHERE province_id = ?;",
