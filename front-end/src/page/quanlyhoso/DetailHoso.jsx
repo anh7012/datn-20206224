@@ -99,7 +99,11 @@ function DetailHoso() {
                     <div className="w-full p-8">
                         <div className={'flex items-center justify-between'}>
                             <h2 className="text-2xl font-semibold mb-2 text-green-800">I. THÔNG TIN KHOẢN VAY</h2>
+<<<<<<< HEAD
                            <div className={` ${roleUser.includes('roleUser')?' ':' hidden'}`}> <ShowHosoGoc idHoso={idHoso}/></div>
+=======
+                           <div className={` ${roleUser.includes('getFiles')?' ':' hidden'}`}> <ShowHosoGoc idHoso={idHoso}/></div>
+>>>>>>> origin/main
                         </div>
                         <div className="mb-12  pt-8 border-t-[1px] border-black">
                         <label className="block text-gray-700 mb-4">

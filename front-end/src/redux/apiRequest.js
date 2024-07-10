@@ -10,7 +10,10 @@ api.interceptors.request.use(
     (config) => {
         // Thực hiện các hành động trước khi request được gửi đi
         const token = localStorage.getItem('token');
+<<<<<<< HEAD
         console.log(token)
+=======
+>>>>>>> origin/main
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }

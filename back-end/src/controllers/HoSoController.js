@@ -312,6 +312,7 @@ const hoSoController = {
 
     uploadFiles: async (req, res) => {
         try {
+<<<<<<< HEAD
             const { files } = req;
             if (!files || files.length === 0) {
                 throw new Error("No files received");
@@ -324,6 +325,18 @@ const hoSoController = {
                 const newFileName = `${fileName}_${timestamp}_${index++}`; // Tạo tên tệp mới với dấu thời gian và chỉ số
 
                 return cloudinary.uploader.upload(file?.filepath, {
+=======
+
+            const {files} = req;
+            const myFiles = Array.isArray(files.HoSoFiles) ? files.HoSoFiles : [files.HoSoFiles];
+
+            const filesUploadPromise = myFiles.map(file => {
+                const fileName = file.originalFilename.replace(/\.[^/.]+$/, ""); // Loại bỏ phần mở rộng tệp
+                const timestamp = Date.now();
+                const newFileName = `${fileName}_${timestamp}_${index++}`; // Tạo tên tệp mới với dấu thời gian và chỉ số
+
+                return cloudinary.uploader.upload(file.filepath, {
+>>>>>>> origin/main
                     resource_type: "auto",
                     public_id: `${newFileName}` // Đặt tên tệp trong Cloudinary
                 });

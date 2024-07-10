@@ -11,7 +11,24 @@ module.exports = class Wards {
         const [rows, fields] = await DBPlace.query("SELECT * FROM wards;");
         return rows;
     }
+<<<<<<< HEAD
 
+=======
+    static getWardsById = async (wards_id) => {
+        const [rows, fields] = await DBPlace.query(
+            "SELECT * FROM wards WHERE wards_id = ?;",
+            [wards_id]
+        );
+        return rows.length > 0 ? rows[0].wards_id : null;
+    }
+    static getWardsByName = async (name) => {
+        const [rows, fields] = await DBPlace.query(
+            "SELECT * FROM wards WHERE name = ?;",
+            [name]
+        );
+        return rows.length > 0 ? rows[0].name : null;
+    }
+>>>>>>> origin/main
     static getWardsByDistrict = async (district_id) => {
         const [rows, fields] = await DBPlace.query(
             "SELECT * FROM wards WHERE district_id = ?;",

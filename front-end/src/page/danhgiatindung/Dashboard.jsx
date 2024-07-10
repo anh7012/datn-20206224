@@ -458,7 +458,11 @@ function Dashboard() {
                     <div className={'h-[400px] shadow-[0px_3px_16px] shadow-gray-300 rounded-xl grid grid-rows-[80%,20%] p-4'}>
                         <div className={'p-4 -mt-8'}><TreemapChart data={dataBieuDoPhanPhoiPhuongThucGD}/></div>
                         <div className={'flex items-center justify-center font-bold text-[#2E7D32] uppercase'}>Biểu đồ
+<<<<<<< HEAD
                             phân phối số lượng vay theo phương thức giao dịch
+=======
+                            phân phối số lượng vay theo kỳ hạn
+>>>>>>> origin/main
                         </div>
                     </div>
 

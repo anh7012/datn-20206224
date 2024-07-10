@@ -9,7 +9,11 @@ import {upLoadFileFuntion} from "../redux/apiRequest.js";
 import eventEmitter from "../utils/eventEmitter.js";
 import {useNavigate} from "react-router-dom"; // Đảm bảo đường dẫn đúng
 
+<<<<<<< HEAD
 const FileUpload = ({id, hiddent}) => {
+=======
+const FileUpload = ({id, hidden}) => {
+>>>>>>> origin/main
     const [files, setFiles] = useState([]);
         const roleUser = useSelector(state => state.auth.login?.currentUser?.data?.permissions)||[];
 
@@ -110,7 +114,11 @@ return (
                 )}
             </div>
         </div>
+<<<<<<< HEAD
         <div className={`flex gap-x-4 w-full max-w-lg justify-center items-center mt-2 ${hiddent ? ' hidden' : ' '}`}>
+=======
+        <div className={`flex gap-x-4 w-full max-w-lg justify-center items-center mt-2 ${hidden ? ' hidden' : ' '}`}>
+>>>>>>> origin/main
             <Button
                 id="myButton"
                 variant="contained"
